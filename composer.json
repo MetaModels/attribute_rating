@@ -41,7 +41,8 @@
 		"php":">=5.3",
 		"contao/core":"~2.11",
 		"contao-community-alliance/composer-installer": "*",
-		"metamodels/core":"~1"
+		"metamodels/core":"~1",
+		"leounglaub/contao-simple-ajax": "~1.0"
 	},
 	"require-dev": {
 		"metamodels/php-coding-standard":"1.0.*@dev",
