@@ -216,7 +216,7 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 
 		$objTemplate->ratingDisabled = (
 			(TL_MODE == 'BE')
-			|| $objSettings->rating_disabled
+			|| $objSettings->get('rating_disabled')
 			|| Session::getInstance()->get($this->getLockId($arrRowData['id']))
 		);
 
