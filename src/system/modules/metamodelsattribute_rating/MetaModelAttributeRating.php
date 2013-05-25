@@ -43,7 +43,7 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 		return $arrFieldDef;
 	}
 
-	public function getFilterOptions($arrIds, $usedOnly)
+	public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
 	{
 		return array();
 	}
