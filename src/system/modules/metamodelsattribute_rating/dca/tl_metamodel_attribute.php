@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_half'] = array
 	'inputType'             => 'checkbox',
 	'eval'                  => array
 	(
-		'tl_class'          => 'w50 m12 cbx',
+		'tl_class'          => 'w50 m12 cbx'
 	),
 );
 
@@ -59,6 +59,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_emtpy'] = array
 	'eval'                  => array
 	(
 		'fieldType'         => 'radio',
+		'filesOnly'         => true,
+		'files'             => true,
+		'extensions'        => 'jpg,png,gif',
 		'tl_class'          => 'clr'
 	),
 );
@@ -71,6 +74,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_full'] = array
 	'eval'                  => array
 	(
 		'fieldType'         => 'radio',
+		'filesOnly'         => true,
+		'files'             => true,
+		'extensions'        => 'jpg,png,gif',
 		'tl_class'          => 'clr'
 	),
 );
@@ -83,6 +89,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_hover'] = array
 	'eval'                  => array
 	(
 		'fieldType'         => 'radio',
+		'filesOnly'         => true,
+		'files'             => true,
+		'extensions'        => 'jpg,png,gif',
 		'tl_class'          => 'clr'
 	),
 );
