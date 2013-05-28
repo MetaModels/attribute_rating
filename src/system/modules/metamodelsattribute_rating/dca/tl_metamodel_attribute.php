@@ -35,7 +35,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_max'] = array
 	(
 		'includeBlankOption' => true,
 		'doNotSaveEmpty'     => true,
-		'tl_class'           =>'w50',
+		'tl_class'           => 'w50',
 		'rgxp'               => 'digit'
 	),
 );
@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_half'] = array
 	'inputType'             => 'checkbox',
 	'eval'                  => array
 	(
-		'tl_class'=>'w50 m12 cbx',
+		'tl_class'          => 'w50 m12 cbx'
 	),
 );
 
