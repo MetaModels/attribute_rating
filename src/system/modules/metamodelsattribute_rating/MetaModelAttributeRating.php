@@ -344,8 +344,9 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 		);
 
 		$arrOptions = array();
-		$intInc     = $objTemplate->rateHalf ? .5 : 1;
+		$intInc     = strlen($this->get('rating_half')) ? .5 : 1;
 		$intValue   = $intInc;
+
 		while ($intValue <= $this->get('rating_max'))
 		{
 			$arrOptions[] = $intValue;
