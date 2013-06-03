@@ -46,7 +46,11 @@
 	},
 	"require-dev": {
 		"metamodels/php-coding-standard":"1.0.*@dev",
-		"cyberspectrum/contao-toolbox": "1.0.*@dev"
+		"cyberspectrum/contao-toolbox": "1.0.*@dev",
+		"cyberspectrum/buildtools": "*@dev"
+	},
+	"autoload": {
+		"classmap": ["src"]
 	},
 	"extra":{
 		"contao": {
@@ -63,5 +67,7 @@
 		"branch-alias": {
 			"dev-master": "1.0.x-dev"
 		}
-	}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }

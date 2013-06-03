@@ -21,6 +21,8 @@
  * @package    MetaModels
  * @subpackage AttributeRatingAjax
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ *
+ * @codeCoverageIgnore
  */
 class MetaModelAttributeRatingAjax
 {
