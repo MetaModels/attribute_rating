@@ -15,10 +15,6 @@
  * @filesource
  */
 
-$GLOBALS['METAMODELS']['attributes']['rating'] = array
-(
-	'class' => 'MetaModelAttributeRating',
-	'image' => 'system/modules/metamodelsattribute_rating/html/star-full.png'
-);
-
+$GLOBALS['METAMODELS']['attributes']['rating']['class'] = 'MetaModelAttributeRating';
+$GLOBALS['METAMODELS']['attributes']['rating']['image'] = 'system/modules/metamodelsattribute_rating/html/star-full.png';
 $GLOBALS['TL_HOOKS']['simpleAjax'][] = array('MetaModelAttributeRatingAjax', 'handle');
