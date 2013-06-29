@@ -39,7 +39,7 @@
 	},
 	"require":{
 		"php":">=5.3",
-		"contao/core":"~2.11",
+		"contao/core": ">=2.11,<4.0",
 		"contao-community-alliance/composer-installer": "*",
 		"metamodels/core":"~1",
 		"leounglaub/contao-simple-ajax": "~1.0"
@@ -47,6 +47,12 @@
 	"require-dev": {
 		"metamodels/php-coding-standard":"1.0.*@dev",
 		"cyberspectrum/contao-toolbox": "1.0.*@dev"
+	},
+	"conflict": {
+		"contao/core": "3.0.*"
+	},
+	"autoload": {
+		"classmap": ["src"]
 	},
 	"extra":{
 		"contao": {
@@ -61,7 +67,8 @@
 			}
 		},
 		"branch-alias": {
-			"dev-master": "1.0.x-dev"
+			"dev-master": "1.0.x-dev",
+			"dev-contao3": "1.1.x-dev"
 		}
 	}
 }
