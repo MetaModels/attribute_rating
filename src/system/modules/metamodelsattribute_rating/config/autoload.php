@@ -16,8 +16,11 @@
  */
 ClassLoader::addClasses(array
 (
-	'MetaModelAttributeRatingAjax' => 'system/modules/metamodelsattribute_rating/MetaModelAttributeRatingAjax.php',
-	'MetaModelAttributeRating'     => 'system/modules/metamodelsattribute_rating/MetaModelAttributeRating.php',
+	'MetaModels\Attribute\Rating\Rating' => 'system/modules/metamodelsattribute_rating/MetaModels/Attribute/Rating/Rating.php',
+	'MetaModels\Helper\RatingAjax'       => 'system/modules/metamodelsattribute_rating/deprecated/MetaModels/Helper/RatingAjax.php',
+
+	'MetaModelAttributeRatingAjax' => 'system/modules/metamodelsattribute_rating/deprecated/MetaModelAttributeRatingAjax.php',
+	'MetaModelAttributeRating'     => 'system/modules/metamodelsattribute_rating/deprecated/MetaModelAttributeRating.php',
 ));
 
 

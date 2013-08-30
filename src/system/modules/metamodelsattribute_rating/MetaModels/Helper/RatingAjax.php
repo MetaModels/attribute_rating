@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The MetaModels extension allows the creation of multiple collections of custom items,
  * each with its own unique set of selectable attributes, with attribute extendability.
@@ -15,6 +14,12 @@
  * @filesource
  */
 
+namespace MetaModels\Helper;
+
+use MetaModels\Factory;
+
+use MetaModels\Attribute\Rating\Rating;
+
 /**
  * This is the MetaModelAttribute ajax endpoint for the rating attribute.
  *
@@ -22,9 +27,8 @@
  * @subpackage AttributeRatingAjax
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class MetaModelAttributeRatingAjax
+class RatingAjax
 {
-
 	/**
 	 * Set HTTP 400 Bad Request header and exit the script.
 	 *
@@ -46,19 +50,19 @@ class MetaModelAttributeRatingAjax
 	 */
 	public function handle()
 	{
-		if (!Input::getInstance()->get('metamodelsattribute_rating'))
+		if (!\Input::getInstance()->get('metamodelsattribute_rating'))
 		{
 			return;
 		}
-		$arrData  = Input::getInstance()->post('data');
-		$fltValue = Input::getInstance()->post('rating');
+		$arrData  = \Input::getInstance()->post('data');
+		$fltValue = \Input::getInstance()->post('rating');
 
 		if (!($arrData && $arrData['id'] && $arrData['pid'] && $arrData['item']))
 		{
 			$this->bail('Invalid request.');
 		}
 
-		$objMetaModel = MetaModelFactory::byId($arrData['pid']);
+		$objMetaModel = Factory::byId($arrData['pid']);
 		if (!$objMetaModel)
 		{
 			$this->bail('No MetaModel.');
@@ -66,7 +70,7 @@ class MetaModelAttributeRatingAjax
 
 		// @codingStandardsIgnoreStart - allow this inline doc comment.
 		/**
-		 * @var MetaModelAttributeRating $objAttribute
+		 * @var \MetaModels\Attribute\Rating\Rating $objAttribute
 		 */
 		// @codingStandardsIgnoreEnd
 

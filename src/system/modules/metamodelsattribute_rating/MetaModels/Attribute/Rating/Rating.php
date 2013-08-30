@@ -15,6 +15,11 @@
  * @filesource
  */
 
+namespace MetaModels\Attribute\Rating;
+
+use MetaModels\Attribute\BaseComplex;
+use MetaModels\Render\Template;
+
 /**
  * This is the MetaModelAttribute class for handling numeric fields.
  *
@@ -22,7 +27,7 @@
  * @subpackage AttributeRating
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class MetaModelAttributeRating extends MetaModelAttributeComplex
+class Rating extends BaseComplex
 {
 	/**
 	 * Returns all valid settings for the attribute type.
@@ -94,7 +99,7 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 	 */
 	public function destroyAUX()
 	{
-		Database::getInstance()
+		\Database::getInstance()
 			->prepare('DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=?')
 			->execute($this->getMetaModel()->get('id'), $this->get('id'));
 	}
@@ -109,7 +114,7 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 	 */
 	public function getDataFor($arrIds)
 	{
-		$objData = Database::getInstance()
+		$objData = \Database::getInstance()
 			->prepare(sprintf(
 				'SELECT * FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s))',
 				implode(', ', array_fill(0, count($arrIds), '?'))
@@ -167,7 +172,7 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 	 */
 	public function unsetDataFor($arrIds)
 	{
-		Database::getInstance()
+		\Database::getInstance()
 			->prepare(sprintf(
 				'DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=? AND (iid IN (%s))',
 				implode(', ', array_fill(0, count($arrIds), '?'))))
@@ -209,7 +214,7 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 	 */
 	public function addVote($intItemId, $fltValue, $blnLock = false)
 	{
-		if (Session::getInstance()->get($this->getLockId($intItemId)))
+		if (\Session::getInstance()->get($this->getLockId($intItemId)))
 		{
 			return;
 		}
@@ -251,7 +256,7 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 			$strSQL = 'UPDATE tl_metamodel_rating %s WHERE mid=? AND aid=? AND iid=?';
 		}
 
-		Database::getInstance()
+		\Database::getInstance()
 			->prepare($strSQL)
 			->set($arrSet)
 			->execute(
@@ -262,7 +267,7 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 
 		if ($blnLock)
 		{
-			Session::getInstance()->set($this->getLockId($intItemId), true);
+			\Session::getInstance()->set($this->getLockId($intItemId), true);
 		}
 	}
 
@@ -288,19 +293,19 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 	/**
 	 * Initialize the template with values.
 	 *
-	 * @param MetaModelTemplate               $objTemplate The Template instance to populate.
+	 * @param \MetaModels\Render\Template        $objTemplate The Template instance to populate.
 	 *
-	 * @param array                           $arrRowData  The row data for the current item.
+	 * @param array                              $arrRowData  The row data for the current item.
 	 *
-	 * @param MetaModelRenderSettingAttribute $objSettings The render settings to use for this attribute.
+	 * @param \MetaModels\Render\Setting\ISimple $objSettings The render settings to use for this attribute.
 	 *
 	 * @return void
 	 */
-	public function prepareTemplate(MetaModelTemplate $objTemplate, $arrRowData, $objSettings = null)
+	public function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings = null)
 	{
 		parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
-		$base = Environment::getInstance()->base;
+		$base = \Environment::getInstance()->base;
 
 		$strEmpty = $this->ensureImage(
 			$this->get('rating_emtpy'),
@@ -323,7 +328,7 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 		$objTemplate->ratingDisabled = (
 			(TL_MODE == 'BE')
 			|| $objSettings->get('rating_disabled')
-			|| Session::getInstance()->get($this->getLockId($arrRowData['id']))
+			|| \Session::getInstance()->get($this->getLockId($arrRowData['id']))
 		);
 
 		$value = ($this->get('rating_max') * floatval($arrRowData[$this->getColName()]['meanvalue']));
@@ -370,7 +375,7 @@ class MetaModelAttributeRating extends MetaModelAttributeComplex
 	 */
 	public function sortIds($arrIds, $strDirection)
 	{
-		$objData = Database::getInstance()
+		$objData = \Database::getInstance()
 			->prepare(sprintf(
 				'SELECT iid FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s)) ORDER BY meanvalue '
 				. $strDirection,
