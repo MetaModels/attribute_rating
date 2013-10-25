@@ -16,3 +16,6 @@ vendor/
 
 # build
 build/
+
+# concrete configs not to be added
+phpunit.xml
