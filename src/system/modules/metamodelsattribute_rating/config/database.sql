@@ -16,7 +16,7 @@ CREATE TABLE `tl_metamodel_attribute` (
   `rating_half` char(1) NOT NULL default '',
   `rating_emtpy` varchar(255) NOT NULL default '',
   `rating_full` varchar(255) NOT NULL default '',
-  `rating_hover` varchar(255) NOT NULL default '',
+  `rating_hover` varchar(255) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -24,7 +24,7 @@ CREATE TABLE `tl_metamodel_attribute` (
 --
 
 CREATE TABLE `tl_metamodel_rendersetting` (
-  `rating_disabled` varchar(32) NOT NULL default '',
+  `rating_disabled` varchar(32) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `tl_metamodel_rating` (
   `aid` int(10) unsigned NOT NULL default '0',
 -- item id
   `iid` int(10) unsigned NOT NULL default '0',
--- amount of votes in the DB,
+-- amount of votes in the DB
   `votecount` int(10) unsigned NOT NULL default '0',
 -- current value
   `meanvalue` double NULL default NULL,
