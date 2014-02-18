@@ -42,7 +42,7 @@ CREATE TABLE `tl_metamodel_rating` (
 -- amount of votes in the DB
   `votecount` int(10) unsigned NOT NULL default '0',
 -- current value
-  `meanvalue` double NULL default NULL,
+  `meanvalue` double NULL,
   PRIMARY KEY  (`id`),
   KEY `all_id` (`mid`, `aid`, `iid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
