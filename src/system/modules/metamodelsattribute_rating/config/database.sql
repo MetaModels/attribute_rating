@@ -14,9 +14,9 @@
 CREATE TABLE `tl_metamodel_attribute` (
   `rating_max` int(10) NOT NULL default '0',
   `rating_half` char(1) NOT NULL default '',
-  `rating_emtpy` varchar(255) NOT NULL default '',
-  `rating_full` varchar(255) NOT NULL default '',
-  `rating_hover` varchar(255) NOT NULL default ''
+  `rating_emtpy` blob NULL,
+  `rating_full` blob NULL,
+  `rating_hover` blob NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
