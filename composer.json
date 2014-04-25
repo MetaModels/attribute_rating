@@ -46,7 +46,8 @@
 	},
 	"require-dev": {
 		"metamodels/php-coding-standard":"1.0.*@dev",
-		"cyberspectrum/contao-toolbox": "1.0.*@dev"
+		"cyberspectrum/contao-toolbox": "1.0.*@dev",
+		"cyberspectrum/buildtools": "*@dev"
 	},
 	"conflict": {
 		"contao/core": "3.0.*"
@@ -70,5 +71,7 @@
 			"dev-master": "1.0.x-dev",
 			"dev-contao3": "1.1.x-dev"
 		}
-	}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }

@@ -26,6 +26,8 @@ use MetaModels\Attribute\Rating\Rating;
  * @package    MetaModels
  * @subpackage AttributeRatingAjax
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ *
+ * @codeCoverageIgnore
  */
 class RatingAjax
 {
