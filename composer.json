@@ -46,7 +46,8 @@
 	},
 	"require-dev": {
 		"metamodels/php-coding-standard":"dev-master",
-		"cyberspectrum/contao-toolbox": "dev-master"
+		"cyberspectrum/contao-toolbox": "dev-master",
+		"cyberspectrum/buildtools": "*@dev"
 	},
 	"conflict": {
 		"contao/core": "3.0.*"
@@ -69,5 +70,7 @@
 		"branch-alias": {
 			"dev-tng": "2.0.x-dev"
 		}
-	}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }

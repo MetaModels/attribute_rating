@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MetaModels attribute rating" default="build" description="Automated build of MetaModels attribute rating">
+	<import file="vendor/cyberspectrum/buildtools/builddefault.xml"/>
+
+	<!--
+	Overwrite individual targets - can leave empty to stop a called target
+	from having any effect.
+	-->
+	<!--
+	<target name="..."></target>
+	-->
+
+</project>

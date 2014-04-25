@@ -58,6 +58,8 @@ class Rating extends BaseComplex
 	 *                            getAttributeSettingNames().
 	 *
 	 * @return array The DCA array to use as $GLOBALS['TL_DCA']['tablename']['fields']['attribute-name]
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function getFieldDefinition($arrOverrides = array())
 	{
@@ -119,7 +121,7 @@ class Rating extends BaseComplex
 				'SELECT * FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s))',
 				implode(', ', array_fill(0, count($arrIds), '?'))
 			))
-			->execute(array_merge(array
+			->executeUncached(array_merge(array
 				(
 					$this->getMetaModel()->get('id'),
 					$this->get('id')
@@ -132,8 +134,8 @@ class Rating extends BaseComplex
 		{
 			$arrResult[$objData->iid] = array
 			(
-				'votecount' => $objData->votecount,
-				'meanvalue' => $objData->meanvalue,
+				'votecount' => intval($objData->votecount),
+				'meanvalue' => floatval($objData->meanvalue),
 			);
 		}
 		foreach (array_diff($arrIds, array_keys($arrResult)) as $intId)
@@ -156,6 +158,7 @@ class Rating extends BaseComplex
 	 *
 	 * @return void
 	 *
+	 * @codeCoverageIgnore
 	 */
 	public function setDataFor($arrValues)
 	{
