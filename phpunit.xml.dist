@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <phpunit backupGlobals="false"
 		 backupStaticAttributes="false"
-		 bootstrap="vendor/cyberspectrum/buildtools/src/prepare.php"
 		 colors="true"
 		 convertErrorsToExceptions="true"
 		 convertNoticesToExceptions="true"
 		 convertWarningsToExceptions="true"
-		 processIsolation="true"
-		 strict="true">
+		 processIsolation="false"
+		 stopOnFailure="false"
+		 syntaxCheck="false"
+		 bootstrap="tests/bootstrap.php"
+		>
 	<testsuites>
-		<testsuite name="MetaModelsAttributeRatingTestSuite">
-			<directory suffix="Test.php">test/</directory>
+		<testsuite name="MetaModels attribute rating tests">
+			<directory>./tests/MetaModels/</directory>
 		</testsuite>
 	</testsuites>
+
+	<groups>
+		<exclude>
+			<group>slow</group>
+		</exclude>
+	</groups>
+
 	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">./src</directory>
-			<exclude>
-				<!-- exclude everything that will run code inline as this will break code coverage. -->
-				<directory>./src/system/modules/*/config</directory>
-				<directory>./src/system/modules/*/dca</directory>
-				<directory>./src/system/modules/*/languages</directory>
-			</exclude>
+		<whitelist>
+			<directory>./src/system/modules/metamodelsattribute_numeric/MetaModels/</directory>
 		</whitelist>
 	</filter>
 </phpunit>

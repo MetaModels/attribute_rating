@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="MetaModels attribute rating" default="build" description="Automated build of MetaModels attribute rating">
-	<import file="vendor/cyberspectrum/buildtools/builddefault.xml"/>
+<?xml version="1.0"?>
+<project name="MetaModels attribute numeric" default="test">
+	<target name="phpunit">
+		<exec dir="${basedir}" executable="vendor/bin/phpunit" failonerror="true" />
+	</target>
 
-	<!--
-	Overwrite individual targets - can leave empty to stop a called target
-	from having any effect.
-	-->
-	<!--
-	<target name="..."></target>
-	-->
+	<target name="phpcs">
+		<exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
+			<arg line="--standard=${basedir}/vendor/metamodels/php-coding-standard/MetaModels/ruleset.xml ${basedir}/src"/>
+		</exec>
+	</target>
 
+	<target name="test" depends="phpunit,phpcs"/>
 </project>
