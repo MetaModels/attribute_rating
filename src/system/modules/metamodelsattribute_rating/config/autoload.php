@@ -11,18 +11,6 @@
  */
 
 
-/**
- * Register the classes
- */
-ClassLoader::addClasses(array
-(
-	'MetaModels\Attribute\Rating\Rating' => 'system/modules/metamodelsattribute_rating/MetaModels/Attribute/Rating/Rating.php',
-	'MetaModels\Helper\RatingAjax'       => 'system/modules/metamodelsattribute_rating/deprecated/MetaModels/Helper/RatingAjax.php',
-
-	'MetaModelAttributeRatingAjax' => 'system/modules/metamodelsattribute_rating/deprecated/MetaModelAttributeRatingAjax.php',
-	'MetaModelAttributeRating'     => 'system/modules/metamodelsattribute_rating/deprecated/MetaModelAttributeRating.php',
-));
-
 
 /**
  * Register the templates

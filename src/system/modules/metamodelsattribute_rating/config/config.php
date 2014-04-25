@@ -19,7 +19,3 @@ $GLOBALS['METAMODELS']['attributes']['rating']['class'] = 'MetaModels\Attribute\
 $GLOBALS['METAMODELS']['attributes']['rating']['image'] = 'system/modules/metamodelsattribute_rating/html/star-full.png';
 
 $GLOBALS['TL_HOOKS']['simpleAjax'][] = array('MetaModels\Helper\RatingAjax', 'handle');
-
-// non composerized Contao 2.X autoload support.
-$GLOBALS['MM_AUTOLOAD'][] = dirname(__DIR__);
-$GLOBALS['MM_AUTOLOAD'][] = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'deprecated';
