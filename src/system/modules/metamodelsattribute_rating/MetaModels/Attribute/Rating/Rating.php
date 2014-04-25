@@ -18,6 +18,7 @@
 namespace MetaModels\Attribute\Rating;
 
 use MetaModels\Attribute\BaseComplex;
+use MetaModels\Render\Setting\ISimple;
 use MetaModels\Render\Template;
 
 /**
@@ -80,11 +81,11 @@ class Rating extends BaseComplex
 	 * This is only relevant, when using "null" as id list for attributes that have preconfigured
 	 * values like select lists and tags i.e.
 	 *
-	 * @param array $arrIds    The ids of items that the values shall be fetched from.
+	 * @param array $arrIds   The ids of items that the values shall be fetched from.
 	 *
-	 * @param bool  $usedOnly  Determines if only "used" values shall be returned.
+	 * @param bool  $usedOnly Determines if only "used" values shall be returned.
 	 *
-	 * @param bool  &$arrCount Array for the counted values.
+	 * @param bool  $arrCount Array for the counted values.
 	 *
 	 * @return array All options matching the given conditions as name => value.
 	 */
@@ -296,11 +297,11 @@ class Rating extends BaseComplex
 	/**
 	 * Initialize the template with values.
 	 *
-	 * @param \MetaModels\Render\Template        $objTemplate The Template instance to populate.
+	 * @param Template $objTemplate The Template instance to populate.
 	 *
-	 * @param array                              $arrRowData  The row data for the current item.
+	 * @param array    $arrRowData  The row data for the current item.
 	 *
-	 * @param \MetaModels\Render\Setting\ISimple $objSettings The render settings to use for this attribute.
+	 * @param ISimple  $objSettings The render settings to use for this attribute.
 	 *
 	 * @return void
 	 */

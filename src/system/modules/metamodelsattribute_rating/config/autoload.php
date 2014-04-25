@@ -1,16 +1,19 @@
 <?php
 
 /**
- * Contao Open Source CMS
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
  *
- * Copyright (c) 2005-2013 Leo Feyer
- *
- * @package Metamodelsattribute_rating
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * PHP version 5
+ * @package    MetaModels
+ * @subpackage AttributeNumeric
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
+ * @filesource
  */
-
-
 
 /**
  * Register the templates
