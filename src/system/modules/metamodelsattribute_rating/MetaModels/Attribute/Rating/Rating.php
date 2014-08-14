@@ -91,7 +91,6 @@ class Rating extends BaseComplex
 	 */
 	public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
 	{
-		// TODO: unimplemented.
 		return array();
 	}
 
