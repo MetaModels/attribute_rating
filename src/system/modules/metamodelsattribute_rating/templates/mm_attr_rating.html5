@@ -28,7 +28,7 @@ window.addEvent("domready",function() {
 });
 </script>
 
-<form name="<?php echo $this->name; ?>">
+<form name="<?php echo $this->name; ?>" class="<?php echo $this->additional_class; ?>">
 <?php foreach ($this->options as $value): ?>
     <input type="radio" name="<?php echo $this->name; ?>_rating"<?php if ($this->currentValue==$value): ?> checked="checked" <?php endif; ?> value="<?php echo $value ?>">
 <?php endforeach; ?>
