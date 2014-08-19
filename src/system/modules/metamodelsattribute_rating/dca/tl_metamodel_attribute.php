@@ -23,7 +23,7 @@
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['rating extends _complexattribute_'] = array
 (
 	'+display' => array('rating_max after description', 'rating_half', 'rating_emtpy', 'rating_full', 'rating_hover'),
-	'advanced' => array('-isvariant', )
+	'+advanced' => array('-isvariant', )
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_max'] = array
