@@ -1,31 +1,33 @@
 <?php $GLOBALS['TL_JAVASCRIPT']['metamodelsattribute_rating'] = 'system/modules/metamodelsattribute_rating/html/moostarrating.js'; ?>
 <script type="text/javascript">
-window.addEvent("domready",function() {
-	// Create our instance
-	var starRater = new MooStarRating({
-		<?php if ($this->ratingDisabled): ?>disabled: true,<?php endif; ?>
-		form: "<?php echo $this->name; ?>",
-		radios: "<?php echo $this->name; ?>_rating",
-		half: <?php echo $this->rateHalf; ?>,
-		imageEmpty: '<?php echo $this->imageEmpty; ?>',
-		imageFull:  '<?php echo $this->imageFull; ?>',
-		imageHover: '<?php echo $this->imageHover; ?>',
-		width: <?php echo $this->imageWidth; ?>,
-		tip: "<?php echo $this->tipText; ?></i>",
-		tipTarget: $('<?php echo $this->name; ?>_tip'),
-		tipTargetType: "html"
+(function($) {
+	window.addEvent("domready",function() {
+		// Create our instance
+		var starRater = new MooStarRating({
+			<?php if ($this->ratingDisabled): ?>disabled: true,<?php endif; ?>
+			form: "<?php echo $this->name; ?>",
+			radios: "<?php echo $this->name; ?>_rating",
+			half: <?php echo $this->rateHalf; ?>,
+			imageEmpty: '<?php echo $this->imageEmpty; ?>',
+			imageFull:  '<?php echo $this->imageFull; ?>',
+			imageHover: '<?php echo $this->imageHover; ?>',
+			width: <?php echo $this->imageWidth; ?>,
+			tip: "<?php echo $this->tipText; ?></i>",
+			tipTarget: $('<?php echo $this->name; ?>_tip'),
+			tipTargetType: "html"
+		});
+	<?php if (TL_MODE == 'FE'): ?>
+		// Listen for star clicks
+		starRater.addEvent("click",function(value) {
+			// Send ajax request to server
+			new Request({
+				'url': "<?php echo $this->ajaxUrl; ?>",
+				'data': { 'rating': value, data: <?php echo $this->ajaxData; ?> }
+			}).send();
+		});
+	<?php endif; ?>
 	});
-<?php if (TL_MODE == 'FE'): ?>
-	// Listen for star clicks
-	starRater.addEvent("click",function(value) {
-		// Send ajax request to server
-		new Request({
-			'url': "<?php echo $this->ajaxUrl; ?>",
-			'data': { 'rating': value, data: <?php echo $this->ajaxData; ?> }
-		}).send();
-	});
-<?php endif; ?>
-});
+})(document.id);
 </script>
 
 <form name="<?php echo $this->name; ?>">
