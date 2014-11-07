@@ -11,7 +11,6 @@
  * last-updated: 2013-05-14T00:11:39+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy']['0']     = 'Immagine per "stella vuota"';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy']['1']     = 'Scegliere l\'immagine da utilizzare come stella vuota.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_full']['0']      = 'Immagine per "stella piena"';

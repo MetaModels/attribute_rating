@@ -18,4 +18,4 @@
 /**
  * Fields
  */
-	$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled'] = array('Disable rating (implicit on in the backend)', 'If this is checked, the rating will be disabled and only the current rating value will get shown (this is hardcoded to "on" for the Backend).');
+    $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled'] = array('Disable rating (implicit on in the backend)', 'If this is checked, the rating will be disabled and only the current rating value will get shown (this is hardcoded to "on" for the Backend).');

@@ -11,7 +11,6 @@
  * last-updated: 2013-05-14T00:11:39+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy']['0']     = 'Εικόνα για «κενό αστέρων" ';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy']['1']     = 'Επιλέξτε την εικόνα που θα χρησιμοποιηθεί ως άδειο αστέρι. ';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_full']['0']      = ' Εικόνα για «πλήρης αστέρι" ';

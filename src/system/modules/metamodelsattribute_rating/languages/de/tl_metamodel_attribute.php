@@ -11,7 +11,6 @@
  * last-updated: 2013-05-14T00:11:39+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy']['0']     = 'Bild für "leeren Stern"';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy']['1']     = 'Bitte wählen Sie ein Bild aus, das als "leerer Stern" benutzt werden soll.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_full']['0']      = 'Bild für "voller Stern"';

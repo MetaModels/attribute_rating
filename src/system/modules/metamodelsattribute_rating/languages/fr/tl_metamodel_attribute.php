@@ -11,7 +11,6 @@
  * last-updated: 2013-05-14T00:11:39+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy']['0']     = 'Image pour le symbole de l\'étoile vide';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy']['1']     = 'Choisir l\'image à utiliser en tant qu\'étoile vide.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_full']['0']      = 'Image pour le symbole de l\'étoile pleine';

@@ -31,61 +31,57 @@ use MetaModels\Attribute\Rating\Rating;
  */
 class RatingAjax
 {
-	/**
-	 * Set HTTP 400 Bad Request header and exit the script.
-	 *
-	 * @param string $message The error message.
-	 *
-	 * @return void
-	 */
-	protected function bail($message = 'Invalid AJAX call.')
-	{
-		header('HTTP/1.1 400 Bad Request');
+    /**
+     * Set HTTP 400 Bad Request header and exit the script.
+     *
+     * @param string $message The error message.
+     *
+     * @return void
+     */
+    protected function bail($message = 'Invalid AJAX call.')
+    {
+        header('HTTP/1.1 400 Bad Request');
 
-		die('Rating Ajax: ' . $message);
-	}
+        die('Rating Ajax: ' . $message);
+    }
 
-	/**
-	 * Process an ajax request.
-	 *
-	 * @return void
-	 */
-	public function handle()
-	{
-		if (!\Input::getInstance()->get('metamodelsattribute_rating'))
-		{
-			return;
-		}
-		$arrData  = \Input::getInstance()->post('data');
-		$fltValue = \Input::getInstance()->post('rating');
+    /**
+     * Process an ajax request.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        if (!\Input::getInstance()->get('metamodelsattribute_rating')) {
+            return;
+        }
+        $arrData  = \Input::getInstance()->post('data');
+        $fltValue = \Input::getInstance()->post('rating');
 
-		if (!($arrData && $arrData['id'] && $arrData['pid'] && $arrData['item']))
-		{
-			$this->bail('Invalid request.');
-		}
+        if (!($arrData && $arrData['id'] && $arrData['pid'] && $arrData['item'])) {
+            $this->bail('Invalid request.');
+        }
 
-		$objMetaModel = Factory::byId($arrData['pid']);
-		if (!$objMetaModel)
-		{
-			$this->bail('No MetaModel.');
-		}
+        $objMetaModel = Factory::byId($arrData['pid']);
+        if (!$objMetaModel) {
+            $this->bail('No MetaModel.');
+        }
 
-		// @codingStandardsIgnoreStart - allow this inline doc comment.
-		/**
-		 * @var \MetaModels\Attribute\Rating\Rating $objAttribute
-		 */
-		// @codingStandardsIgnoreEnd
+        // @codingStandardsIgnoreStart - allow this inline doc comment.
+        /**
+         * @var \MetaModels\Attribute\Rating\Rating $objAttribute
+         */
+        // @codingStandardsIgnoreEnd
 
-		$objAttribute = $objMetaModel->getAttributeById($arrData['id']);
+        $objAttribute = $objMetaModel->getAttributeById($arrData['id']);
 
-		if (!$objAttribute)
-		{
-			$this->bail('No Attribute.');
-		}
+        if (!$objAttribute) {
+            $this->bail('No Attribute.');
+        }
 
-		$objAttribute->addVote($arrData['item'], floatval($fltValue), true);
+        $objAttribute->addVote($arrData['item'], floatval($fltValue), true);
 
-		header('HTTP/1.1 200 Ok');
-		exit;
-	}
+        header('HTTP/1.1 200 Ok');
+        exit;
+    }
 }

@@ -11,5 +11,4 @@
  * last-updated: 2013-05-14T00:11:39+02:00
  */
 
-
 $GLOBALS['TL_LANG']['metamodel_rating_label'] = 'Vota come <em>%s / %s</em>';
