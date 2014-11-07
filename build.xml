@@ -1,14 +1,9 @@
-<?xml version="1.0"?>
-<project name="MetaModels attribute numeric" default="test">
-	<target name="phpunit">
-		<exec dir="${basedir}" executable="vendor/bin/phpunit" failonerror="true" />
-	</target>
-
-	<target name="phpcs">
-		<exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
-			<arg line="--standard=${basedir}/vendor/metamodels/php-coding-standard/MetaModels/ruleset.xml ${basedir}/src"/>
-		</exec>
-	</target>
-
-	<target name="test" depends="phpunit,phpcs"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ This project is using the Contao Community Alliance Build System (CCABS)
+ For documentation visit:
+   https://github.com/contao-community-alliance/build-system
+-->
+<project name="MetaModels attribute rating" default="build">
+    <import file="vendor/contao-community-alliance/build-system/ccabs.main.xml" />
 </project>
