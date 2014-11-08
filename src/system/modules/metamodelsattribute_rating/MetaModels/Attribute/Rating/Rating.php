@@ -38,14 +38,18 @@ class Rating extends BaseComplex
      */
     public function getAttributeSettingNames()
     {
-        return array_merge(parent::getAttributeSettingNames(), array(
-            'sortable',
-            'rating_half',
-            'rating_max',
-            'rating_emtpy',
-            'rating_full',
-            'rating_hover',
-        ));
+        return array_merge(
+            parent::getAttributeSettingNames(),
+            array
+            (
+                'sortable',
+                'rating_half',
+                'rating_max',
+                'rating_emtpy',
+                'rating_full',
+                'rating_hover',
+            )
+        );
     }
 
     /**
@@ -82,11 +86,9 @@ class Rating extends BaseComplex
      * This is only relevant, when using "null" as id list for attributes that have preconfigured
      * values like select lists and tags i.e.
      *
-     * @param array $arrIds The ids of items that the values shall be fetched from.
-     *
-     * @param bool $usedOnly Determines if only "used" values shall be returned.
-     *
-     * @param bool $arrCount Array for the counted values.
+     * @param array $arrIds   The ids of items that the values shall be fetched from.
+     * @param bool  $usedOnly Determines if only "used" values shall be returned.
+     * @param bool  $arrCount Array for the counted values.
      *
      * @return array All options matching the given conditions as name => value.
      */
@@ -122,7 +124,8 @@ class Rating extends BaseComplex
                 'SELECT * FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s))',
                 implode(', ', array_fill(0, count($arrIds), '?'))
             ))
-            ->executeUncached(array_merge(array
+            ->executeUncached(array_merge(
+                array
                 (
                     $this->getMetaModel()->get('id'),
                     $this->get('id')
@@ -175,10 +178,21 @@ class Rating extends BaseComplex
     public function unsetDataFor($arrIds)
     {
         \Database::getInstance()
-            ->prepare(sprintf(
-                'DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=? AND (iid IN (%s))',
-                implode(', ', array_fill(0, count($arrIds), '?'))))
-            ->execute(array_merge(array
+            ->prepare(
+                sprintf(
+                    'DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=? AND (iid IN (%s))',
+                    implode(
+                        ', ',
+                        array_fill(
+                            0,
+                            count($arrIds),
+                            '?'
+                        )
+                    )
+                )
+            )
+            ->execute(array_merge(
+                array
                 (
                     $this->getMetaModel()->get('id'),
                     $this->get('id')
@@ -196,7 +210,8 @@ class Rating extends BaseComplex
      */
     protected function getLockId($intItemId)
     {
-        return sprintf('vote_lock_%s_%s_%s',
+        return sprintf(
+            'vote_lock_%s_%s_%s',
             $this->getMetaModel()->get('id'),
             $this->get('id'),
             $intItemId
@@ -206,11 +221,9 @@ class Rating extends BaseComplex
     /**
      * Add a vote to the database.
      *
-     * @param int $intItemId The id of the item to be voted.
-     *
-     * @param float $fltValue The value of the vote.
-     *
-     * @param bool $blnLock Flag if the user session shall be locked against voting for this item again.
+     * @param int   $intItemId The id of the item to be voted.
+     * @param float $fltValue  The value of the vote.
+     * @param bool  $blnLock   Flag if the user session shall be locked against voting for this item again.
      *
      * @return void
      */
@@ -268,8 +281,7 @@ class Rating extends BaseComplex
     /**
      * Test whether the given image exists.
      *
-     * @param string $strImage Path to the image to use.
-     *
+     * @param string $strImage   Path to the image to use.
      * @param string $strDefault Path to the fallback image.
      *
      * @return string If the image exists, the image is returned, the default otherwise.
@@ -287,10 +299,8 @@ class Rating extends BaseComplex
      * Initialize the template with values.
      *
      * @param Template $objTemplate The Template instance to populate.
-     *
-     * @param array $arrRowData The row data for the current item.
-     *
-     * @param ISimple $objSettings The render settings to use for this attribute.
+     * @param array    $arrRowData  The row data for the current item.
+     * @param ISimple  $objSettings The render settings to use for this attribute.
      *
      * @return void
      */
@@ -333,7 +343,8 @@ class Rating extends BaseComplex
             $this->get('rating_max')
         );
         $objTemplate->ajaxUrl      = sprintf('SimpleAjax.php?metamodelsattribute_rating=%s', $this->get('id'));
-        $objTemplate->ajaxData     = json_encode(array
+        $objTemplate->ajaxData     = json_encode(
+            array
             (
                 'id' => $this->get('id'),
                 'pid' => $this->get('pid'),
@@ -359,8 +370,7 @@ class Rating extends BaseComplex
     /**
      * Sorts the given array list by field value in the given direction.
      *
-     * @param int[] $arrIds A list of Ids from the MetaModel table.
-     *
+     * @param int[]  $arrIds       A list of Ids from the MetaModel table.
      * @param string $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
      *
      * @return int[] The sorted integer array.
@@ -373,7 +383,8 @@ class Rating extends BaseComplex
                 . $strDirection,
                 implode(', ', array_fill(0, count($arrIds), '?'))
             ))
-            ->execute(array_merge(array
+            ->execute(array_merge(
+                array
                 (
                     $this->getMetaModel()->get('id'),
                     $this->get('id')

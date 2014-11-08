@@ -11,5 +11,10 @@
  * last-updated: 2013-05-14T00:11:39+02:00
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['0'] = 'Απενεργοποίηση βαθμολογίσης (σιωπηρή για το backend) ';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['1'] = 'Εάν αυτό ελέγθει, η βαθμολογιση πρέπει να απενεργοποιείται και μόνο η τρέχουσα τιμή της βαθμολογίσης θα πάρει εμφανίζετε (αυτό είναι μια μόνιμη στο "on" για το backend). ';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['0'] =
+    'Απενεργοποίηση βαθμολογίσης (σιωπηρή για το backend) ';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['1'] =
+    'Εάν αυτό ελέγθει, η βαθμολογιση πρέπει να
+ απενεργοποιείται και μόνο η τρέχουσα τιμή της
+ βαθμολογίσης θα πάρει εμφανίζετε (αυτό είναι μια
+ μόνιμη στο "on" για το backend). ';

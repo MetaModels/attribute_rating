@@ -18,8 +18,10 @@
 /**
  * Register the templates
  */
-TemplateLoader::addFiles(array
-(
-    'mm_attr_rating'     => 'system/modules/metamodelsattribute_rating/templates',
-    'mm_attr_rating_raw' => 'system/modules/metamodelsattribute_rating/templates',
-));
+TemplateLoader::addFiles(
+    array
+    (
+        'mm_attr_rating'     => 'system/modules/metamodelsattribute_rating/templates',
+        'mm_attr_rating_raw' => 'system/modules/metamodelsattribute_rating/templates',
+    )
+);

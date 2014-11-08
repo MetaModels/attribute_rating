@@ -21,7 +21,10 @@
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['rating extends default'] = array
 (
-    '+advanced' => array('rating_disabled'),
+    '+advanced' => array
+    (
+        'rating_disabled'
+    ),
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['rating_disabled'] = array

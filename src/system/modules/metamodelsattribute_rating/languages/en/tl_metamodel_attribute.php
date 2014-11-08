@@ -19,9 +19,15 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['rating'] = 'Rating';
-
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_max']            = array('Maximum', 'Please enter the maximum value for the rating.');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_half']           = array('Enable half steps', 'If this is checked, the rating will count in .5 steps instead of integer values.');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy']          = array('Image for "empty star"', 'Choose the image to use as empty star.');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_full']           = array('Image for "full star"', 'Choose the image to use as full star.');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_hover']          = array('Image for "hovered star"', 'Choose the image to use as hovered star.');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_max'][0]         = 'Maximum';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_max'][1]         =
+    'Please enter the maximum value for the rating.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_half'][0]        = 'Enable half steps';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_half'][1]        =
+    'If this is checked, the rating will count in .5 steps instead of integer values.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy'][0]       = 'Image for "empty star"';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy'][1]       = 'Choose the image to use as empty star.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_full'][0]        = 'Image for "full star"';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_full'][1]        = 'Choose the image to use as full star.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_hover'][0]       = 'Image for "hovered star"';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_hover'][1]       = 'Choose the image to use as hovered star.';
