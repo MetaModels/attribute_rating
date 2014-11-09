@@ -411,7 +411,7 @@ class Rating extends BaseComplex
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getActiveLanguageArray()
+    protected function getActiveLanguageArray()
     {
         return $GLOBALS['TL_LANG'];
     }
