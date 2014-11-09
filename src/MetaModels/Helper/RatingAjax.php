@@ -37,6 +37,8 @@ class RatingAjax
      * @param string $message The error message.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function bail($message = 'Invalid AJAX call.')
     {
@@ -49,6 +51,8 @@ class RatingAjax
      * Process an ajax request.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function handle()
     {

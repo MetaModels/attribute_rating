@@ -91,6 +91,8 @@ class Rating extends BaseComplex
      * @param bool  $arrCount Array for the counted values.
      *
      * @return array All options matching the given conditions as name => value.
+     *
+     * @SuppressWarnings("unused")
      */
     public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
     {
@@ -160,6 +162,7 @@ class Rating extends BaseComplex
      *
      * @return void
      *
+     * @SuppressWarnings("unused")
      * @codeCoverageIgnore
      */
     public function setDataFor($arrValues)
@@ -309,6 +312,7 @@ class Rating extends BaseComplex
         parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
         $base = \Environment::getInstance()->base;
+        $lang = $this->getActiveLanguageArray();
 
         $strEmpty = $this->ensureImage(
             $this->get('rating_emtpy'),
@@ -338,7 +342,7 @@ class Rating extends BaseComplex
 
         $objTemplate->currentValue = (round(($value / .5), 0) * .5);
         $objTemplate->tipText      = sprintf(
-            $GLOBALS['TL_LANG']['metamodel_rating_label'],
+            $lang['metamodel_rating_label'],
             '[VALUE]',
             $this->get('rating_max')
         );
@@ -397,5 +401,18 @@ class Rating extends BaseComplex
         return ($strDirection == 'DESC')
             ? array_merge($arrSorted, array_diff($arrIds, $arrSorted))
             : array_merge(array_diff($arrIds, $arrSorted), $arrSorted);
+    }
+
+    /**
+     * Returns the language array of the actual language (replacement for super globals access).
+     *
+     * @return array The language Strings
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getActiveLanguageArray()
+    {
+        return $GLOBALS['TL_LANG'];
     }
 }
