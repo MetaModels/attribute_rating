@@ -25,7 +25,7 @@
 
 	<filter>
 		<whitelist>
-			<directory>./src/system/modules/metamodelsattribute_numeric/MetaModels/</directory>
+			<directory>./src/system/modules/metamodelsattribute_rating/MetaModels/</directory>
 		</whitelist>
 	</filter>
 </phpunit>
