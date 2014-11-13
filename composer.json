@@ -1,50 +1,50 @@
 {
-	"name":"metamodels/attribute_rating",
-	"description":"MetaModels attribute for rating items",
-	"keywords":["contao", "metamodels", "attribute", "ajax", "rating"],
-	"type":"contao-module",
-	"homepage":"http://now.metamodel.me/",
-	"license":"LGPL-3.0+",
-	"authors":[
-		{
-			"name":"Christian Schiffler",
-			"email":"c.schiffler@cyberspectrum.de",
-			"homepage":"http://www.cyberspectrum.de",
-			"role":"Developer"
-		},
-		{
-			"name":"Andreas Isaak",
-			"email":"info@andreas-isaak.de",
-			"homepage":"http://www.andreas-isaak.de",
-			"role":"Developer"
-		},
-		{
-			"name":"Stefan Heimes",
-			"email":"stefan_heimes@hotmail.com",
-			"role":"Developer"
-		},
-		{
-			"name":"Christian de la Haye",
-			"email":"service@delahaye.de",
-			"homepage":"http://www.delahaye.de/",
-			"role":"Developer"
-		}
-	],
-	"support":{
-		"email":"mail@metamodel.me",
-		"issues":"https://github.com/MetaModels/attribute_rating/issues",
-		"wiki":"http://de.contaowiki.org/MetaModels",
-		"irc":"irc://irc.freenode.org/contao.mm",
-		"source":"https://github.com/MetaModels/attribute_rating"
-	},
-	"require":{
-		"php":">=5.3",
+    "name": "metamodels/attribute_rating",
+    "description": "MetaModels attribute for rating items",
+    "keywords": ["contao", "metamodels", "attribute", "ajax", "rating"],
+    "type": "contao-module",
+    "homepage": "http://now.metamodel.me/",
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "Christian Schiffler",
+            "email": "c.schiffler@cyberspectrum.de",
+            "homepage": "http://www.cyberspectrum.de",
+            "role": "Developer"
+        },
+        {
+            "name": "Andreas Isaak",
+            "email": "info@andreas-isaak.de",
+            "homepage": "http://www.andreas-isaak.de",
+            "role": "Developer"
+        },
+        {
+            "name": "Stefan Heimes",
+            "email": "stefan_heimes@hotmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Christian de la Haye",
+            "email": "service@delahaye.de",
+            "homepage": "http://www.delahaye.de/",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "mail@metamodel.me",
+        "issues": "https://github.com/MetaModels/attribute_rating/issues",
+        "wiki": "http://de.contaowiki.org/MetaModels",
+        "irc": "irc://irc.freenode.org/contao.mm",
+        "source": "https://github.com/MetaModels/attribute_rating"
+    },
+    "require": {
+        "php": ">=5.3",
         "contao/core": ">=2.11,<4.0",
         "contao-community-alliance/composer-plugin": "~2.0",
-        "metamodels/core":"~2.0.0",
-		"leounglaub/contao-simple-ajax": "~1.0"
-	},
-	"require-dev": {
+        "metamodels/core": "~2.0.0",
+        "leounglaub/contao-simple-ajax": "~1.0"
+    },
+    "require-dev": {
         "cyberspectrum/contao-toolbox": "~0.6",
         "phpunit/phpunit": "~3.7",
         "sebastian/phpcpd": "~1.4",
@@ -54,7 +54,7 @@
         "contao-community-alliance/build-system-tool-branch-alias-validation": "~1.0",
         "contao-community-alliance/build-system": "~1.0",
         "contao-community-alliance/coding-standard": "~1.0"
-	},
+    },
     "conflict": {
         "contao/core": "3.0.*"
     },
@@ -68,9 +68,9 @@
             "MetaModels\\Test": "tests"
         }
     },
-    "extra":{
+    "extra": {
         "contao": {
-            "sources":{
+            "sources": {
                 "contao": "system/modules/metamodelsattribute_rating"
             },
             "transifex": {
