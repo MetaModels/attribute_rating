@@ -19,20 +19,16 @@
  * Table tl_metamodel_attribute
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['rating extends default'] = array
-(
-    '+advanced' => array
-    (
-        'rating_disabled'
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['rating extends default'] = array(
+    '+advanced' => array(
+        'rating_disabled',
     ),
 );
 
-$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['rating_disabled'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['rating_disabled'] = array(
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled'],
     'inputType'               => 'checkbox',
-    'eval'                    => array
-    (
-        'tl_class'            => 'w50'
-    )
+    'eval'                    => array(
+        'tl_class'            => 'w50',
+    ),
 );

@@ -19,8 +19,7 @@ $GLOBALS['METAMODELS']['attributes']['rating']['class'] = 'MetaModels\Attribute\
 $GLOBALS['METAMODELS']['attributes']['rating']['image'] =
     'system/modules/metamodelsattribute_rating/html/star-full.png';
 
-$GLOBALS['TL_HOOKS']['simpleAjax'][] = array
-(
+$GLOBALS['TL_HOOKS']['simpleAjax'][] = array(
     'MetaModels\Helper\RatingAjax',
-    'handle'
+    'handle',
 );

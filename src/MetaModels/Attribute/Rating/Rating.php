@@ -40,8 +40,7 @@ class Rating extends BaseComplex
     {
         return array_merge(
             parent::getAttributeSettingNames(),
-            array
-            (
+            array(
                 'sortable',
                 'rating_half',
                 'rating_max',
@@ -127,25 +126,22 @@ class Rating extends BaseComplex
                 implode(', ', array_fill(0, count($arrIds), '?'))
             ))
             ->executeUncached(array_merge(
-                array
-                (
+                array(
                     $this->getMetaModel()->get('id'),
-                    $this->get('id')
+                    $this->get('id'),
                 ),
                 $arrIds
             ));
 
         $arrResult = array();
         while ($objData->next()) {
-            $arrResult[$objData->iid] = array
-            (
+            $arrResult[$objData->iid] = array(
                 'votecount' => intval($objData->votecount),
                 'meanvalue' => floatval($objData->meanvalue),
             );
         }
         foreach (array_diff($arrIds, array_keys($arrResult)) as $intId) {
-            $arrResult[$intId] = array
-            (
+            $arrResult[$intId] = array(
                 'votecount' => 0,
                 'meanvalue' => 0,
             );
@@ -195,10 +191,9 @@ class Rating extends BaseComplex
                 )
             )
             ->execute(array_merge(
-                array
-                (
+                array(
                     $this->getMetaModel()->get('id'),
-                    $this->get('id')
+                    $this->get('id'),
                 ),
                 $arrIds
             ));
@@ -252,8 +247,7 @@ class Rating extends BaseComplex
         // Calculate the percentage.
         $value = (1 / $hundred * ($grandTotal + $fltValue));
 
-        $arrSet = array
-        (
+        $arrSet = array(
             'mid' => $this->getMetaModel()->get('id'),
             'aid' => $this->get('id'),
             'iid' => $intItemId,
@@ -291,7 +285,7 @@ class Rating extends BaseComplex
      */
     protected function ensureImage($strImage, $strDefault)
     {
-        if (strlen($strImage) && file_exists(TL_ROOT . '/' . $strImage)) {
+        if (strlen($strImage) && file_exists(TL_ROOT.'/'.$strImage)) {
             return $strImage;
         }
 
@@ -327,10 +321,10 @@ class Rating extends BaseComplex
             'system/modules/metamodelsattribute_rating/html/star-hover.png'
         );
 
-        $size                    = getimagesize(TL_ROOT . '/' . $strEmpty);
+        $size                    = getimagesize(TL_ROOT.'/'.$strEmpty);
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
-        $objTemplate->name       = 'rating_attribute_'.$this->get('id') . '_' . $arrRowData['id'];
+        $objTemplate->name       = 'rating_attribute_'.$this->get('id').'_'.$arrRowData['id'];
 
         $objTemplate->ratingDisabled = (
             (TL_MODE == 'BE')
@@ -348,11 +342,10 @@ class Rating extends BaseComplex
         );
         $objTemplate->ajaxUrl      = sprintf('SimpleAjax.php?metamodelsattribute_rating=%s', $this->get('id'));
         $objTemplate->ajaxData     = json_encode(
-            array
-            (
+            array(
                 'id' => $this->get('id'),
                 'pid' => $this->get('pid'),
-                'item' => $arrRowData['id']
+                'item' => $arrRowData['id'],
             )
         );
 
@@ -366,9 +359,9 @@ class Rating extends BaseComplex
         }
         $objTemplate->options = $arrOptions;
 
-        $objTemplate->imageEmpty = $base . $strEmpty;
-        $objTemplate->imageFull  = $base . $strFull;
-        $objTemplate->imageHover = $base . $strHover;
+        $objTemplate->imageEmpty = $base.$strEmpty;
+        $objTemplate->imageFull  = $base.$strFull;
+        $objTemplate->imageHover = $base.$strHover;
     }
 
     /**
@@ -384,14 +377,13 @@ class Rating extends BaseComplex
         $objData = \Database::getInstance()
             ->prepare(sprintf(
                 'SELECT iid FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s)) ORDER BY meanvalue '
-                . $strDirection,
+                .$strDirection,
                 implode(', ', array_fill(0, count($arrIds), '?'))
             ))
             ->execute(array_merge(
-                array
-                (
+                array(
                     $this->getMetaModel()->get('id'),
-                    $this->get('id')
+                    $this->get('id'),
                 ),
                 $arrIds
             ));

@@ -17,7 +17,6 @@
 namespace MetaModels\Helper;
 
 use MetaModels\Factory;
-
 use MetaModels\Attribute\Rating\Rating;
 
 /**
@@ -44,7 +43,7 @@ class RatingAjax
     {
         header('HTTP/1.1 400 Bad Request');
 
-        die('Rating Ajax: ' . $message);
+        die('Rating Ajax: '.$message);
     }
 
     /**
