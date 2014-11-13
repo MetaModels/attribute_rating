@@ -31,14 +31,3 @@ if (
 		'php composer.phar install'.PHP_EOL;
 	exit(1);
 }
-
-$loader->add('MetaModels\Test', __DIR__);
-
-if (
-	// Locally installed dependencies
-	(!$loader = includeIfExists(__DIR__.'/../vendor/metamodels/core/tests/MetaModels/Test/TestCase.php'))
-	// We are within an composer install.
-	&& (!$loader = includeIfExists(__DIR__.'/vendor/metamodels/core/tests/MetaModels/Test/TestCase.php'))) {
-	echo 'Could not determine the location of the testcase class of the MetaModels core.'.PHP_EOL;
-	exit(1);
-}
