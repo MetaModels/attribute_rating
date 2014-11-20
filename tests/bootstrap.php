@@ -18,27 +18,16 @@ error_reporting(E_ALL);
 
 function includeIfExists($file)
 {
-	return file_exists($file) ? include $file : false;
+    return file_exists($file) ? include $file : false;
 }
 
 if (
-	// Locally installed dependencies
-	(!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php'))
-	// We are within an composer install.
-	&& (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))) {
-	echo 'You must set up the project dependencies, run the following commands:'.PHP_EOL.
-		'curl -sS https://getcomposer.org/installer | php'.PHP_EOL.
-		'php composer.phar install'.PHP_EOL;
-	exit(1);
-}
-
-$loader->add('MetaModels\Test', __DIR__);
-
-if (
-	// Locally installed dependencies
-	(!$loader = includeIfExists(__DIR__.'/../vendor/metamodels/core/tests/MetaModels/Test/TestCase.php'))
-	// We are within an composer install.
-	&& (!$loader = includeIfExists(__DIR__.'/vendor/metamodels/core/tests/MetaModels/Test/TestCase.php'))) {
-	echo 'Could not determine the location of the testcase class of the MetaModels core.'.PHP_EOL;
-	exit(1);
+    // Locally installed dependencies
+    (!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php'))
+    // We are within an composer install.
+    && (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))) {
+    echo 'You must set up the project dependencies, run the following commands:'.PHP_EOL.
+        'curl -sS https://getcomposer.org/installer | php'.PHP_EOL.
+        'php composer.phar install'.PHP_EOL;
+    exit(1);
 }
