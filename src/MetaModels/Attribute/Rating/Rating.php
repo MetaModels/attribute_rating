@@ -87,7 +87,7 @@ class Rating extends BaseComplex
      * This is only relevant, when using "null" as id list for attributes that have preconfigured
      * values like select lists and tags i.e.
      *
-     * @param array $arrIds   The ids of items that the values shall be fetched from.
+     * @param array $idList   The ids of items that the values shall be fetched from.
      * @param bool  $usedOnly Determines if only "used" values shall be returned.
      * @param bool  $arrCount Array for the counted values.
      *
@@ -95,7 +95,7 @@ class Rating extends BaseComplex
      *
      * @SuppressWarnings("unused")
      */
-    public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
+    public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
         return array();
     }
@@ -303,7 +303,7 @@ class Rating extends BaseComplex
      *
      * @return void
      */
-    public function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings = null)
+    public function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings)
     {
         parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
@@ -369,32 +369,32 @@ class Rating extends BaseComplex
     /**
      * Sorts the given array list by field value in the given direction.
      *
-     * @param int[]  $arrIds       A list of Ids from the MetaModel table.
+     * @param int[]  $idList       A list of Ids from the MetaModel table.
      * @param string $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
      *
      * @return int[] The sorted integer array.
      */
-    public function sortIds($arrIds, $strDirection)
+    public function sortIds($idList, $strDirection)
     {
         $objData = \Database::getInstance()
             ->prepare(sprintf(
                 'SELECT iid FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s)) ORDER BY meanvalue '
                 .$strDirection,
-                implode(', ', array_fill(0, count($arrIds), '?'))
+                implode(', ', array_fill(0, count($idList), '?'))
             ))
             ->execute(array_merge(
                 array(
                     $this->getMetaModel()->get('id'),
                     $this->get('id'),
                 ),
-                $arrIds
+                $idList
             ));
 
         $arrSorted = $objData->fetchEach('iid');
 
         return ($strDirection == 'DESC')
-            ? array_merge($arrSorted, array_diff($arrIds, $arrSorted))
-            : array_merge(array_diff($arrIds, $arrSorted), $arrSorted);
+            ? array_merge($arrSorted, array_diff($idList, $arrSorted))
+            : array_merge(array_diff($idList, $arrSorted), $arrSorted);
     }
 
     /**
