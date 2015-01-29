@@ -319,7 +319,7 @@ class Rating extends BaseComplex
     {
         parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
-        $base = \Environment::getInstance()->base;
+        $base = \Environment::get('base');
         $lang = $this->getActiveLanguageArray();
 
         $strEmpty = $this->ensureImage(
