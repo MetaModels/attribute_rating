@@ -107,7 +107,10 @@ class Rating extends BaseComplex
      */
     public function destroyAUX()
     {
-        \Database::getInstance()
+        $this
+            ->getMetaModel()
+            ->getServiceContainer()
+            ->getDatabase()
             ->prepare('DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=?')
             ->execute($this->getMetaModel()->get('id'), $this->get('id'));
     }
@@ -122,12 +125,15 @@ class Rating extends BaseComplex
      */
     public function getDataFor($arrIds)
     {
-        $objData = \Database::getInstance()
+        $objData = $this
+            ->getMetaModel()
+            ->getServiceContainer()
+            ->getDatabase()
             ->prepare(sprintf(
                 'SELECT * FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s))',
                 implode(', ', array_fill(0, count($arrIds), '?'))
             ))
-            ->executeUncached(array_merge(
+            ->execute(array_merge(
                 array(
                     $this->getMetaModel()->get('id'),
                     $this->get('id'),
@@ -178,7 +184,10 @@ class Rating extends BaseComplex
      */
     public function unsetDataFor($arrIds)
     {
-        \Database::getInstance()
+        $this
+            ->getMetaModel()
+            ->getServiceContainer()
+            ->getDatabase()
             ->prepare(
                 sprintf(
                     'DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=? AND (iid IN (%s))',
@@ -263,7 +272,10 @@ class Rating extends BaseComplex
             $strSQL = 'UPDATE tl_metamodel_rating %s WHERE mid=? AND aid=? AND iid=?';
         }
 
-        \Database::getInstance()
+        $this
+            ->getMetaModel()
+            ->getServiceContainer()
+            ->getDatabase()
             ->prepare($strSQL)
             ->set($arrSet)
             ->execute(
@@ -376,7 +388,10 @@ class Rating extends BaseComplex
      */
     public function sortIds($idList, $strDirection)
     {
-        $objData = \Database::getInstance()
+        $objData = $this
+            ->getMetaModel()
+            ->getServiceContainer()
+            ->getDatabase()
             ->prepare(sprintf(
                 'SELECT iid FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s)) ORDER BY meanvalue '
                 .$strDirection,
