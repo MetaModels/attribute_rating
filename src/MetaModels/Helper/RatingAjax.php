@@ -17,8 +17,9 @@
 
 namespace MetaModels\Helper;
 
-use MetaModels\Factory;
 use MetaModels\Attribute\Rating\Rating;
+use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\IServiceContainerAware;
 
 /**
  * This is the MetaModelAttribute ajax endpoint for the rating attribute.
@@ -29,8 +30,15 @@ use MetaModels\Attribute\Rating\Rating;
  *
  * @codeCoverageIgnore
  */
-class RatingAjax
+class RatingAjax implements IServiceContainerAware
 {
+    /**
+     * The service container.
+     *
+     * @var IMetaModelsServiceContainer
+     */
+    protected $serviceContainer;
+
     /**
      * Set HTTP 400 Bad Request header and exit the script.
      *
@@ -48,6 +56,32 @@ class RatingAjax
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
+    {
+        $this->serviceContainer = $serviceContainer;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getServiceContainer()
+    {
+        // Implicit fallback if none set, retrieve from global container.
+        if (!$this->serviceContainer) {
+            $this->serviceContainer = $GLOBALS['container']['metamodels-service-container'];
+        }
+
+        return $this->serviceContainer;
+    }
+
+    /**
      * Process an ajax request.
      *
      * @return void
@@ -56,27 +90,22 @@ class RatingAjax
      */
     public function handle()
     {
-        if (!\Input::getInstance()->get('metamodelsattribute_rating')) {
+        if (!\Input::get('metamodelsattribute_rating')) {
             return;
         }
-        $arrData  = \Input::getInstance()->post('data');
-        $fltValue = \Input::getInstance()->post('rating');
+        $arrData  = \Input::post('data');
+        $fltValue = \Input::post('rating');
 
         if (!($arrData && $arrData['id'] && $arrData['pid'] && $arrData['item'])) {
             $this->bail('Invalid request.');
         }
-
-        $objMetaModel = Factory::byId($arrData['pid']);
+        $factory      = $this->getServiceContainer()->getFactory();
+        $objMetaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($arrData['pid']));
         if (!$objMetaModel) {
             $this->bail('No MetaModel.');
         }
 
-        // @codingStandardsIgnoreStart - allow this inline doc comment.
-        /**
-         * @var \MetaModels\Attribute\Rating\Rating $objAttribute
-         */
-        // @codingStandardsIgnoreEnd
-
+        /** @var Rating $objAttribute */
         $objAttribute = $objMetaModel->getAttributeById($arrData['id']);
 
         if (!$objAttribute) {
