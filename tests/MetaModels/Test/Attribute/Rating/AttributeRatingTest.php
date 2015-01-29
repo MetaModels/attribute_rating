@@ -23,11 +23,20 @@ use MetaModels\Attribute\Rating\Rating;
 use MetaModels\Factory;
 use MetaModels\Test\TestCase;
 
+/**
+ * Test the rating attribute.
+ */
 class AttributeRatingTest extends TestCase
 {
+    /**
+     * Prepare the database.
+     *
+     * @return bool
+     */
     protected function prepareDb()
     {
         $this->markTestSkipped('Currently this does not work anymore.');
+        return;
 
         $this->installIntoContao(
             'src/system/modules/metamodelsattribute_rating/config',
@@ -71,7 +80,9 @@ class AttributeRatingTest extends TestCase
     }
 
     /**
-     * Test the retrieval of a vote
+     * Test the retrieval of a vote.
+     *
+     * @return void
      */
     public function testFetchVote()
     {
@@ -98,6 +109,8 @@ class AttributeRatingTest extends TestCase
 
     /**
      * Test the retrieval of a known and an unknown vote.
+     *
+     * @return void
      */
     public function testFetchVoteUnknown()
     {
@@ -128,7 +141,9 @@ class AttributeRatingTest extends TestCase
     }
 
     /**
-     * Test the casting of a vote
+     * Test the casting of a vote.
+     *
+     * @return void
      */
     public function testCastVoteMax()
     {
@@ -156,7 +171,9 @@ class AttributeRatingTest extends TestCase
     }
 
     /**
-     * Test the casting of a vote
+     * Test the casting of a vote.
+     *
+     * @return void
      */
     public function testCastVoteHalf()
     {
@@ -184,7 +201,9 @@ class AttributeRatingTest extends TestCase
     }
 
     /**
-     * Test the casting of a vote
+     * Test the casting of a vote.
+     *
+     * @return void
      */
     public function testCastUnsetDataFor()
     {
@@ -213,6 +232,8 @@ class AttributeRatingTest extends TestCase
 
     /**
      * Test the casting of a vote on a locked item.
+     *
+     * @return void
      */
     public function testTryCastVoteForLockedItem()
     {
@@ -243,6 +264,8 @@ class AttributeRatingTest extends TestCase
 
     /**
      * Test the casting of a vote on a locked item.
+     *
+     * @return void
      */
     public function testTryCastVoteAndLockItem()
     {
@@ -273,6 +296,8 @@ class AttributeRatingTest extends TestCase
 
     /**
      * Test the casting of a vote on a locked item.
+     *
+     * @return void
      */
     public function testCastVoteForNewItem()
     {
@@ -301,6 +326,8 @@ class AttributeRatingTest extends TestCase
 
     /**
      * Test the sorting of items.
+     *
+     * @return void
      */
     public function testSortVotes()
     {
@@ -336,6 +363,8 @@ class AttributeRatingTest extends TestCase
 
     /**
      * Test the ensure image method.
+     *
+     * @return void
      */
     public function testEnsureImageExisting()
     {
@@ -368,6 +397,8 @@ class AttributeRatingTest extends TestCase
 
     /**
      * Test the ensure image method.
+     *
+     * @return void
      */
     public function testPrepareTemplate()
     {
@@ -401,6 +432,11 @@ class AttributeRatingTest extends TestCase
         );
     }
 
+    /**
+     * Test the getFilterOptions() method.
+     *
+     * @return void
+     */
     public function testGetfilterOptions()
     {
         $this->markTestIncomplete();
@@ -437,6 +473,11 @@ class AttributeRatingTest extends TestCase
         );
     }
 
+    /**
+     * Test destruction of the auxiliary data.
+     *
+     * @return void
+     */
     public function testDestroyAUX()
     {
         // This marks the test skipped upon error as Contao related testing is not available.
@@ -447,11 +488,11 @@ class AttributeRatingTest extends TestCase
         $metamodel = Factory::byTableName('mm_movies');
 
         /** @var Rating $rating */
-        $rating   = $metamodel->getAttribute('rating');
+        $rating = $metamodel->getAttribute('rating');
 
         $rating->destroyAUX();
 
-        $query1 = \Database::getInstance()->executeUncached('SELECT * FROM tl_metamodel_rating WHERE mid=1 AND aid=1');
+        $query1 = \Database::getInstance()->execute('SELECT * FROM tl_metamodel_rating WHERE mid=1 AND aid=1');
 
         $this->assertEquals(
             0,
@@ -464,7 +505,7 @@ class AttributeRatingTest extends TestCase
         );
 
         // Ensure the data from the other attribute is still present.
-        $query2 = \Database::getInstance()->executeUncached('SELECT * FROM tl_metamodel_rating WHERE mid=1 AND aid=2');
+        $query2 = \Database::getInstance()->execute('SELECT * FROM tl_metamodel_rating WHERE mid=1 AND aid=2');
 
         $this->assertEquals(
             1,

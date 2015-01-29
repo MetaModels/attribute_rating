@@ -43,20 +43,17 @@ class RatingTest extends \PHPUnit_Framework_TestCase
         $metaModel
             ->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnValue('mm_unittest'))
-        ;
+            ->will($this->returnValue('mm_unittest'));
 
         $metaModel
             ->expects($this->any())
             ->method('getActiveLanguage')
-            ->will($this->returnValue($language))
-        ;
+            ->will($this->returnValue($language));
 
         $metaModel
             ->expects($this->any())
             ->method('getFallbackLanguage')
-            ->will($this->returnValue($fallbackLanguage))
-        ;
+            ->will($this->returnValue($fallbackLanguage));
 
         return $metaModel;
     }
