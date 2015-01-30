@@ -158,7 +158,6 @@ class Rating extends BaseComplex
         return $arrResult;
     }
 
-    // @codingStandardsIgnoreStart - we know that this is a non-op just to be non-abstract.
     /**
      * This method is a no-op in this class.
      *
@@ -173,7 +172,6 @@ class Rating extends BaseComplex
     {
         // No op - this attribute is not meant to be manipulated.
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * Delete all votes for the given items.
