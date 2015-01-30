@@ -20,6 +20,7 @@
 namespace MetaModels\Attribute\Rating;
 
 use MetaModels\Attribute\BaseComplex;
+use MetaModels\Helper\ToolboxFile;
 use MetaModels\Render\Setting\ISimple;
 use MetaModels\Render\Template;
 
@@ -290,15 +291,16 @@ class Rating extends BaseComplex
     /**
      * Test whether the given image exists.
      *
-     * @param string $strImage   Path to the image to use.
+     * @param string $uuidImage  The uuid of the image.
      * @param string $strDefault Path to the fallback image.
      *
      * @return string If the image exists, the image is returned, the default otherwise.
      */
-    protected function ensureImage($strImage, $strDefault)
+    protected function ensureImage($uuidImage, $strDefault)
     {
-        if (strlen($strImage) && file_exists(TL_ROOT.'/'.$strImage)) {
-            return $strImage;
+        $imagePath = ToolboxFile::convertValueToPath($uuidImage);
+        if (strlen($imagePath) && file_exists(TL_ROOT . '/' . $imagePath)) {
+            return $imagePath;
         }
 
         return $strDefault;
