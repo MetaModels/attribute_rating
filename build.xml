@@ -6,6 +6,6 @@
    https://github.com/phpcq/phpcq
 
 -->
-<project name="MetaModels attribute rating" default="build">
+<project name="metamodels/attribute_rating" default="build">
     <import file="vendor/phpcq/phpcq/phpcq.main.xml" />
 </project>
