@@ -8,10 +8,10 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-12-22T20:16:48+01:00
+ * last-updated: 2015-07-11T08:03:08+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['0'] = 'Отключить рейтинг';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['1'] = 'Если выбрано, рейтинг будет отключен и будут выведены существующие значения рейтинга (в панели управления отображается всегда).';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['1'] = 'Если этот флажок установлен, рейтинг будет отключен и будет показано только текущее значение рейтинга
+ (это жесткое "Вкл" для панели управления).';
 
