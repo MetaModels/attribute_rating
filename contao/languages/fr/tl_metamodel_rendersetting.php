@@ -8,11 +8,9 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-14T00:11:39+02:00
+ * last-updated: 2015-07-11T04:13:13+02:00
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['0'] =
-    'Désactiver classement (implicite dans le back office)';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['1'] =
-    'Si coché, le classement sera désactivé et seule les notes courante seront montrée.
- (Ceci est codé nativement sur "on" pour le back office).';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['0'] = 'Désactiver classement (implicite dans le back office)';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['1'] = 'Si sélectionné, le classement sera désactivé et seule la valeur actuelle sera affichée (sélectionné par défaut dans le backend).';
+
