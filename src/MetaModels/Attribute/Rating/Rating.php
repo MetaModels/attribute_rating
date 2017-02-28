@@ -59,6 +59,22 @@ class Rating extends BaseComplex
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function valueToWidget($varValue)
+    {
+        return $varValue['meanvalue'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function widgetToValue($varValue, $itemId)
+    {
+        return ['meanvalue' => $varValue];
+    }
+
+    /**
      * This generates the field definition for use in a DCA.
      *
      * It also sets the proper language variables (if not already set per dcaconfig.php or similar).
@@ -75,7 +91,9 @@ class Rating extends BaseComplex
     public function getFieldDefinition($arrOverrides = array())
     {
         $arrFieldDef              = parent::getFieldDefinition($arrOverrides);
-        $arrFieldDef['inputType'] = 'submit';
+        $arrFieldDef['inputType'] = 'text';
+        // We must not change the value.
+        $arrFieldDef['eval']['disabled'] = true;
 
         return $arrFieldDef;
     }
