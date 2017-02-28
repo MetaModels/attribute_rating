@@ -1,24 +1,30 @@
 <?php
 
 /**
- * The MetaModels extension allows the creation of multiple collections of custom items,
- * each with its own unique set of selectable attributes, with attribute extendability.
- * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each collection.
+ * This file is part of MetaModels/attribute_rating.
  *
- * PHP version 5
+ * (c) 2012-2017 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
  * @package    MetaModels
  * @subpackage AttributeRating
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Greminger <david.greminger@1up.io>
- * @copyright  The MetaModels team.
- * @license    LGPL.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2017 The MetaModels team.
+ * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\Attribute\Rating;
 
+use Contao\Environment;
+use Contao\Session;
 use MetaModels\Attribute\BaseComplex;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\Render\Setting\ISimple;
@@ -55,6 +61,22 @@ class Rating extends BaseComplex
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function valueToWidget($varValue)
+    {
+        return $varValue['meanvalue'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function widgetToValue($varValue, $itemId)
+    {
+        return ['meanvalue' => $varValue];
+    }
+
+    /**
      * This generates the field definition for use in a DCA.
      *
      * It also sets the proper language variables (if not already set per dcaconfig.php or similar).
@@ -71,7 +93,9 @@ class Rating extends BaseComplex
     public function getFieldDefinition($arrOverrides = array())
     {
         $arrFieldDef              = parent::getFieldDefinition($arrOverrides);
-        $arrFieldDef['inputType'] = 'submit';
+        $arrFieldDef['inputType'] = 'text';
+        // We must not change the value.
+        $arrFieldDef['eval']['disabled'] = true;
 
         return $arrFieldDef;
     }
@@ -237,7 +261,7 @@ class Rating extends BaseComplex
      */
     public function addVote($intItemId, $fltValue, $blnLock = false)
     {
-        if (\Session::getInstance()->get($this->getLockId($intItemId))) {
+        if (Session::getInstance()->get($this->getLockId($intItemId))) {
             return;
         }
 
@@ -284,7 +308,7 @@ class Rating extends BaseComplex
             );
 
         if ($blnLock) {
-            \Session::getInstance()->set($this->getLockId($intItemId), true);
+            Session::getInstance()->set($this->getLockId($intItemId), true);
         }
     }
 
@@ -319,7 +343,7 @@ class Rating extends BaseComplex
     {
         parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
-        $base = \Environment::get('base');
+        $base = Environment::get('base');
         $lang = $this->getActiveLanguageArray();
 
         $strEmpty = $this->ensureImage(
@@ -343,7 +367,7 @@ class Rating extends BaseComplex
         $objTemplate->ratingDisabled = (
             (TL_MODE == 'BE')
             || $objSettings->get('rating_disabled')
-            || \Session::getInstance()->get($this->getLockId($arrRowData['id']))
+            || Session::getInstance()->get($this->getLockId($arrRowData['id']))
         );
 
         $value = ($this->get('rating_max') * floatval($arrRowData[$this->getColName()]['meanvalue']));
