@@ -23,6 +23,8 @@
 
 namespace MetaModels\Attribute\Rating;
 
+use Contao\Environment;
+use Contao\Session;
 use MetaModels\Attribute\BaseComplex;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\Render\Setting\ISimple;
@@ -259,7 +261,7 @@ class Rating extends BaseComplex
      */
     public function addVote($intItemId, $fltValue, $blnLock = false)
     {
-        if (\Session::getInstance()->get($this->getLockId($intItemId))) {
+        if (Session::getInstance()->get($this->getLockId($intItemId))) {
             return;
         }
 
@@ -306,7 +308,7 @@ class Rating extends BaseComplex
             );
 
         if ($blnLock) {
-            \Session::getInstance()->set($this->getLockId($intItemId), true);
+            Session::getInstance()->set($this->getLockId($intItemId), true);
         }
     }
 
@@ -341,7 +343,7 @@ class Rating extends BaseComplex
     {
         parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
-        $base = \Environment::get('base');
+        $base = Environment::get('base');
         $lang = $this->getActiveLanguageArray();
 
         $strEmpty = $this->ensureImage(
@@ -365,7 +367,7 @@ class Rating extends BaseComplex
         $objTemplate->ratingDisabled = (
             (TL_MODE == 'BE')
             || $objSettings->get('rating_disabled')
-            || \Session::getInstance()->get($this->getLockId($arrRowData['id']))
+            || Session::getInstance()->get($this->getLockId($arrRowData['id']))
         );
 
         $value = ($this->get('rating_max') * floatval($arrRowData[$this->getColName()]['meanvalue']));
