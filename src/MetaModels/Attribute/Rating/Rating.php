@@ -341,6 +341,8 @@ class Rating extends BaseComplex
      */
     public function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings)
     {
+        global $container;
+
         parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
         $base = Environment::get('base');
@@ -378,11 +380,15 @@ class Rating extends BaseComplex
             '[VALUE]',
             $this->get('rating_max')
         );
-        $objTemplate->ajaxUrl      = sprintf('SimpleAjax.php?metamodelsattribute_rating=%s', $this->get('id'));
+        $objTemplate->ajaxUrl      = sprintf(
+            '%s?metamodelsattribute_rating=%s',
+            $container['simpleajax.entrypoint-frontend'],
+            $this->get('id')
+        );
         $objTemplate->ajaxData     = json_encode(
             array(
-                'id' => $this->get('id'),
-                'pid' => $this->get('pid'),
+                'id'   => $this->get('id'),
+                'pid'  => $this->get('pid'),
                 'item' => $arrRowData['id'],
             )
         );

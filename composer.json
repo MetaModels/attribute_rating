@@ -37,7 +37,7 @@
     "contao-community-alliance/composer-plugin": "~2.0",
     "contao-community-alliance/dc-general": "~2.0@beta",
     "metamodels/core": "~2.0@alpha",
-    "leounglaub/contao-simple-ajax": "~1.0"
+    "richardhj/contao-simple-ajax": "^1.1"
   },
   "require-dev": {
     "cyberspectrum/contao-toolbox": "~0.6",
