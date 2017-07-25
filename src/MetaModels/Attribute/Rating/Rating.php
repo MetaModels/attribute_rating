@@ -36,6 +36,7 @@ use MetaModels\Render\Template;
  * @package    MetaModels
  * @subpackage AttributeRating
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  */
 class Rating extends BaseComplex
 {
