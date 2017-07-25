@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -95,11 +96,13 @@ class RatingAjax implements IServiceContainerAware
      */
     public function handle()
     {
-        if (!\Input::get('metamodelsattribute_rating')) {
+        $input = \Input::getInstance();
+        if (!$input->get('metamodelsattribute_rating')) {
             return;
         }
-        $arrData  = \Input::post('data');
-        $fltValue = \Input::post('rating');
+
+        $arrData  = $input->post('data');
+        $fltValue = $input->post('rating');
 
         if (!($arrData && $arrData['id'] && $arrData['pid'] && $arrData['item'])) {
             $this->bail('Invalid request.');
