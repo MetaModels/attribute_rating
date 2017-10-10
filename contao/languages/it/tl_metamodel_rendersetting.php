@@ -8,11 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-14T00:11:39+02:00
+ * last-updated: 2017-10-10T13:09:34+02:00
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['0'] =
-    'Disattivare rating (implicito nel backend)';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['1'] =
-    'Se selezionato, il rating verrà disattivato e verrà dimostrato solo il valore corrente
- (questo è hardcoded su "on" per il backend).';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['0'] = 'Disattivare rating (implicito nel backend)';
+
