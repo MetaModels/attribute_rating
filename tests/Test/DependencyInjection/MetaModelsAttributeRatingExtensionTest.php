@@ -21,6 +21,7 @@
 namespace MetaModels\Test\Attribute\Rating\DependencyInjection;
 
 use MetaModels\Attribute\Rating\AttributeTypeFactory;
+use MetaModels\Attribute\Rating\Controller\RateAjaxController;
 use MetaModels\Attribute\Rating\DependencyInjection\MetaModelsAttributeRatingExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -74,6 +75,41 @@ class MetaModelsAttributeRatingExtensionTest extends TestCase
                 [
                     $this->anything(),
                     $this->anything()
+                ]
+            );
+
+        $extension = new MetaModelsAttributeRatingExtension();
+        $extension->load([], $container);
+    }
+
+    /**
+     * Test that the services are loaded.
+     *
+     * @return void
+     */
+    public function testRatingControllerIsRegistered()
+    {
+        $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
+
+        $container
+            ->expects($this->atLeastOnce())
+            ->method('setDefinition')
+            ->withConsecutive(
+                [
+                    $this->anything(),
+                    $this->anything()
+                ],
+                [
+                    'metamodels.controller.rating',
+                    $this->callback(
+                        function ($value) {
+                            /** @var Definition $value */
+                            $this->assertInstanceOf(Definition::class, $value);
+                            $this->assertEquals(RateAjaxController::class, $value->getClass());
+
+                            return true;
+                        }
+                    )
                 ]
             );
 

@@ -26,6 +26,9 @@ use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use MetaModels\Attribute\Rating\ContaoManager\Plugin;
 use MetaModels\CoreBundle\MetaModelsCoreBundle;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\Loader\LoaderResolverInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Unit tests the contao manager plugin.
@@ -64,5 +67,30 @@ class PluginTest extends TestCase
 
         $this->assertEquals($bundleConfig->getLoadAfter(), [MetaModelsCoreBundle::class]);
         $this->assertEquals($bundleConfig->getReplace(), ['metamodelsattribute_rating']);
+    }
+
+    /**
+     * Test if the routing config is loaded.
+     *
+     * @return void
+     */
+    public function testRouting()
+    {
+        $loader   = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        $resolver = $this->getMockBuilder(LoaderResolverInterface::class)->getMock();
+
+        $loader
+            ->expects($this->once())
+            ->method('load');
+
+        $resolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->willReturn($loader);
+
+        $kernel = $this->getMockBuilder(KernelInterface::class)->getMock();
+
+        $plugin = new Plugin();
+        $plugin->getRouteCollection($resolver, $kernel);
     }
 }
