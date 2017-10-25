@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -22,28 +23,22 @@
 
 namespace MetaModels\Test\Attribute\Rating;
 
-use MetaModels\Attribute\IAttributeTypeFactory;
-use MetaModels\Attribute\Rating\AttributeTypeFactory;
-use MetaModels\IMetaModel;
-use MetaModels\Test\Attribute\AttributeTypeFactoryTest;
+use MetaModels\Attribute\Rating\Rating;
 
 /**
- * Test the attribute factory.
+ * Unit tests to test class Rating.
  */
-class RatingAttributeTypeFactoryTest extends AttributeTypeFactoryTest
+class RatingTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Mock a MetaModel.
      *
-     * @param string $tableName        The table name.
-     *
      * @param string $language         The language.
-     *
      * @param string $fallbackLanguage The fallback language.
      *
-     * @return IMetaModel
+     * @return \MetaModels\IMetaModel
      */
-    protected function mockMetaModel($tableName, $language, $fallbackLanguage)
+    protected function mockMetaModel($language, $fallbackLanguage)
     {
         $metaModel = $this->getMock(
             'MetaModels\MetaModel',
@@ -54,7 +49,7 @@ class RatingAttributeTypeFactoryTest extends AttributeTypeFactoryTest
         $metaModel
             ->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnValue($tableName));
+            ->will($this->returnValue('mm_unittest'));
 
         $metaModel
             ->expects($this->any())
@@ -70,39 +65,13 @@ class RatingAttributeTypeFactoryTest extends AttributeTypeFactoryTest
     }
 
     /**
-     * Override the method to run the tests on the attribute factories to be tested.
-     *
-     * @return IAttributeTypeFactory[]
-     */
-    protected function getAttributeFactories()
-    {
-        return array(new AttributeTypeFactory());
-    }
-
-    /**
-     * Test creation of a numeric attribute.
+     * Test that the attribute can be instantiated.
      *
      * @return void
      */
-    public function testCreateSelect()
+    public function testInstantiation()
     {
-        $factory   = new AttributeTypeFactory();
-        $values    = array(
-            'rating_max'   => 10,
-            'rating_half'  => 1,
-            'rating_emtpy' => '',
-            'rating_full'  => '',
-            'rating_hover' => '',
-        );
-        $attribute = $factory->createInstance(
-            $values,
-            $this->mockMetaModel('mm_test', 'de', 'en')
-        );
-
-        $this->assertInstanceOf('MetaModels\Attribute\Rating\Rating', $attribute);
-
-        foreach ($values as $key => $value) {
-            $this->assertEquals($value, $attribute->get($key), $key);
-        }
+        $text = new Rating($this->mockMetaModel('en', 'en'));
+        $this->assertInstanceOf('MetaModels\Attribute\Rating\Rating', $text);
     }
 }
