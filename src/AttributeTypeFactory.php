@@ -21,7 +21,9 @@
 
 namespace MetaModels\Attribute\Rating;
 
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\AbstractAttributeTypeFactory;
+use MetaModels\Helper\TableManipulator;
 
 /**
  * Attribute type factory for rating attributes.
@@ -31,9 +33,9 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
     /**
      * {@inheritDoc}
      */
-    public function __construct()
+    public function __construct(Connection $connection, TableManipulator $tableManipulator)
     {
-        parent::__construct();
+        parent::__construct($connection, $tableManipulator);
 
         $this->typeName  = 'rating';
         $this->typeIcon  = 'bundles/metamodelsattributerating/star-full.png';
