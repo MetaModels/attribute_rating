@@ -25,13 +25,17 @@
 namespace MetaModels\Attribute\Rating;
 
 use Contao\Environment;
-use Contao\Session;
+use Contao\System;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\BaseComplex;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\ISimple;
 use MetaModels\Render\Template;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
+use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -58,23 +62,80 @@ class Rating extends BaseComplex
     private $router;
 
     /**
+     * Web session.
+     *
+     * @var null|SessionInterface
+     */
+    private $session;
+
+    /**
+     * Request scope determinator.
+     *
+     * @var RequestScopeDeterminator|null
+     */
+    private $scopeDeterminator;
+
+    /**
      * Rating constructor.
      *
-     * @param IMetaModel            $objMetaModel     The metamodel to which the attribute belongs to.
-     * @param array                 $arrData          Attribute data.
-     * @param Connection|null       $connection       Database connection.
-     * @param RouterInterface|null  $router           The router.
+     * @param IMetaModel                    $objMetaModel      The metamodel to which the attribute belongs to.
+     * @param array                         $arrData           Attribute data.
+     * @param Connection|null               $connection        Database connection.
+     * @param RouterInterface|null          $router            The router.
+     * @param SessionInterface|null         $session           Session.
+     * @param RequestScopeDeterminator|null $scopeDeterminator Request scope determinator.
      */
     public function __construct(
         IMetaModel $objMetaModel,
         array $arrData = [],
         Connection $connection = null,
-        RouterInterface $router = null
+        RouterInterface $router = null,
+        SessionInterface $session = null,
+        RequestScopeDeterminator $scopeDeterminator = null
     ) {
         parent::__construct($objMetaModel, $arrData);
 
-        $this->connection = $connection;
-        $this->router     = $router;
+        // @codingStandardsIgnoreStart Silencing errors is discouraged
+        if (null === $connection) {
+            @trigger_error(
+                'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        if (null === $router) {
+            @trigger_error(
+                'Router is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+
+            $router = System::getContainer()->get('router');
+        }
+
+        if (null === $session) {
+            @trigger_error(
+                'Router is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+
+            $session = System::getContainer()->get('session');
+        }
+
+        if (null === $scopeDeterminator) {
+            @trigger_error(
+                'Scope determinator is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+
+            $scopeDeterminator = System::getContainer()->get('cca.dc-general.scope-matcher');
+        }
+        // @codingStandardsIgnoreEnd
+
+        $this->connection        = $connection;
+        $this->router            = $router;
+        $this->session           = $session;
+        $this->scopeDeterminator = $scopeDeterminator;
     }
 
     /**
@@ -273,7 +334,7 @@ class Rating extends BaseComplex
      */
     public function addVote($intItemId, $fltValue, $blnLock = false)
     {
-        if (Session::getInstance()->get($this->getLockId($intItemId))) {
+        if ($this->getSessionBag()->get($this->getLockId($intItemId))) {
             return;
         }
 
@@ -325,7 +386,7 @@ class Rating extends BaseComplex
         $queryBuilder->execute();
 
         if ($blnLock) {
-            Session::getInstance()->set($this->getLockId($intItemId), true);
+            $this->getSessionBag()->set($this->getLockId($intItemId), true);
         }
     }
 
@@ -384,7 +445,7 @@ class Rating extends BaseComplex
         $objTemplate->ratingDisabled = (
             (TL_MODE == 'BE')
             || $objSettings->get('rating_disabled')
-            || Session::getInstance()->get($this->getLockId($arrRowData['id']))
+            || $this->getSessionBag()->get($this->getLockId($arrRowData['id']))
         );
 
         $value = ($this->get('rating_max') * floatval($arrRowData[$this->getColName()]['meanvalue']));
@@ -459,5 +520,23 @@ class Rating extends BaseComplex
     protected function getActiveLanguageArray()
     {
         return $GLOBALS['TL_LANG'];
+    }
+
+    /**
+     * Get the session bag depending on current scope.
+     *
+     * @return AttributeBagInterface|SessionBagInterface
+     */
+    protected function getSessionBag()
+    {
+        if ($this->scopeDeterminator->currentScopeIsBackend()) {
+            return $this->session->getBag('contao_backend');
+        }
+
+        if ($this->scopeDeterminator->currentScopeIsFrontend()) {
+            return $this->session->getBag('contao_frontend');
+        }
+
+        return $this->session->getBag('attributes');
     }
 }

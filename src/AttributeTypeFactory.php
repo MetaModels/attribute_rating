@@ -21,9 +21,11 @@
 
 namespace MetaModels\Attribute\Rating;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\AbstractAttributeTypeFactory;
-use MetaModels\Helper\TableManipulator;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Attribute type factory for rating attributes.
@@ -31,14 +33,68 @@ use MetaModels\Helper\TableManipulator;
 class AttributeTypeFactory extends AbstractAttributeTypeFactory
 {
     /**
-     * {@inheritDoc}
+     * Database connection.
+     *
+     * @var Connection
      */
-    public function __construct(Connection $connection, TableManipulator $tableManipulator)
-    {
-        parent::__construct($connection, $tableManipulator);
+    private $connection;
 
-        $this->typeName  = 'rating';
-        $this->typeIcon  = 'bundles/metamodelsattributerating/star-full.png';
-        $this->typeClass = 'MetaModels\Attribute\Rating\Rating';
+    /**
+     * Router.
+     *
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
+     * Session.
+     *
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
+     * Request scope determinator.
+     *
+     * @var RequestScopeDeterminator
+     */
+    private $scopeDeterminator;
+
+    /**
+     * Construct.
+     *
+     * @param Connection               $connection        Database connection.
+     * @param RouterInterface          $router            Router.
+     * @param SessionInterface         $session           Session
+     * @param RequestScopeDeterminator $scopeDeterminator Scope determinator.
+     */
+    public function __construct(
+        Connection $connection,
+        RouterInterface $router,
+        SessionInterface $session,
+        RequestScopeDeterminator $scopeDeterminator
+    ) {
+        $this->typeName          = 'rating';
+        $this->typeIcon          = 'bundles/metamodelsattributerating/star-full.png';
+        $this->typeClass         = 'MetaModels\Attribute\Rating\Rating';
+        $this->connection        = $connection;
+        $this->router            = $router;
+        $this->session           = $session;
+        $this->scopeDeterminator = $scopeDeterminator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createInstance($information, $metaModel)
+    {
+        return new $this->typeClass(
+            $metaModel,
+            $information,
+            $this->connection,
+            $this->router,
+            $this->session,
+            $this->scopeDeterminator
+        );
     }
 }

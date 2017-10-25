@@ -3,7 +3,8 @@ services:
         class: MetaModels\Attribute\Rating\AttributeTypeFactory
         arguments:
             - '@database_connection'
-            - '@metamodels.table_manipulator'
+            - '@router'
+            - '@session'
         tags:
           - { name: metamodels.attribute_factory }
 
