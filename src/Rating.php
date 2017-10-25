@@ -28,7 +28,6 @@ use Contao\Environment;
 use Contao\Session;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\BaseComplex;
-use MetaModels\Helper\TableManipulator;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\ISimple;
@@ -52,32 +51,30 @@ class Rating extends BaseComplex
     private $connection;
 
     /**
-     * Table manipulator.
-     *
-     * @var TableManipulator
-     */
-    private $tableManipulator;
-
-    /**
      * Router.
      *
      * @var RouterInterface
      */
     private $router;
 
-
+    /**
+     * Rating constructor.
+     *
+     * @param IMetaModel            $objMetaModel     The metamodel to which the attribute belongs to.
+     * @param array                 $arrData          Attribute data.
+     * @param Connection|null       $connection       Database connection.
+     * @param RouterInterface|null  $router           The router.
+     */
     public function __construct(
         IMetaModel $objMetaModel,
         array $arrData = [],
         Connection $connection = null,
-        TableManipulator $tableManipulator = null,
         RouterInterface $router = null
     ) {
         parent::__construct($objMetaModel, $arrData);
 
-        $this->connection       = $connection;
-        $this->tableManipulator = $tableManipulator;
-        $this->router           = $router;
+        $this->connection = $connection;
+        $this->router     = $router;
     }
 
     /**
@@ -173,12 +170,13 @@ class Rating extends BaseComplex
      */
     public function destroyAUX()
     {
-        $this
-            ->getMetaModel()
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare('DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=?')
-            ->execute($this->getMetaModel()->get('id'), $this->get('id'));
+        $this->connection->delete(
+            'tl_metamodel_rating',
+            [
+                'mid' => $this->getMetaModel()->get('id'),
+                'aid' => $this->get('id')
+            ]
+        );
     }
 
     /**
@@ -191,24 +189,15 @@ class Rating extends BaseComplex
      */
     public function getDataFor($arrIds)
     {
-        $objData = $this
-            ->getMetaModel()
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare(sprintf(
-                'SELECT * FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s))',
-                implode(', ', array_fill(0, count($arrIds), '?'))
-            ))
-            ->execute(array_merge(
-                array(
-                    $this->getMetaModel()->get('id'),
-                    $this->get('id'),
-                ),
-                $arrIds
-            ));
+        $query     = 'SELECT * FROM tl_metamodel_rating WHERE (mid=:mid) AND (aid=:aid) AND (iid IN (:iids))';
+        $statement = $this->connection->prepare($query);
+        $statement->bindValue('mid', $this->getMetaModel()->get('id'));
+        $statement->bindValue('aid', $this->get('id'));
+        $statement->bindValue('iids', $arrIds, Connection::PARAM_INT_ARRAY);
+        $statement->execute();
 
         $arrResult = array();
-        while ($objData->next()) {
+        while ($objData = $statement->fetch(\PDO::FETCH_OBJ)) {
             $arrResult[$objData->iid] = array(
                 'votecount' => intval($objData->votecount),
                 'meanvalue' => floatval($objData->meanvalue),
@@ -248,30 +237,12 @@ class Rating extends BaseComplex
      */
     public function unsetDataFor($arrIds)
     {
-        $this
-            ->getMetaModel()
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare(
-                sprintf(
-                    'DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=? AND (iid IN (%s))',
-                    implode(
-                        ', ',
-                        array_fill(
-                            0,
-                            count($arrIds),
-                            '?'
-                        )
-                    )
-                )
-            )
-            ->execute(array_merge(
-                array(
-                    $this->getMetaModel()->get('id'),
-                    $this->get('id'),
-                ),
-                $arrIds
-            ));
+        $query     = 'DELETE FROM tl_metamodel_rating WHERE mid=:mid AND aid=:aid AND (iid IN (:iids))';
+        $statement = $this->connection->prepare($query);
+        $statement->bindValue('mid', $this->getMetaModel()->get('id'));
+        $statement->bindValue('aid', $this->get('id'));
+        $statement->bindValue('iids', $arrIds, Connection::PARAM_INT_ARRAY);
+        $statement->execute();
     }
 
     /**
@@ -330,23 +301,28 @@ class Rating extends BaseComplex
             'meanvalue' => $value,
         );
 
+        $queryBuilder = $this->connection->createQueryBuilder();
+
         if (!$arrData || !$arrData[$intItemId]['votecount']) {
-            $strSQL = 'INSERT INTO tl_metamodel_rating %s';
+            $queryBuilder
+                ->insert('tl_metamodel_rating')
+                ->values($arrSet);
         } else {
-            $strSQL = 'UPDATE tl_metamodel_rating %s WHERE mid=? AND aid=? AND iid=?';
+            foreach ($arrSet as $key => $value) {
+                $queryBuilder
+                    ->set($key, ':' . $key)
+                    ->setParameter($key, $value);
+            }
+            
+            $queryBuilder
+                ->update('tl_metamodel_rating')
+                ->andWhere('mid=:mid AND aid=:aid AND iid=:iid')
+                ->setParameter('mid', $this->getMetaModel()->get('id'))
+                ->setParameter('aid', $this->get('id'))
+                ->setParameter('iid', $intItemId);
         }
 
-        $this
-            ->getMetaModel()
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare($strSQL)
-            ->set($arrSet)
-            ->execute(
-                $this->getMetaModel()->get('id'),
-                $this->get('id'),
-                $intItemId
-            );
+        $queryBuilder->execute();
 
         if ($blnLock) {
             Session::getInstance()->set($this->getLockId($intItemId), true);
@@ -389,15 +365,15 @@ class Rating extends BaseComplex
 
         $strEmpty = $this->ensureImage(
             $this->get('rating_emtpy'),
-            'system/modules/metamodelsattribute_rating/html/star-empty.png'
+            'bundles/metamodelsattributerating/star-empty.png'
         );
         $strFull  = $this->ensureImage(
             $this->get('rating_full'),
-            'system/modules/metamodelsattribute_rating/html/star-full.png'
+            'bundles/metamodelsattributerating/star-full.png'
         );
         $strHover = $this->ensureImage(
             $this->get('rating_hover'),
-            'system/modules/metamodelsattribute_rating/html/star-hover.png'
+            'bundles/metamodelsattributerating/star-hover.png'
         );
 
         $size                    = getimagesize(TL_ROOT.'/'.$strEmpty);
@@ -453,24 +429,19 @@ class Rating extends BaseComplex
      */
     public function sortIds($idList, $strDirection)
     {
-        $objData = $this
-            ->getMetaModel()
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare(sprintf(
-                'SELECT iid FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s)) ORDER BY meanvalue '
-                .$strDirection,
-                implode(', ', array_fill(0, count($idList), '?'))
-            ))
-            ->execute(array_merge(
-                array(
-                    $this->getMetaModel()->get('id'),
-                    $this->get('id'),
-                ),
-                $idList
-            ));
+        $query = '
+            SELECT   iid 
+            FROM     tl_metamodel_rating 
+            WHERE    (mid=:mid) AND (aid=:aid) AND (iid IN (:iids)) 
+            ORDER BY meanvalue ' . $strDirection;
 
-        $arrSorted = $objData->fetchEach('iid');
+        $statement = $this->connection->prepare($query);
+        $statement->bindValue('mid', $this->getMetaModel()->get('id'));
+        $statement->bindValue('aid', $this->get('id'));
+        $statement->bindValue('iids', $idList, Connection::PARAM_INT_ARRAY);
+        $statement->execute();
+
+        $arrSorted = $statement->fetchAll(\PDO::FETCH_COLUMN, 'iid');
 
         return ($strDirection == 'DESC')
             ? array_merge($arrSorted, array_diff($idList, $arrSorted))
