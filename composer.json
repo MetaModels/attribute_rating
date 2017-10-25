@@ -46,7 +46,7 @@
   },
   "autoload": {
     "psr-4": {
-      "MetaModels\\Attribute\\Rating": "src/"
+      "MetaModels\\Attribute\\Rating\\": "src/"
     }
   },
   "autoload-dev": {
