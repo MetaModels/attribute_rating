@@ -55,20 +55,26 @@ class MetaModelsAttributeRatingExtensionTest extends TestCase
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
 
         $container
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('setDefinition')
-            ->with(
-                'metamodels.attribute_rating.factory',
-                $this->callback(
-                    function ($value) {
-                        /** @var Definition $value */
-                        $this->assertInstanceOf(Definition::class, $value);
-                        $this->assertEquals(AttributeTypeFactory::class, $value->getClass());
-                        $this->assertCount(1, $value->getTag('metamodels.attribute_factory'));
+            ->withConsecutive(
+                [
+                    'metamodels.attribute_rating.factory',
+                    $this->callback(
+                        function ($value) {
+                            /** @var Definition $value */
+                            $this->assertInstanceOf(Definition::class, $value);
+                            $this->assertEquals(AttributeTypeFactory::class, $value->getClass());
+                            $this->assertCount(1, $value->getTag('metamodels.attribute_factory'));
 
-                        return true;
-                    }
-                )
+                            return true;
+                        }
+                    )
+                ],
+                [
+                    $this->anything(),
+                    $this->anything()
+                ]
             );
 
         $extension = new MetaModelsAttributeRatingExtension();

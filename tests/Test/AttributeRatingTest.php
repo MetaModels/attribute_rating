@@ -26,7 +26,7 @@ namespace MetaModels\Test\Attribute\Rating;
 use \CyberSpectrum\TestHarness\Reflector;
 use MetaModels\Attribute\Rating\Rating;
 use MetaModels\Factory;
-use MetaModels\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the rating attribute.
