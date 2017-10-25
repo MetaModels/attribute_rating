@@ -6,3 +6,8 @@ services:
             - '@metamodels.table_manipulator'
         tags:
           - { name: metamodels.attribute_factory }
+
+    metamodels.controller.rating:
+        class: MetaModels\Attribute\Rating\Controller\RateAjaxController
+        arguments:
+            - '@metamodels.factory'

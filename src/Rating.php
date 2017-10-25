@@ -26,10 +26,14 @@ namespace MetaModels\Attribute\Rating;
 
 use Contao\Environment;
 use Contao\Session;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\BaseComplex;
+use MetaModels\Helper\TableManipulator;
 use MetaModels\Helper\ToolboxFile;
+use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\ISimple;
 use MetaModels\Render\Template;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * This is the MetaModelAttribute class for handling numeric fields.
@@ -40,6 +44,42 @@ use MetaModels\Render\Template;
  */
 class Rating extends BaseComplex
 {
+    /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * Table manipulator.
+     *
+     * @var TableManipulator
+     */
+    private $tableManipulator;
+
+    /**
+     * Router.
+     *
+     * @var RouterInterface
+     */
+    private $router;
+
+
+    public function __construct(
+        IMetaModel $objMetaModel,
+        array $arrData = [],
+        Connection $connection = null,
+        TableManipulator $tableManipulator = null,
+        RouterInterface $router = null
+    ) {
+        parent::__construct($objMetaModel, $arrData);
+
+        $this->connection       = $connection;
+        $this->tableManipulator = $tableManipulator;
+        $this->router           = $router;
+    }
+
     /**
      * Returns all valid settings for the attribute type.
      *
@@ -379,7 +419,7 @@ class Rating extends BaseComplex
             '[VALUE]',
             $this->get('rating_max')
         );
-        $objTemplate->ajaxUrl      = sprintf('SimpleAjax.php?metamodelsattribute_rating=%s', $this->get('id'));
+        $objTemplate->ajaxUrl      = $this->router->generate('metamodels.attribute_rating');
         $objTemplate->ajaxData     = json_encode(
             array(
                 'id' => $this->get('id'),
