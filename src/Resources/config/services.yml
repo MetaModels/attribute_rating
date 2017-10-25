@@ -1,0 +1,8 @@
+services:
+    metamodels.attribute_rating.factory:
+        class: MetaModels\Attribute\Rating\AttributeTypeFactory
+        arguments:
+            - '@database_connection'
+            - '@metamodels.table_manipulator'
+        tags:
+          - { name: metamodels.attribute_factory }
