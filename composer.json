@@ -8,7 +8,7 @@
     "ajax",
     "rating"
   ],
-  "type": "contao-module",
+  "type": "contao-bundle",
   "homepage": "http://now.metamodel.me/",
   "license": "LGPL-3.0+",
   "authors": [
@@ -32,46 +32,41 @@
     "source": "https://github.com/MetaModels/attribute_rating"
   },
   "require": {
-    "php": ">=5.4",
-    "contao/core": "^3.5.5",
-    "contao-community-alliance/composer-plugin": "~2.0",
-    "contao-community-alliance/dc-general": "~2.0@beta",
-    "metamodels/core": "~2.0@alpha",
-    "leounglaub/contao-simple-ajax": "~1.0"
+    "php": ">=5.6",
+    "contao/core-bundle": "^4.4",
+    "contao-community-alliance/dc-general": "~2.1@dev",
+    "metamodels/core": "~2.1@dev",
+    "symfony/dependency-injection": "^3.3",
+    "symfony/http-kernel": "^3.3"
   },
   "require-dev": {
     "cyberspectrum/contao-toolbox": "~0.6",
-    "phpcq/all-tasks": "~1.0",
-    "metamodels/base-unit-tests": "~1.0"
-  },
-  "conflict": {
-    "contao/core": "3.4.0"
+    "phpcq/all-tasks": "~1.2",
+    "contao/manager-plugin": "~2.1"
   },
   "autoload": {
-    "psr-0": {
-      "MetaModels\\": "src"
+    "psr-4": {
+      "MetaModels\\Attribute\\Rating": "src/"
     }
   },
   "autoload-dev": {
-    "psr-0": {
-      "MetaModels\\Test\\": "tests"
+    "psr-4": {
+      "MetaModels\\Test\\Attribute\\Rating\\": "tests/Test"
     }
   },
   "extra": {
+    "contao-manager-plugin": "MetaModels\\Attribute\\Rating\\ContaoManager\\Plugin",
     "contao": {
-      "sources": {
-        "contao": "system/modules/metamodelsattribute_rating"
-      },
       "transifex": {
         "project": "metamodels",
         "prefix": "attribute_rating-",
-        "languages_cto": "contao/languages",
+        "languages_cto": "src/Resources/contao/languages",
         "languages_tx": ".tx"
       }
     },
     "branch-alias": {
       "dev-master": "2.0.x-dev",
-      "dev-develop": "2.1.x-dev"
+      "dev-feature/contao4": "2.1.x-dev"
     }
   },
   "prefer-stable": true
