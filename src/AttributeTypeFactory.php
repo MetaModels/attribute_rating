@@ -36,7 +36,7 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
         parent::__construct();
 
         $this->typeName  = 'rating';
-        $this->typeIcon  = 'system/modules/metamodelsattribute_rating/html/star-full.png';
+        $this->typeIcon  = 'bundles/metamodelsattributerating/star-full.png';
         $this->typeClass = 'MetaModels\Attribute\Rating\Rating';
     }
 }
