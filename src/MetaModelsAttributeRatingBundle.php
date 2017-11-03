@@ -21,7 +21,7 @@
  * @filesource
  */
 
-namespace MetaModels\Attribute\Rating;
+namespace MetaModels\AttributeRatingBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

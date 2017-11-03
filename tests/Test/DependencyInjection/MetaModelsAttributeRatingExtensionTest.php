@@ -18,11 +18,11 @@
  * @filesource
  */
 
-namespace MetaModels\Test\Attribute\Rating\DependencyInjection;
+namespace MetaModels\AttributeRatingBundle\Test\DependencyInjection;
 
-use MetaModels\Attribute\Rating\AttributeTypeFactory;
-use MetaModels\Attribute\Rating\Controller\RateAjaxController;
-use MetaModels\Attribute\Rating\DependencyInjection\MetaModelsAttributeRatingExtension;
+use MetaModels\AttributeRatingBundle\Attribute\AttributeTypeFactory;
+use MetaModels\AttributeRatingBundle\Controller\RateAjaxController;
+use MetaModels\AttributeRatingBundle\DependencyInjection\MetaModelsAttributeRatingExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

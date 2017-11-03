@@ -22,7 +22,7 @@
  * @filesource
  */
 
-namespace MetaModels\Attribute\Rating;
+namespace MetaModels\AttributeRatingBundle\Attribute;
 
 use Contao\Environment;
 use Contao\System;

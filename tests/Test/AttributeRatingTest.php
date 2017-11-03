@@ -21,10 +21,10 @@
  * @filesource
  */
 
-namespace MetaModels\Test\Attribute\Rating;
+namespace MetaModels\AttributeRatingBundle\Test;
 
 use \CyberSpectrum\TestHarness\Reflector;
-use MetaModels\Attribute\Rating\Rating;
+use MetaModels\AttributeRatingBundle\Attribute\Rating;
 use MetaModels\Factory;
 use PHPUnit\Framework\TestCase;
 

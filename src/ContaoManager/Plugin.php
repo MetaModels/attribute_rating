@@ -18,13 +18,13 @@
  * @filesource
  */
 
-namespace MetaModels\Attribute\Rating\ContaoManager;
+namespace MetaModels\AttributeRatingBundle\ContaoManager;
 
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use Contao\ManagerPlugin\Routing\RoutingPluginInterface;
-use MetaModels\Attribute\Rating\MetaModelsAttributeRatingBundle;
+use MetaModels\AttributeRatingBundle\MetaModelsAttributeRatingBundle;
 use MetaModels\CoreBundle\MetaModelsCoreBundle;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\HttpKernel\KernelInterface;

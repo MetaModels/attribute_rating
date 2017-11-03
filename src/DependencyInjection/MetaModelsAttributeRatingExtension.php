@@ -18,7 +18,7 @@
  * @filesource
  */
 
-namespace MetaModels\Attribute\Rating\DependencyInjection;
+namespace MetaModels\AttributeRatingBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

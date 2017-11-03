@@ -21,9 +21,9 @@
  * @filesource
  */
 
-namespace MetaModels\Attribute\Rating\Controller;
+namespace MetaModels\AttributeRatingBundle\Controller;
 
-use MetaModels\Attribute\Rating\Rating;
+use MetaModels\AttributeRatingBundle\Attribute\Rating;
 use MetaModels\IFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

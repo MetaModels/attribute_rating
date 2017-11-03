@@ -18,12 +18,12 @@
  * @filesource
  */
 
-namespace MetaModels\Test\Attribute\Rating\ContaoManager;
+namespace MetaModels\AttributeRatingBundle\Test\ContaoManager;
 
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
-use MetaModels\Attribute\Rating\ContaoManager\Plugin;
+use MetaModels\AttributeRatingBundle\ContaoManager\Plugin;
 use MetaModels\CoreBundle\MetaModelsCoreBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;

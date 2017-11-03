@@ -46,16 +46,19 @@
   },
   "autoload": {
     "psr-4": {
-      "MetaModels\\Attribute\\Rating\\": "src/"
-    }
+      "MetaModels\\AttributeRatingBundle\\": "src/"
+    },
+    "files": [
+      "src/deprecated-autoload.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
-      "MetaModels\\Test\\Attribute\\Rating\\": "tests/Test"
+      "MetaModels\\AttributeRatingBundle\\Test\\": "tests/Test"
     }
   },
   "extra": {
-    "contao-manager-plugin": "MetaModels\\Attribute\\Rating\\ContaoManager\\Plugin",
+    "contao-manager-plugin": "MetaModels\\AttributeRatingBundle\\ContaoManager\\Plugin",
     "contao": {
       "transifex": {
         "project": "metamodels",

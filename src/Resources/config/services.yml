@@ -1,6 +1,6 @@
 services:
     metamodels.attribute_rating.factory:
-        class: MetaModels\Attribute\Rating\AttributeTypeFactory
+        class: MetaModels\AttributeRatingBundle\Attribute\AttributeTypeFactory
         arguments:
             - '@database_connection'
             - '@router'
@@ -10,6 +10,6 @@ services:
           - { name: metamodels.attribute_factory }
 
     metamodels.controller.rating:
-        class: MetaModels\Attribute\Rating\Controller\RateAjaxController
+        class: MetaModels\AttributeRatingBundle\Controller\RateAjaxController
         arguments:
             - '@metamodels.factory'

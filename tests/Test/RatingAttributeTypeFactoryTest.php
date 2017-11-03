@@ -21,12 +21,12 @@
  * @filesource
  */
 
-namespace MetaModels\Test\Attribute\Rating;
+namespace MetaModels\AttributeRatingBundle\Test;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeTypeFactory;
-use MetaModels\Attribute\Rating\AttributeTypeFactory;
+use MetaModels\AttributeRatingBundle\Attribute\AttributeTypeFactory;
 use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
