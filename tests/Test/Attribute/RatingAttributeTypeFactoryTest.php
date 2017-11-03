@@ -21,7 +21,7 @@
  * @filesource
  */
 
-namespace MetaModels\AttributeRatingBundle\Test;
+namespace MetaModels\AttributeRatingBundle\Test\Attribute;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
