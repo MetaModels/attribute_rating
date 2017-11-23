@@ -1,7 +1,7 @@
-
-metamodels.attribute_rating:
-  path: /_metamodels/rate
-  condition: "request.isXmlHttpRequest()"
-  methods: ['POST']
-  defaults:
-    _controller: metamodels.controller.rating:ratingAction
+metamodels.attribute_rating.rate:
+    path: /_metamodels/rate
+    condition: "request.isXmlHttpRequest()"
+    methods: ['POST']
+    defaults:
+      _controller: metamodels.controller.rating:ratingAction
+      _scope: frontend

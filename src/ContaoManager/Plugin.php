@@ -20,6 +20,7 @@
 
 namespace MetaModels\AttributeRatingBundle\ContaoManager;
 
+use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
@@ -43,6 +44,7 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
             BundleConfig::create(MetaModelsAttributeRatingBundle::class)
                 ->setLoadAfter(
                     [
+                        ContaoCoreBundle::class,
                         MetaModelsCoreBundle::class
                     ]
                 )
@@ -55,7 +57,7 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
      */
     public function getRouteCollection(LoaderResolverInterface $resolver, KernelInterface $kernel)
     {
-        $resolver
+        return $resolver
             ->resolve(__DIR__ . '/../Resources/config/routing.yml')
             ->load(__DIR__ . '/../Resources/config/routing.yml');
     }

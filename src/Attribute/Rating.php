@@ -456,7 +456,7 @@ class Rating extends BaseComplex
             '[VALUE]',
             $this->get('rating_max')
         );
-        $objTemplate->ajaxUrl      = $this->router->generate('metamodels.attribute_rating');
+        $objTemplate->ajaxUrl      = $this->router->generate('metamodels.attribute_rating.rate');
         $objTemplate->ajaxData     = json_encode(
             array(
                 'id' => $this->get('id'),
