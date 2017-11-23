@@ -437,7 +437,12 @@ class Rating extends BaseComplex
             'bundles/metamodelsattributerating/star-hover.png'
         );
 
-        $size                    = getimagesize(TL_ROOT.'/'.$strEmpty);
+        if (file_exists(TL_ROOT . '/' . $strEmpty)) {
+            $size = getimagesize(TL_ROOT.'/'. $strEmpty);
+        } else {
+            $size = getimagesize(TL_ROOT.'/web/'. $strEmpty);
+        }
+
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
         $objTemplate->name       = 'rating_attribute_'.$this->get('id').'_'.$arrRowData['id'];
