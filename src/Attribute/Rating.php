@@ -250,12 +250,14 @@ class Rating extends BaseComplex
      */
     public function getDataFor($arrIds)
     {
-        $query     = 'SELECT * FROM tl_metamodel_rating WHERE (mid=:mid) AND (aid=:aid) AND (iid IN (:iids))';
-        $statement = $this->connection->prepare($query);
-        $statement->bindValue('mid', $this->getMetaModel()->get('id'));
-        $statement->bindValue('aid', $this->get('id'));
-        $statement->bindValue('iids', $arrIds, Connection::PARAM_INT_ARRAY);
-        $statement->execute();
+        $statement = $this->connection->createQueryBuilder()
+            ->select('*')
+            ->from('tl_metamodel_rating')
+            ->andWhere('mid=:mid AND aid=:aid AND iid IN (:iids)')
+            ->setParameter('mid', $this->getMetaModel()->get('id'))
+            ->setParameter('aid', $this->get('id'))
+            ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->execute();
 
         $arrResult = array();
         while ($objData = $statement->fetch(\PDO::FETCH_OBJ)) {
@@ -298,12 +300,13 @@ class Rating extends BaseComplex
      */
     public function unsetDataFor($arrIds)
     {
-        $query     = 'DELETE FROM tl_metamodel_rating WHERE mid=:mid AND aid=:aid AND (iid IN (:iids))';
-        $statement = $this->connection->prepare($query);
-        $statement->bindValue('mid', $this->getMetaModel()->get('id'));
-        $statement->bindValue('aid', $this->get('id'));
-        $statement->bindValue('iids', $arrIds, Connection::PARAM_INT_ARRAY);
-        $statement->execute();
+        $this->connection->createQueryBuilder()
+            ->delete('tl_metamodel_rating')
+            ->andWhere('mid=:mid AND aid=:aid AND iid IN (:iids)')
+            ->setParameter('mid', $this->getMetaModel()->get('id'))
+            ->setParameter('aid', $this->get('id'))
+            ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->execute();
     }
 
     /**
@@ -495,17 +498,15 @@ class Rating extends BaseComplex
      */
     public function sortIds($idList, $strDirection)
     {
-        $query = '
-            SELECT   iid 
-            FROM     tl_metamodel_rating 
-            WHERE    (mid=:mid) AND (aid=:aid) AND (iid IN (:iids)) 
-            ORDER BY meanvalue ' . $strDirection;
-
-        $statement = $this->connection->prepare($query);
-        $statement->bindValue('mid', $this->getMetaModel()->get('id'));
-        $statement->bindValue('aid', $this->get('id'));
-        $statement->bindValue('iids', $idList, Connection::PARAM_INT_ARRAY);
-        $statement->execute();
+        $statement = $this->connection->createQueryBuilder()
+            ->select('iid')
+            ->from('tl_metamodel_rating')
+            ->andWhere('mid=:mid AND aid=:aid AND iid IN (:iids)')
+            ->setParameter('mid', $this->getMetaModel()->get('id'))
+            ->setParameter('aid', $this->get('id'))
+            ->setParameter('iids', $idList, Connection::PARAM_STR_ARRAY)
+            ->orderBy('meanvalue', $strDirection)
+            ->execute();
 
         $arrSorted = $statement->fetchAll(\PDO::FETCH_COLUMN, 'iid');
 
