@@ -16,6 +16,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -36,6 +37,7 @@ use MetaModels\Render\Template;
  * @package    MetaModels
  * @subpackage AttributeRating
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  */
 class Rating extends BaseComplex
 {
@@ -378,11 +380,15 @@ class Rating extends BaseComplex
             '[VALUE]',
             $this->get('rating_max')
         );
-        $objTemplate->ajaxUrl      = sprintf('SimpleAjax.php?metamodelsattribute_rating=%s', $this->get('id'));
+        $objTemplate->ajaxUrl      = sprintf(
+            '%s?metamodelsattribute_rating=%s',
+            $this->getContainer()['simpleajax.entrypoint-frontend'],
+            $this->get('id')
+        );
         $objTemplate->ajaxData     = json_encode(
             array(
-                'id' => $this->get('id'),
-                'pid' => $this->get('pid'),
+                'id'   => $this->get('id'),
+                'pid'  => $this->get('pid'),
                 'item' => $arrRowData['id'],
             )
         );
@@ -434,6 +440,19 @@ class Rating extends BaseComplex
         return ($strDirection == 'DESC')
             ? array_merge($arrSorted, array_diff($idList, $arrSorted))
             : array_merge(array_diff($idList, $arrSorted), $arrSorted);
+    }
+
+    /**
+     * Returns the dependency injection container (replacement for super globals access).
+     *
+     * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function getContainer()
+    {
+        return $GLOBALS['container'];
     }
 
     /**

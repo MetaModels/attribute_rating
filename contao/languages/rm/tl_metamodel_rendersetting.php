@@ -8,10 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-07-11T04:13:13+02:00
+ * last-updated: 2017-10-10T13:09:34+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['0'] = 'Deactivar la valitaziun (activà implicitamain en il back-end)';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled']['1'] = 'Sche questa chaschetta è activada vegn la valitaziun deactivada e be la
- valur actuala dalla valitaziun vegn mussada (quai è adina activà per il back-end).';
 
