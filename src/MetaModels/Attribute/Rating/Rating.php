@@ -372,9 +372,10 @@ class Rating extends BaseComplex
             || Session::getInstance()->get($this->getLockId($arrRowData['id']))
         );
 
-        $value = ($this->get('rating_max') * floatval($arrRowData[$this->getColName()]['meanvalue']));
+        $value  = ($this->get('rating_max') * floatval($arrRowData[$this->getColName()]['meanvalue']));
+        $intInc = strlen($this->get('rating_half')) ? .5 : 1;
 
-        $objTemplate->currentValue = (round(($value / .5), 0) * .5);
+        $objTemplate->currentValue = (round(($value / $intInc), 0) * $intInc);
         $objTemplate->tipText      = sprintf(
             $lang['metamodel_rating_label'],
             '[VALUE]',
@@ -394,7 +395,6 @@ class Rating extends BaseComplex
         );
 
         $arrOptions = array();
-        $intInc     = strlen($this->get('rating_half')) ? .5 : 1;
         $intValue   = $intInc;
 
         while ($intValue <= $this->get('rating_max')) {
