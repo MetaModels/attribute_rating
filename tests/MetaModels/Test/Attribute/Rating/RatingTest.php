@@ -23,11 +23,12 @@
 namespace MetaModels\Test\Attribute\Rating;
 
 use MetaModels\Attribute\Rating\Rating;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests to test class Rating.
  */
-class RatingTest extends \PHPUnit_Framework_TestCase
+class RatingTest extends TestCase
 {
     /**
      * Mock a MetaModel.
@@ -39,11 +40,7 @@ class RatingTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array(),
-            array(array())
-        );
+        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
 
         $metaModel
             ->expects($this->any())
