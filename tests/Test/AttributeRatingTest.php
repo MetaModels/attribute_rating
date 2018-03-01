@@ -437,6 +437,41 @@ class AttributeRatingTest extends TestCase
     }
 
     /**
+     * Test the ensure image method.
+     *
+     * @return void
+     */
+    public function testPrepareTemplate2()
+    {
+        $metamodel = $this->mockMetaModel();
+
+        /** @var Rating $rating */
+        $rating   = $metamodel->getAttribute('rating2');
+        $itemData = [
+            'id'     => 1,
+            'rating2' => [
+                'votecount' => 300,
+                'meanvalue' => 0.65333268,
+            ]
+        ];
+        $template = new Template();
+        $settings = $rating->getDefaultRenderSettings();
+
+        $rating->method('ensureImage')->willReturn('star-empty.png');
+
+        $rating->prepareTemplate($template, $itemData, $settings);
+
+        $this->assertEquals($rating, $template->attribute);
+        $this->assertEquals($settings, $template->settings);
+        $this->assertEquals($itemData, $template->row);
+        $this->assertEquals($itemData['rating2'], $template->raw);
+        $this->assertEquals(16, $template->imageWidth);
+        $this->assertEquals('false', $template->rateHalf);
+        $this->assertEquals(7, $template->currentValue);
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], $template->options);
+    }
+
+    /**
      * Test the getFilterOptions() method.
      *
      * @return void
