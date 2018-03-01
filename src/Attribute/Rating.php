@@ -17,6 +17,7 @@
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -44,6 +45,7 @@ use Symfony\Component\Routing\RouterInterface;
  * @package    MetaModels
  * @subpackage AttributeRating
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  */
 class Rating extends BaseComplex
 {
@@ -452,9 +454,10 @@ class Rating extends BaseComplex
             || $this->getSessionBag()->get($this->getLockId($arrRowData['id']))
         );
 
-        $value = ($this->get('rating_max') * floatval($arrRowData[$this->getColName()]['meanvalue']));
+        $value  = ($this->get('rating_max') * floatval($arrRowData[$this->getColName()]['meanvalue']));
+        $intInc = strlen($this->get('rating_half')) ? .5 : 1;
 
-        $objTemplate->currentValue = (round(($value / .5), 0) * .5);
+        $objTemplate->currentValue = (round(($value / $intInc), 0) * $intInc);
         $objTemplate->tipText      = sprintf(
             $lang['metamodel_rating_label'],
             '[VALUE]',
@@ -463,14 +466,13 @@ class Rating extends BaseComplex
         $objTemplate->ajaxUrl      = $this->router->generate('metamodels.attribute_rating.rate');
         $objTemplate->ajaxData     = json_encode(
             array(
-                'id' => $this->get('id'),
-                'pid' => $this->get('pid'),
+                'id'   => $this->get('id'),
+                'pid'  => $this->get('pid'),
                 'item' => $arrRowData['id'],
             )
         );
 
         $arrOptions = array();
-        $intInc     = strlen($this->get('rating_half')) ? .5 : 1;
         $intValue   = $intInc;
 
         while ($intValue <= $this->get('rating_max')) {
