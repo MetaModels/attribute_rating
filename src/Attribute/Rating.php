@@ -431,18 +431,22 @@ class Rating extends BaseComplex
 
         $strEmpty = $this->ensureImage(
             $this->get('rating_emtpy'),
-            'web/bundles/metamodelsattributerating/star-empty.png'
+            'bundles/metamodelsattributerating/star-empty.png'
         );
         $strFull  = $this->ensureImage(
             $this->get('rating_full'),
-            'web/bundles/metamodelsattributerating/star-full.png'
+            'bundles/metamodelsattributerating/star-full.png'
         );
         $strHover = $this->ensureImage(
             $this->get('rating_hover'),
-            'web/bundles/metamodelsattributerating/star-hover.png'
+            'bundles/metamodelsattributerating/star-hover.png'
         );
 
-        $size = getimagesize(TL_ROOT . '/' . $strEmpty);
+        if (file_exists(TL_ROOT . '/' . $strEmpty)) {
+            $size = getimagesize(TL_ROOT . '/' . $strEmpty);
+        } else {
+            $size = getimagesize(TL_ROOT . '/web/' . $strEmpty);
+        }
 
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
