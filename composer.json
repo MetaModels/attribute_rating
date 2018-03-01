@@ -10,7 +10,7 @@
   ],
   "type": "contao-bundle",
   "homepage": "http://now.metamodel.me/",
-  "license": "LGPL-3.0+",
+  "license": "LGPL-3.0-or-later",
   "authors": [
     {
       "name": "Christian Schiffler",
@@ -76,7 +76,7 @@
   "prefer-stable": true,
   "repositories": [
     {
-      "type": "vcs",
+      "type": "git",
       "url": "git@gitlab.com:metamodels/core.git"
     }
   ]

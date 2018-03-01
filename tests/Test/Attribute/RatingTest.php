@@ -103,6 +103,6 @@ class RatingTest extends TestCase
         $scopeMatcher = $this->mockScopeMatcher();
 
         $text = new Rating($this->mockMetaModel('en', 'en'), [], $connection, $router, $session, $scopeMatcher);
-        $this->assertInstanceOf('MetaModels\Attribute\Rating\Rating', $text);
+        $this->assertInstanceOf('MetaModels\AttributeRatingBundle\Attribute\Rating', $text);
     }
 }

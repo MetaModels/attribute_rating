@@ -429,29 +429,25 @@ class Rating extends BaseComplex
 
         $strEmpty = $this->ensureImage(
             $this->get('rating_emtpy'),
-            'bundles/metamodelsattributerating/star-empty.png'
+            'web/bundles/metamodelsattributerating/star-empty.png'
         );
         $strFull  = $this->ensureImage(
             $this->get('rating_full'),
-            'bundles/metamodelsattributerating/star-full.png'
+            'web/bundles/metamodelsattributerating/star-full.png'
         );
         $strHover = $this->ensureImage(
             $this->get('rating_hover'),
-            'bundles/metamodelsattributerating/star-hover.png'
+            'web/bundles/metamodelsattributerating/star-hover.png'
         );
 
-        if (file_exists(TL_ROOT . '/' . $strEmpty)) {
-            $size = getimagesize(TL_ROOT.'/'. $strEmpty);
-        } else {
-            $size = getimagesize(TL_ROOT.'/web/'. $strEmpty);
-        }
+        $size = getimagesize(TL_ROOT . '/' . $strEmpty);
 
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
         $objTemplate->name       = 'rating_attribute_'.$this->get('id').'_'.$arrRowData['id'];
 
         $objTemplate->ratingDisabled = (
-            (TL_MODE == 'BE')
+            $this->scopeDeterminator->currentScopeIsBackend()
             || $objSettings->get('rating_disabled')
             || $this->getSessionBag()->get($this->getLockId($arrRowData['id']))
         );
