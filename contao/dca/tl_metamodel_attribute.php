@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Andreas Isaak <andy.jared@googlemail.com>
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2017 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -48,6 +49,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_max'] = array(
         'tl_class'           => 'w50',
         'rgxp'               => 'digit',
     ),
+    'sql'                    => 'int(10) NOT NULL default \'0\''
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_half'] = array(
@@ -57,6 +59,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_half'] = array(
     'eval'                  => array(
         'tl_class'          => 'w50 m12 cbx',
     ),
+    'sql'                    => 'char(1) NOT NULL default \'\''
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_emtpy'] = array(
@@ -70,6 +73,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_emtpy'] = array(
         'extensions'        => 'jpg,png,gif',
         'tl_class'          => 'clr',
     ),
+    'sql'                    => 'blob NULL'
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_full'] = array(
@@ -83,6 +87,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_full'] = array(
         'extensions'        => 'jpg,png,gif',
         'tl_class'          => 'clr',
     ),
+    'sql'                    => 'blob NULL'
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_hover'] = array(
@@ -96,4 +101,5 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_hover'] = array(
         'extensions'        => 'jpg,png,gif',
         'tl_class'          => 'clr',
     ),
+    'sql'                    => 'blob NULL'
 );
