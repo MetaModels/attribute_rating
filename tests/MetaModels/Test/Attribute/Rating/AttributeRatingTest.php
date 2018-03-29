@@ -23,6 +23,8 @@
 
 namespace MetaModels\Test\Attribute\Rating;
 
+use Contao\Database;
+use Contao\Session;
 use CyberSpectrum\TestHarness\Reflector;
 use MetaModels\Attribute\Rating\Rating;
 use MetaModels\Factory;
@@ -252,7 +254,7 @@ class AttributeRatingTest extends TestCase
         /** @var Rating $rating */
         $rating = $metamodel->getAttribute('rating');
 
-        \Session::getInstance()->set(Reflector::invoke($rating, 'getLockId', 1), true);
+        Session::getInstance()->set(Reflector::invoke($rating, 'getLockId', 1), true);
 
         $rating->addVote(1, 5);
 
@@ -497,7 +499,7 @@ class AttributeRatingTest extends TestCase
 
         $rating->destroyAUX();
 
-        $query1 = \Database::getInstance()->execute('SELECT * FROM tl_metamodel_rating WHERE mid=1 AND aid=1');
+        $query1 = Database::getInstance()->execute('SELECT * FROM tl_metamodel_rating WHERE mid=1 AND aid=1');
 
         $this->assertEquals(
             0,
@@ -510,7 +512,7 @@ class AttributeRatingTest extends TestCase
         );
 
         // Ensure the data from the other attribute is still present.
-        $query2 = \Database::getInstance()->execute('SELECT * FROM tl_metamodel_rating WHERE mid=1 AND aid=2');
+        $query2 = Database::getInstance()->execute('SELECT * FROM tl_metamodel_rating WHERE mid=1 AND aid=2');
 
         $this->assertEquals(
             1,

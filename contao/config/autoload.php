@@ -24,7 +24,7 @@
 /**
  * Register the templates
  */
-TemplateLoader::addFiles(
+\Contao\TemplateLoader::addFiles(
     [
         'mm_attr_rating'     => 'system/modules/metamodelsattribute_rating/templates',
         'mm_attr_rating_raw' => 'system/modules/metamodelsattribute_rating/templates',
