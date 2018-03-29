@@ -58,7 +58,7 @@ class RatingAjax implements IServiceContainerAware
      */
     protected function bail($message = 'Invalid AJAX call.')
     {
-        header('HTTP/1.1 400 Bad Request');
+        \header('HTTP/1.1 400 Bad Request');
 
         die('Rating Ajax: '.$message);
     }
@@ -124,7 +124,7 @@ class RatingAjax implements IServiceContainerAware
 
         $objAttribute->addVote($arrData['item'], floatval($fltValue), true);
 
-        header('HTTP/1.1 200 Ok');
+        \header('HTTP/1.1 200 Ok');
         exit;
     }
 }

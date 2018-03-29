@@ -50,7 +50,7 @@ class Rating extends BaseComplex
      */
     public function getAttributeSettingNames()
     {
-        return array_merge(
+        return \array_merge(
             parent::getAttributeSettingNames(),
             [
                 'sortable',
@@ -159,10 +159,10 @@ class Rating extends BaseComplex
             ->getDatabase()
             ->prepare(sprintf(
                 'SELECT * FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s))',
-                implode(', ', array_fill(0, count($arrIds), '?'))
+                \implode(', ', \array_fill(0, \count($arrIds), '?'))
             ))
             ->execute(
-                array_merge(
+                \array_merge(
                     [
                         $this->getMetaModel()->get('id'),
                         $this->get('id'),
@@ -178,7 +178,7 @@ class Rating extends BaseComplex
                 'meanvalue' => floatval($objData->meanvalue),
             ];
         }
-        foreach (array_diff($arrIds, array_keys($arrResult)) as $intId) {
+        foreach (\array_diff($arrIds, \array_keys($arrResult)) as $intId) {
             $arrResult[$intId] = [
                 'votecount' => 0,
                 'meanvalue' => 0,
@@ -217,20 +217,20 @@ class Rating extends BaseComplex
             ->getServiceContainer()
             ->getDatabase()
             ->prepare(
-                sprintf(
+                \sprintf(
                     'DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=? AND (iid IN (%s))',
-                    implode(
+                    \implode(
                         ', ',
-                        array_fill(
+                        \array_fill(
                             0,
-                            count($arrIds),
+                            \count($arrIds),
                             '?'
                         )
                     )
                 )
             )
             ->execute(
-                array_merge(
+                \array_merge(
                     [
                         $this->getMetaModel()->get('id'),
                         $this->get('id'),
@@ -249,7 +249,7 @@ class Rating extends BaseComplex
      */
     protected function getLockId($intItemId)
     {
-        return sprintf(
+        return \sprintf(
             'vote_lock_%s_%s_%s',
             $this->getMetaModel()->get('id'),
             $this->get('id'),
@@ -330,7 +330,7 @@ class Rating extends BaseComplex
     protected function ensureImage($uuidImage, $strDefault)
     {
         $imagePath = ToolboxFile::convertValueToPath($uuidImage);
-        if (strlen($imagePath) && file_exists(TL_ROOT . '/' . $imagePath)) {
+        if (\strlen($imagePath) && \file_exists(TL_ROOT . '/' . $imagePath)) {
             return $imagePath;
         }
 
@@ -366,7 +366,7 @@ class Rating extends BaseComplex
             'system/modules/metamodelsattribute_rating/html/star-hover.png'
         );
 
-        $size                    = getimagesize(TL_ROOT.'/'.$strEmpty);
+        $size                    = \getimagesize(TL_ROOT.'/'.$strEmpty);
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
         $objTemplate->name       = 'rating_attribute_'.$this->get('id').'_'.$arrRowData['id'];
@@ -378,20 +378,20 @@ class Rating extends BaseComplex
         );
 
         $value  = ($this->get('rating_max') * floatval($arrRowData[$this->getColName()]['meanvalue']));
-        $intInc = strlen($this->get('rating_half')) ? .5 : 1;
+        $intInc = \strlen($this->get('rating_half')) ? .5 : 1;
 
-        $objTemplate->currentValue = (round(($value / $intInc), 0) * $intInc);
-        $objTemplate->tipText      = sprintf(
+        $objTemplate->currentValue = (\round(($value / $intInc), 0) * $intInc);
+        $objTemplate->tipText      = \sprintf(
             $lang['metamodel_rating_label'],
             '[VALUE]',
             $this->get('rating_max')
         );
-        $objTemplate->ajaxUrl      = sprintf(
+        $objTemplate->ajaxUrl      = \sprintf(
             '%s?metamodelsattribute_rating=%s',
             $this->getContainer()['simpleajax.entrypoint-frontend'],
             $this->get('id')
         );
-        $objTemplate->ajaxData     = json_encode(
+        $objTemplate->ajaxData     = \json_encode(
             [
                 'id'   => $this->get('id'),
                 'pid'  => $this->get('pid'),
@@ -430,10 +430,10 @@ class Rating extends BaseComplex
             ->prepare(sprintf(
                 'SELECT iid FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s)) ORDER BY meanvalue '
                 .$strDirection,
-                implode(', ', array_fill(0, count($idList), '?'))
+                \implode(', ', \array_fill(0, \count($idList), '?'))
             ))
             ->execute(
-                array_merge(
+                \array_merge(
                     [
                         $this->getMetaModel()->get('id'),
                         $this->get('id'),
@@ -445,8 +445,8 @@ class Rating extends BaseComplex
         $arrSorted = $objData->fetchEach('iid');
 
         return ($strDirection == 'DESC')
-            ? array_merge($arrSorted, array_diff($idList, $arrSorted))
-            : array_merge(array_diff($idList, $arrSorted), $arrSorted);
+            ? \array_merge($arrSorted, \array_diff($idList, $arrSorted))
+            : \array_merge(\array_diff($idList, $arrSorted), $arrSorted);
     }
 
     /**
