@@ -26,80 +26,80 @@
  * Table tl_metamodel_attribute
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['rating extends _complexattribute_'] = array(
-    '+display' => array(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['rating extends _complexattribute_'] = [
+    '+display' => [
         'rating_max after description',
         'rating_half',
         'rating_emtpy',
         'rating_full',
         'rating_hover',
-    ),
-    '+advanced' => array(
+    ],
+    '+advanced' => [
         '-isvariant',
-    ),
-);
+    ],
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_max'] = array(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_max'] = [
     'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_max'],
     'exclude'                => true,
     'inputType'              => 'text',
-    'eval'                   => array(
+    'eval'                   => [
         'includeBlankOption' => true,
         'doNotSaveEmpty'     => true,
         'tl_class'           => 'w50',
         'rgxp'               => 'digit',
-    ),
+    ],
     'sql'                    => 'int(10) NOT NULL default \'0\''
-);
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_half'] = array(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_half'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_half'],
     'exclude'               => true,
     'inputType'             => 'checkbox',
-    'eval'                  => array(
+    'eval'                  => [
         'tl_class'          => 'w50 m12 cbx',
-    ),
+    ],
     'sql'                    => 'char(1) NOT NULL default \'\''
-);
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_emtpy'] = array(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_emtpy'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_emtpy'],
     'exclude'               => true,
     'inputType'             => 'fileTree',
-    'eval'                  => array(
+    'eval'                  => [
         'fieldType'         => 'radio',
         'filesOnly'         => true,
         'files'             => true,
         'extensions'        => 'jpg,png,gif',
         'tl_class'          => 'clr',
-    ),
+    ],
     'sql'                    => 'blob NULL'
-);
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_full'] = array(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_full'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_full'],
     'exclude'               => true,
     'inputType'             => 'fileTree',
-    'eval'                  => array(
+    'eval'                  => [
         'fieldType'         => 'radio',
         'filesOnly'         => true,
         'files'             => true,
         'extensions'        => 'jpg,png,gif',
         'tl_class'          => 'clr',
-    ),
+    ],
     'sql'                    => 'blob NULL'
-);
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_hover'] = array(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['rating_hover'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rating_hover'],
     'exclude'               => true,
     'inputType'             => 'fileTree',
-    'eval'                  => array(
+    'eval'                  => [
         'fieldType'         => 'radio',
         'filesOnly'         => true,
         'files'             => true,
         'extensions'        => 'jpg,png,gif',
         'tl_class'          => 'clr',
-    ),
+    ],
     'sql'                    => 'blob NULL'
-);
+];

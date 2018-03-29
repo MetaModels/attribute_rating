@@ -21,51 +21,40 @@
 /**
  * Table tl_metamodel_rating
  */
-$GLOBALS['TL_DCA']['tl_metamodel_rating'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_rating'] = [
     // Config
-    'config' => array
-    (
-        'sql' => array
-        (
-            'keys' => array
-            (
+    'config' => [
+        'sql' => [
+            'keys' => [
                 'id'             => 'primary',
                 'mid,aid,iid'    => 'index'
-            )
-        )
-    ),
+            ]
+        ]
+    ],
     // Fields
-    'fields' => array
-    (
-        'id' => array
-        (
+    'fields' => [
+        'id' => [
             'sql'                     => 'int(10) unsigned NOT NULL auto_increment'
-        ),
+        ],
         // model id
-        'mid' => array
-        (
+        'mid' => [
             'sql'                     => 'int(10) unsigned NOT NULL default \'0\''
-        ),
+        ],
         // attribute id
-        'aid' => array
-        (
+        'aid' => [
             'sql'                     => 'int(10) unsigned NOT NULL default \'0\''
-        ),
+        ],
         // item id
-        'iid' => array
-        (
+        'iid' => [
             'sql'                     => 'int(10) unsigned NOT NULL default \'0\''
-        ),
+        ],
         // amount of votes in the DB
-        'votecount' => array
-        (
+        'votecount' => [
             'sql'                     => 'int(10) unsigned NOT NULL default \'0\''
-        ),
+        ],
         // current value
-        'meanvalue' => array
-        (
+        'meanvalue' => [
             'sql'                     => 'double NULL'
-        )
-    )
-);
+        ]
+    ]
+];

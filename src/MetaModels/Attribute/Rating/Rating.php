@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,8 @@
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2017 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -51,14 +52,14 @@ class Rating extends BaseComplex
     {
         return array_merge(
             parent::getAttributeSettingNames(),
-            array(
+            [
                 'sortable',
                 'rating_half',
                 'rating_max',
                 'rating_emtpy',
                 'rating_full',
                 'rating_hover',
-            )
+            ]
         );
     }
 
@@ -92,7 +93,7 @@ class Rating extends BaseComplex
      *
      * @codeCoverageIgnore
      */
-    public function getFieldDefinition($arrOverrides = array())
+    public function getFieldDefinition($arrOverrides = [])
     {
         $arrFieldDef              = parent::getFieldDefinition($arrOverrides);
         $arrFieldDef['inputType'] = 'text';
@@ -124,7 +125,7 @@ class Rating extends BaseComplex
      */
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -160,26 +161,28 @@ class Rating extends BaseComplex
                 'SELECT * FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s))',
                 implode(', ', array_fill(0, count($arrIds), '?'))
             ))
-            ->execute(array_merge(
-                array(
-                    $this->getMetaModel()->get('id'),
-                    $this->get('id'),
-                ),
-                $arrIds
-            ));
+            ->execute(
+                array_merge(
+                    [
+                        $this->getMetaModel()->get('id'),
+                        $this->get('id'),
+                    ],
+                    $arrIds
+                )
+            );
 
-        $arrResult = array();
+        $arrResult = [];
         while ($objData->next()) {
-            $arrResult[$objData->iid] = array(
+            $arrResult[$objData->iid] = [
                 'votecount' => intval($objData->votecount),
                 'meanvalue' => floatval($objData->meanvalue),
-            );
+            ];
         }
         foreach (array_diff($arrIds, array_keys($arrResult)) as $intId) {
-            $arrResult[$intId] = array(
+            $arrResult[$intId] = [
                 'votecount' => 0,
                 'meanvalue' => 0,
-            );
+            ];
         }
 
         return $arrResult;
@@ -226,13 +229,15 @@ class Rating extends BaseComplex
                     )
                 )
             )
-            ->execute(array_merge(
-                array(
-                    $this->getMetaModel()->get('id'),
-                    $this->get('id'),
-                ),
-                $arrIds
-            ));
+            ->execute(
+                array_merge(
+                    [
+                        $this->getMetaModel()->get('id'),
+                        $this->get('id'),
+                    ],
+                    $arrIds
+                )
+            );
     }
 
     /**
@@ -267,7 +272,7 @@ class Rating extends BaseComplex
             return;
         }
 
-        $arrData = $this->getDataFor(array($intItemId));
+        $arrData = $this->getDataFor([$intItemId]);
 
         if (!$arrData || !$arrData[$intItemId]['votecount']) {
             $voteCount   = 0;
@@ -283,13 +288,13 @@ class Rating extends BaseComplex
         // Calculate the percentage.
         $value = (1 / $hundred * ($grandTotal + $fltValue));
 
-        $arrSet = array(
+        $arrSet = [
             'mid' => $this->getMetaModel()->get('id'),
             'aid' => $this->get('id'),
             'iid' => $intItemId,
             'votecount' => $voteCount,
             'meanvalue' => $value,
-        );
+        ];
 
         if (!$arrData || !$arrData[$intItemId]['votecount']) {
             $strSQL = 'INSERT INTO tl_metamodel_rating %s';
@@ -387,14 +392,14 @@ class Rating extends BaseComplex
             $this->get('id')
         );
         $objTemplate->ajaxData     = json_encode(
-            array(
+            [
                 'id'   => $this->get('id'),
                 'pid'  => $this->get('pid'),
                 'item' => $arrRowData['id'],
-            )
+            ]
         );
 
-        $arrOptions = array();
+        $arrOptions = [];
         $intValue   = $intInc;
 
         while ($intValue <= $this->get('rating_max')) {
@@ -427,13 +432,15 @@ class Rating extends BaseComplex
                 .$strDirection,
                 implode(', ', array_fill(0, count($idList), '?'))
             ))
-            ->execute(array_merge(
-                array(
-                    $this->getMetaModel()->get('id'),
-                    $this->get('id'),
-                ),
-                $idList
-            ));
+            ->execute(
+                array_merge(
+                    [
+                        $this->getMetaModel()->get('id'),
+                        $this->get('id'),
+                    ],
+                    $idList
+                )
+            );
 
         $arrSorted = $objData->fetchEach('iid');
 

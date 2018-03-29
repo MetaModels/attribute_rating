@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,26 +17,26 @@
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2017 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
-use MetaModels\Attribute\Rating\AttributeTypeFactory;
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
+use MetaModels\Attribute\Rating\AttributeTypeFactory;
 use MetaModels\Helper\RatingAjax;
 use MetaModels\MetaModelsEvents;
 use SimpleAjax\Event\SimpleAjax;
 
-return array
-(
-    MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => array(
+return [
+    MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => [
         function (CreateAttributeFactoryEvent $event) {
             $factory = $event->getFactory();
             $factory->addTypeFactory(new AttributeTypeFactory());
         }
-    ),
-    SimpleAjax::NAME                           => array(
-        array(new RatingAjax(), 'handle')
-    )
-);
+    ],
+    SimpleAjax::NAME                           => [
+        [new RatingAjax(), 'handle']
+    ]
+];

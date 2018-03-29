@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,14 +15,15 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2017 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\Test\Attribute\Rating;
 
-use \CyberSpectrum\TestHarness\Reflector;
+use CyberSpectrum\TestHarness\Reflector;
 use MetaModels\Attribute\Rating\Rating;
 use MetaModels\Factory;
 use MetaModels\Test\TestCase;
@@ -101,13 +102,13 @@ class AttributeRatingTest extends TestCase
         $rating = $metamodel->getAttribute('rating');
 
         $this->assertEquals(
-            array(
-                1 => array(
+            [
+                1 => [
                     'votecount' => 1,
                     'meanvalue' => 1.0,
-                ),
-            ),
-            $rating->getDataFor(array(1))
+                ],
+            ],
+            $rating->getDataFor([1])
         );
     }
 
@@ -130,17 +131,17 @@ class AttributeRatingTest extends TestCase
 
         // Vote for id 2 is not stored in Db and therefore should be empty in the result.
         $this->assertEquals(
-            array(
-                1 => array(
+            [
+                1 => [
                     'votecount' => 1,
                     'meanvalue' => 1.0,
-                ),
-                2 => array(
+                ],
+                2 => [
                     'votecount' => 0,
                     'meanvalue' => 0,
-                ),
-            ),
-            $rating->getDataFor(array(1, 2))
+                ],
+            ],
+            $rating->getDataFor([1, 2])
         );
     }
 
@@ -164,13 +165,13 @@ class AttributeRatingTest extends TestCase
         $rating->addVote(1, 10);
 
         $this->assertEquals(
-            array(
-                1 => array(
+            [
+                1 => [
                     'votecount' => 2,
                     'meanvalue' => 1.0,
-                ),
-            ),
-            $rating->getDataFor(array(1))
+                ],
+            ],
+            $rating->getDataFor([1])
         );
     }
 
@@ -194,13 +195,13 @@ class AttributeRatingTest extends TestCase
         $rating->addVote(1, 5);
 
         $this->assertEquals(
-            array(
-                1 => array(
+            [
+                1 => [
                     'votecount' => 2,
                     'meanvalue' => .75,
-                ),
-            ),
-            $rating->getDataFor(array(1))
+                ],
+            ],
+            $rating->getDataFor([1])
         );
     }
 
@@ -221,16 +222,16 @@ class AttributeRatingTest extends TestCase
         /** @var Rating $rating */
         $rating = $metamodel->getAttribute('rating');
 
-        $rating->unsetDataFor(array(1));
+        $rating->unsetDataFor([1]);
 
         $this->assertEquals(
-            array(
-                1 => array(
+            [
+                1 => [
                     'votecount' => 0,
                     'meanvalue' => 0,
-                ),
-            ),
-            $rating->getDataFor(array(1))
+                ],
+            ],
+            $rating->getDataFor([1])
         );
     }
 
@@ -256,13 +257,13 @@ class AttributeRatingTest extends TestCase
         $rating->addVote(1, 5);
 
         $this->assertEquals(
-            array(
-                1 => array(
+            [
+                1 => [
                     'votecount' => 1,
                     'meanvalue' => 1.0,
-                ),
-            ),
-            $rating->getDataFor(array(1))
+                ],
+            ],
+            $rating->getDataFor([1])
         );
     }
 
@@ -288,13 +289,13 @@ class AttributeRatingTest extends TestCase
         $rating->addVote(1, 0, true);
 
         $this->assertEquals(
-            array(
-                1 => array(
+            [
+                1 => [
                     'votecount' => 2,
                     'meanvalue' => 1.0,
-                ),
-            ),
-            $rating->getDataFor(array(1))
+                ],
+            ],
+            $rating->getDataFor([1])
         );
     }
 
@@ -318,13 +319,13 @@ class AttributeRatingTest extends TestCase
         $rating->addVote(2, 10);
 
         $this->assertEquals(
-            array(
-                2 => array(
+            [
+                2 => [
                     'votecount' => 1,
                     'meanvalue' => 1.0,
-                ),
-            ),
-            $rating->getDataFor(array(2))
+                ],
+            ],
+            $rating->getDataFor([2])
         );
     }
 
@@ -349,19 +350,19 @@ class AttributeRatingTest extends TestCase
         $rating->addVote(3, 5);
 
         $this->assertEquals(
-            array(3, 2),
-            $rating->sortIds(array(2, 3), 'ASC')
+            [3, 2],
+            $rating->sortIds([2, 3], 'ASC')
         );
 
         $this->assertEquals(
-            array(2, 3),
-            $rating->sortIds(array(2, 3), 'DESC')
+            [2, 3],
+            $rating->sortIds([2, 3], 'DESC')
         );
 
         // invalid ids will get appended.
         $this->assertEquals(
-            array(2, 3, 4, 5, 6),
-            $rating->sortIds(array(2, 3, 4, 5, 6), 'DESC')
+            [2, 3, 4, 5, 6],
+            $rating->sortIds([2, 3, 4, 5, 6], 'DESC')
         );
     }
 
@@ -431,7 +432,7 @@ class AttributeRatingTest extends TestCase
         $this->assertEquals(10, $template->currentValue);
 
         $this->assertEquals(
-            array(0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10),
+            [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10],
             $template->options
         );
     }
@@ -457,22 +458,22 @@ class AttributeRatingTest extends TestCase
 
         // TODO: fill with code when getFilterOptions() is implemented.
         $this->assertEquals(
-            array(),
-            $rating->getFilterOptions(array(1), false)
+            [],
+            $rating->getFilterOptions([1], false)
         );
 
         $this->assertEquals(
-            array(),
-            $rating->getFilterOptions(array(1), true)
+            [],
+            $rating->getFilterOptions([1], true)
         );
 
         $this->assertEquals(
-            array(),
+            [],
             $rating->getFilterOptions(null, false)
         );
 
         $this->assertEquals(
-            array(),
+            [],
             $rating->getFilterOptions(null, true)
         );
     }
@@ -504,7 +505,7 @@ class AttributeRatingTest extends TestCase
         );
 
         $this->assertEquals(
-            array(),
+            [],
             $query1->fetchAllAssoc()
         );
 
@@ -517,16 +518,16 @@ class AttributeRatingTest extends TestCase
         );
 
         $this->assertEquals(
-            array(
-                array(
-                'id'        => 2,
-                'mid'       => 1,
-                'aid'       => 2,
-                'iid'       => 1,
-                'votecount' => 1,
-                'meanvalue' => 1.0,
-                ),
-            ),
+            [
+                [
+                    'id'        => 2,
+                    'mid'       => 1,
+                    'aid'       => 2,
+                    'iid'       => 1,
+                    'votecount' => 1,
+                    'meanvalue' => 1.0,
+                ],
+            ],
             $query2->fetchAllAssoc()
         );
     }
