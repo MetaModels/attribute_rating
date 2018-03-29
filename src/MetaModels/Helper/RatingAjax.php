@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,13 +16,15 @@
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2017 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\Helper;
 
+use Contao\Input;
 use MetaModels\Attribute\Rating\Rating;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\IServiceContainerAware;
@@ -56,7 +58,7 @@ class RatingAjax implements IServiceContainerAware
      */
     protected function bail($message = 'Invalid AJAX call.')
     {
-        header('HTTP/1.1 400 Bad Request');
+        \header('HTTP/1.1 400 Bad Request');
 
         die('Rating Ajax: '.$message);
     }
@@ -96,7 +98,7 @@ class RatingAjax implements IServiceContainerAware
      */
     public function handle()
     {
-        $input = \Input::getInstance();
+        $input = Input::getInstance();
         if (!$input->get('metamodelsattribute_rating')) {
             return;
         }
@@ -120,9 +122,9 @@ class RatingAjax implements IServiceContainerAware
             $this->bail('No Attribute.');
         }
 
-        $objAttribute->addVote($arrData['item'], floatval($fltValue), true);
+        $objAttribute->addVote($arrData['item'], (float) $fltValue, true);
 
-        header('HTTP/1.1 200 Ok');
+        \header('HTTP/1.1 200 Ok');
         exit;
     }
 }
