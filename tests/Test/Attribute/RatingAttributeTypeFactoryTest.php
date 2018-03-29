@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2017 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -31,6 +32,7 @@ use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
+use MetaModels\AttributeRatingBundle\Attribute\Rating;
 
 /**
  * Test the attribute factory.
@@ -50,7 +52,7 @@ class RatingAttributeTypeFactoryTest extends TestCase
      */
     protected function mockMetaModel($tableName, $language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
+        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
 
         $metaModel
             ->expects($this->any())
@@ -106,7 +108,7 @@ class RatingAttributeTypeFactoryTest extends TestCase
         $session      = $this->getMockBuilder(SessionInterface::class)->getMock();
         $scopeMatcher = $this->mockScopeMatcher();
 
-        return array(new AttributeTypeFactory($connection, $router, $session, $scopeMatcher));
+        return [new AttributeTypeFactory($connection, $router, $session, $scopeMatcher)];
     }
 
     /**
@@ -122,19 +124,19 @@ class RatingAttributeTypeFactoryTest extends TestCase
         $scopeMatcher = $this->mockScopeMatcher();
 
         $factory   = new AttributeTypeFactory($connection, $router, $session, $scopeMatcher);
-        $values    = array(
+        $values    = [
             'rating_max'   => 10,
             'rating_half'  => 1,
             'rating_emtpy' => '',
             'rating_full'  => '',
             'rating_hover' => '',
-        );
+        ];
         $attribute = $factory->createInstance(
             $values,
             $this->mockMetaModel('mm_test', 'de', 'en')
         );
 
-        $this->assertInstanceOf('MetaModels\Attribute\Rating\Rating', $attribute);
+        $this->assertInstanceOf(Rating::class, $attribute);
 
         foreach ($values as $key => $value) {
             $this->assertEquals($value, $attribute->get($key), $key);

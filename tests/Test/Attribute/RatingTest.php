@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2017 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -29,6 +30,7 @@ use MetaModels\AttributeRatingBundle\Attribute\Rating;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
+use MetaModels\IMetaModel;
 
 /**
  * Unit tests to test class Rating.
@@ -45,7 +47,7 @@ class RatingTest extends TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
+        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
 
         $metaModel
             ->expects($this->any())
@@ -103,6 +105,6 @@ class RatingTest extends TestCase
         $scopeMatcher = $this->mockScopeMatcher();
 
         $text = new Rating($this->mockMetaModel('en', 'en'), [], $connection, $router, $session, $scopeMatcher);
-        $this->assertInstanceOf('MetaModels\AttributeRatingBundle\Attribute\Rating', $text);
+        $this->assertInstanceOf(Rating::class, $text);
     }
 }
