@@ -174,8 +174,8 @@ class Rating extends BaseComplex
         $arrResult = [];
         while ($objData->next()) {
             $arrResult[$objData->iid] = [
-                'votecount' => intval($objData->votecount),
-                'meanvalue' => floatval($objData->meanvalue),
+                'votecount' => (int) $objData->votecount,
+                'meanvalue' => (float) $objData->meanvalue,
             ];
         }
         foreach (\array_diff($arrIds, \array_keys($arrResult)) as $intId) {
@@ -279,7 +279,7 @@ class Rating extends BaseComplex
             $prevPercent = 0;
         } else {
             $voteCount   = $arrData[$intItemId]['votecount'];
-            $prevPercent = floatval($arrData[$intItemId]['meanvalue']);
+            $prevPercent = (float) $arrData[$intItemId]['meanvalue'];
         }
 
         $grandTotal = ($voteCount * $this->get('rating_max') * $prevPercent);
@@ -377,7 +377,7 @@ class Rating extends BaseComplex
             || Session::getInstance()->get($this->getLockId($arrRowData['id']))
         );
 
-        $value  = ($this->get('rating_max') * floatval($arrRowData[$this->getColName()]['meanvalue']));
+        $value  = ($this->get('rating_max') * (float) $arrRowData[$this->getColName()]['meanvalue']);
         $intInc = \strlen($this->get('rating_half')) ? .5 : 1;
 
         $objTemplate->currentValue = (\round(($value / $intInc), 0) * $intInc);

@@ -122,7 +122,7 @@ class RatingAjax implements IServiceContainerAware
             $this->bail('No Attribute.');
         }
 
-        $objAttribute->addVote($arrData['item'], floatval($fltValue), true);
+        $objAttribute->addVote($arrData['item'], (float) $fltValue, true);
 
         \header('HTTP/1.1 200 Ok');
         exit;
