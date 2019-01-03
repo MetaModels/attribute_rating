@@ -57,12 +57,6 @@
     "contao": {
       "sources": {
         "contao": "system/modules/metamodelsattribute_rating"
-      },
-      "transifex": {
-        "project": "metamodels",
-        "prefix": "attribute_rating-",
-        "languages_cto": "contao/languages",
-        "languages_tx": ".tx"
       }
     },
     "branch-alias": {
