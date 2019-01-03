@@ -33,11 +33,6 @@ use MetaModels\Render\Template;
 
 /**
  * This is the MetaModelAttribute class for handling numeric fields.
- *
- * @package    MetaModels
- * @subpackage AttributeRating
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  */
 class Rating extends BaseComplex
 {

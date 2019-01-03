@@ -30,12 +30,6 @@ use MetaModels\IServiceContainerAware;
 
 /**
  * This is the MetaModelAttribute ajax endpoint for the rating attribute.
- *
- * @package    MetaModels
- * @subpackage AttributeRatingAjax
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- *
- * @codeCoverageIgnore
  */
 class RatingAjax implements IServiceContainerAware
 {
