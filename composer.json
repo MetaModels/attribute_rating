@@ -33,16 +33,15 @@
   },
   "require": {
     "php": "^5.6 || ^7.0",
+    "contao-community-alliance/composer-plugin": "^2.4",
+    "contao-community-alliance/dc-general": "^2.0.0",
     "contao/core": "^3.5.5",
-    "contao-community-alliance/composer-plugin": "^2.0",
-    "contao-community-alliance/dc-general": "^2.0@beta",
     "metamodels/core": "^2.0",
     "richardhj/contao-simple-ajax": "^1.1"
   },
   "require-dev": {
-    "cyberspectrum/contao-toolbox": "^0.6",
-    "phpcq/all-tasks": "^1.2",
-    "metamodels/base-unit-tests": "^1.0.4"
+    "metamodels/base-unit-tests": "^1.0.4",
+    "phpcq/all-tasks": "^1.2"
   },
   "autoload": {
     "psr-0": {
@@ -58,17 +57,14 @@
     "contao": {
       "sources": {
         "contao": "system/modules/metamodelsattribute_rating"
-      },
-      "transifex": {
-        "project": "metamodels",
-        "prefix": "attribute_rating-",
-        "languages_cto": "contao/languages",
-        "languages_tx": ".tx"
       }
     },
     "branch-alias": {
       "dev-master": "2.0.x-dev",
       "dev-develop": "2.1.x-dev"
     }
+  },
+  "config": {
+    "sort-packages": true
   }
 }
