@@ -12,10 +12,7 @@
  *
  * @package    MetaModels/attribute_rating
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     David Greminger <david.greminger@1up.io>
- * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
