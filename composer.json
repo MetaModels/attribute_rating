@@ -32,7 +32,7 @@
     "source": "https://github.com/MetaModels/attribute_rating"
   },
   "require": {
-    "php": "^5.6 || ^7.0",
+    "php": "^7.1",
     "contao-community-alliance/dc-general": "^2.1@dev",
     "contao/core-bundle": "^4.4",
     "metamodels/core": "^2.1@dev",
@@ -60,8 +60,7 @@
   "extra": {
     "contao-manager-plugin": "MetaModels\\AttributeRatingBundle\\ContaoManager\\Plugin",
     "branch-alias": {
-      "dev-master": "2.0.x-dev",
-      "dev-feature/contao4": "2.1.x-dev"
+      "dev-release/2.1.0": "2.1.x-dev"
     }
   },
   "config": {
