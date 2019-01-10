@@ -1,8 +1,8 @@
 ignore:
-#  Mini Model <minimodel@metamodel.me>
+  - 'Mini Model <minimodel@metamodel.me>'
 
 exclude:
-  languages
+  - /^src\/Resources\/contao\/languages/
 
 mapping:
-  "Andreas Isaak <info@andreas-isaak.de>": "Andreas Isaak <andy.jared@googlemail.com>"
+  'Andreas Isaak <info@andreas-isaak.de>': 'Andreas Isaak <andy.jared@googlemail.com>'
