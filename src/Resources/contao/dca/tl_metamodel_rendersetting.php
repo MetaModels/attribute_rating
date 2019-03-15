@@ -14,25 +14,28 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-error_reporting(E_ALL);
+/**
+ * Table tl_metamodel_attribute
+ */
 
-function includeIfExists($file)
-{
-    return file_exists($file) ? include $file : false;
-}
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['rating extends default'] = [
+    '+advanced' => [
+        'rating_disabled',
+    ],
+];
 
-if (
-    // Locally installed dependencies
-    (!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php'))
-    // We are within an composer install.
-    && (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))) {
-    echo 'You must set up the project dependencies, run the following commands:'.PHP_EOL.
-        'curl -sS https://getcomposer.org/installer | php'.PHP_EOL.
-        'php composer.phar install'.PHP_EOL;
-    exit(1);
-}
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['rating_disabled'] = [
+    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['rating_disabled'],
+    'inputType'               => 'checkbox',
+    'eval'                    => [
+        'tl_class'            => 'w50',
+    ],
+    'sql'                    => 'varchar(32) NOT NULL default \'\''
+];

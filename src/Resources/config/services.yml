@@ -1,0 +1,15 @@
+services:
+    metamodels.attribute_rating.factory:
+        class: MetaModels\AttributeRatingBundle\Attribute\AttributeTypeFactory
+        arguments:
+            - '@database_connection'
+            - '@router'
+            - '@session'
+            - '@cca.dc-general.scope-matcher'
+        tags:
+          - { name: metamodels.attribute_factory }
+
+    metamodels.controller.rating:
+        class: MetaModels\AttributeRatingBundle\Controller\RateAjaxController
+        arguments:
+            - '@metamodels.factory'

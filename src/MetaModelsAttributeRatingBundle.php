@@ -12,20 +12,20 @@
  *
  * @package    MetaModels/attribute_rating
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     David Greminger <david.greminger@1up.io>
- * @author     Ingolf Steinhardt <info@e-spin.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
+namespace MetaModels\AttributeRatingBundle;
+
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
 /**
- * Register the templates
+ * The Bundle class.
  */
-\Contao\TemplateLoader::addFiles(
-    [
-        'mm_attr_rating'     => 'system/modules/metamodelsattribute_rating/templates',
-        'mm_attr_rating_raw' => 'system/modules/metamodelsattribute_rating/templates',
-    ]
-);
+class MetaModelsAttributeRatingBundle extends Bundle
+{
+
+}

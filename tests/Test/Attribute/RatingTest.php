@@ -14,16 +14,21 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace MetaModels\Test\Attribute\Rating;
+namespace MetaModels\AttributeRatingBundle\Test\Attribute;
 
-use MetaModels\Attribute\Rating\Rating;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
+use Doctrine\DBAL\Connection;
+use MetaModels\AttributeRatingBundle\Attribute\Rating;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\RouterInterface;
 use MetaModels\IMetaModel;
 
 /**
@@ -61,6 +66,31 @@ class RatingTest extends TestCase
         return $metaModel;
     }
 
+
+    /**
+     * Mock the database connection.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     */
+    private function mockConnection()
+    {
+        return $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
+     * Mock request scope determinator.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|RequestScopeDeterminator
+     */
+    private function mockScopeMatcher()
+    {
+        return $this->getMockBuilder(RequestScopeDeterminator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     /**
      * Test that the attribute can be instantiated.
      *
@@ -68,7 +98,12 @@ class RatingTest extends TestCase
      */
     public function testInstantiation()
     {
-        $text = new Rating($this->mockMetaModel('en', 'en'));
+        $connection   = $this->mockConnection();
+        $router       = $this->getMockBuilder(RouterInterface::class)->getMock();
+        $session      = $this->getMockBuilder(SessionInterface::class)->getMock();
+        $scopeMatcher = $this->mockScopeMatcher();
+
+        $text = new Rating($this->mockMetaModel('en', 'en'), [], $connection, $router, $session, $scopeMatcher);
         $this->assertInstanceOf(Rating::class, $text);
     }
 }

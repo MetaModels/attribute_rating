@@ -13,24 +13,29 @@
  * @package    MetaModels/attribute_rating
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace MetaModels\Test\Attribute\Rating;
+namespace MetaModels\AttributeRatingBundle\Test\Attribute;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeTypeFactory;
-use MetaModels\Attribute\Rating\AttributeTypeFactory;
+use MetaModels\AttributeRatingBundle\Attribute\AttributeTypeFactory;
 use MetaModels\IMetaModel;
-use MetaModels\Test\Attribute\AttributeTypeFactoryTest;
-use MetaModels\Attribute\Rating\Rating;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\RouterInterface;
+use MetaModels\AttributeRatingBundle\Attribute\Rating;
 
 /**
  * Test the attribute factory.
  */
-class RatingAttributeTypeFactoryTest extends AttributeTypeFactoryTest
+class RatingAttributeTypeFactoryTest extends TestCase
 {
     /**
      * Mock a MetaModel.
@@ -66,13 +71,42 @@ class RatingAttributeTypeFactoryTest extends AttributeTypeFactoryTest
     }
 
     /**
+     * Mock the database connection.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     */
+    private function mockConnection()
+    {
+        return $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
+     * Mock request scope determinator.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|RequestScopeDeterminator
+     */
+    private function mockScopeMatcher()
+    {
+        return $this->getMockBuilder(RequestScopeDeterminator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
      * Override the method to run the tests on the attribute factories to be tested.
      *
      * @return IAttributeTypeFactory[]
      */
     protected function getAttributeFactories()
     {
-        return [new AttributeTypeFactory()];
+        $connection   = $this->mockConnection();
+        $router       = $this->getMockBuilder(RouterInterface::class)->getMock();
+        $session      = $this->getMockBuilder(SessionInterface::class)->getMock();
+        $scopeMatcher = $this->mockScopeMatcher();
+
+        return [new AttributeTypeFactory($connection, $router, $session, $scopeMatcher)];
     }
 
     /**
@@ -80,9 +114,14 @@ class RatingAttributeTypeFactoryTest extends AttributeTypeFactoryTest
      *
      * @return void
      */
-    public function testCreateSelect()
+    public function testCreateRating()
     {
-        $factory   = new AttributeTypeFactory();
+        $connection   = $this->mockConnection();
+        $router       = $this->getMockBuilder(RouterInterface::class)->getMock();
+        $session      = $this->getMockBuilder(SessionInterface::class)->getMock();
+        $scopeMatcher = $this->mockScopeMatcher();
+
+        $factory   = new AttributeTypeFactory($connection, $router, $session, $scopeMatcher);
         $values    = [
             'rating_max'   => 10,
             'rating_half'  => 1,

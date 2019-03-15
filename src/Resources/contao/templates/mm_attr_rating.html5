@@ -1,4 +1,4 @@
-<?php $GLOBALS['TL_JAVASCRIPT']['metamodelsattribute_rating'] = 'system/modules/metamodelsattribute_rating/html/moostarrating.js'; ?>
+<?php $GLOBALS['TL_JAVASCRIPT']['metamodelsattribute_rating'] = 'bundles/metamodelsattributerating/moostarrating.js'; ?>
 <script type="text/javascript">
 (function($) {
 	window.addEvent("domready",function() {

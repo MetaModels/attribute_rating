@@ -15,6 +15,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2019 The MetaModels team.
@@ -22,20 +23,118 @@
  * @filesource
  */
 
-namespace MetaModels\Attribute\Rating;
+namespace MetaModels\AttributeRatingBundle\Attribute;
 
 use Contao\Environment;
-use Contao\Session;
+use Contao\System;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\BaseComplex;
 use MetaModels\Helper\ToolboxFile;
+use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\ISimple;
 use MetaModels\Render\Template;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
+use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * This is the MetaModelAttribute class for handling numeric fields.
  */
 class Rating extends BaseComplex
 {
+    /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * Router.
+     *
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
+     * Web session.
+     *
+     * @var null|SessionInterface
+     */
+    private $session;
+
+    /**
+     * Request scope determinator.
+     *
+     * @var RequestScopeDeterminator|null
+     */
+    private $scopeDeterminator;
+
+    /**
+     * Rating constructor.
+     *
+     * @param IMetaModel                    $objMetaModel      The metamodel to which the attribute belongs to.
+     * @param array                         $arrData           Attribute data.
+     * @param Connection|null               $connection        Database connection.
+     * @param RouterInterface|null          $router            The router.
+     * @param SessionInterface|null         $session           Session.
+     * @param RequestScopeDeterminator|null $scopeDeterminator Request scope determinator.
+     */
+    public function __construct(
+        IMetaModel $objMetaModel,
+        array $arrData = [],
+        Connection $connection = null,
+        RouterInterface $router = null,
+        SessionInterface $session = null,
+        RequestScopeDeterminator $scopeDeterminator = null
+    ) {
+        parent::__construct($objMetaModel, $arrData);
+
+        // @codingStandardsIgnoreStart Silencing errors is discouraged
+        if (null === $connection) {
+            @trigger_error(
+                'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        if (null === $router) {
+            @trigger_error(
+                'Router is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+
+            $router = System::getContainer()->get('router');
+        }
+
+        if (null === $session) {
+            @trigger_error(
+                'Router is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+
+            $session = System::getContainer()->get('session');
+        }
+
+        if (null === $scopeDeterminator) {
+            @trigger_error(
+                'Scope determinator is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+
+            $scopeDeterminator = System::getContainer()->get('cca.dc-general.scope-matcher');
+        }
+        // @codingStandardsIgnoreEnd
+
+        $this->connection        = $connection;
+        $this->router            = $router;
+        $this->session           = $session;
+        $this->scopeDeterminator = $scopeDeterminator;
+    }
+
     /**
      * Returns all valid settings for the attribute type.
      *
@@ -129,12 +228,13 @@ class Rating extends BaseComplex
      */
     public function destroyAUX()
     {
-        $this
-            ->getMetaModel()
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare('DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=?')
-            ->execute($this->getMetaModel()->get('id'), $this->get('id'));
+        $this->connection->delete(
+            'tl_metamodel_rating',
+            [
+                'mid' => $this->getMetaModel()->get('id'),
+                'aid' => $this->get('id')
+            ]
+        );
     }
 
     /**
@@ -147,26 +247,17 @@ class Rating extends BaseComplex
      */
     public function getDataFor($arrIds)
     {
-        $objData = $this
-            ->getMetaModel()
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare(sprintf(
-                'SELECT * FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s))',
-                \implode(', ', \array_fill(0, \count($arrIds), '?'))
-            ))
-            ->execute(
-                \array_merge(
-                    [
-                        $this->getMetaModel()->get('id'),
-                        $this->get('id'),
-                    ],
-                    $arrIds
-                )
-            );
+        $statement = $this->connection->createQueryBuilder()
+            ->select('*')
+            ->from('tl_metamodel_rating')
+            ->andWhere('mid=:mid AND aid=:aid AND iid IN (:iids)')
+            ->setParameter('mid', $this->getMetaModel()->get('id'))
+            ->setParameter('aid', $this->get('id'))
+            ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->execute();
 
         $arrResult = [];
-        while ($objData->next()) {
+        while ($objData = $statement->fetch(\PDO::FETCH_OBJ)) {
             $arrResult[$objData->iid] = [
                 'votecount' => (int) $objData->votecount,
                 'meanvalue' => (float) $objData->meanvalue,
@@ -206,32 +297,13 @@ class Rating extends BaseComplex
      */
     public function unsetDataFor($arrIds)
     {
-        $this
-            ->getMetaModel()
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare(
-                \sprintf(
-                    'DELETE FROM tl_metamodel_rating WHERE mid=? AND aid=? AND (iid IN (%s))',
-                    \implode(
-                        ', ',
-                        \array_fill(
-                            0,
-                            \count($arrIds),
-                            '?'
-                        )
-                    )
-                )
-            )
-            ->execute(
-                \array_merge(
-                    [
-                        $this->getMetaModel()->get('id'),
-                        $this->get('id'),
-                    ],
-                    $arrIds
-                )
-            );
+        $this->connection->createQueryBuilder()
+            ->delete('tl_metamodel_rating')
+            ->andWhere('mid=:mid AND aid=:aid AND iid IN (:iids)')
+            ->setParameter('mid', $this->getMetaModel()->get('id'))
+            ->setParameter('aid', $this->get('id'))
+            ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->execute();
     }
 
     /**
@@ -262,7 +334,7 @@ class Rating extends BaseComplex
      */
     public function addVote($intItemId, $fltValue, $blnLock = false)
     {
-        if (Session::getInstance()->get($this->getLockId($intItemId))) {
+        if ($this->getSessionBag()->get($this->getLockId($intItemId))) {
             return;
         }
 
@@ -290,26 +362,31 @@ class Rating extends BaseComplex
             'meanvalue' => $value,
         ];
 
+        $queryBuilder = $this->connection->createQueryBuilder();
+
         if (!$arrData || !$arrData[$intItemId]['votecount']) {
-            $strSQL = 'INSERT INTO tl_metamodel_rating %s';
+            $queryBuilder
+                ->insert('tl_metamodel_rating')
+                ->values($arrSet);
         } else {
-            $strSQL = 'UPDATE tl_metamodel_rating %s WHERE mid=? AND aid=? AND iid=?';
+            foreach ($arrSet as $key => $value) {
+                $queryBuilder
+                    ->set($key, ':' . $key)
+                    ->setParameter($key, $value);
+            }
+
+            $queryBuilder
+                ->update('tl_metamodel_rating')
+                ->andWhere('mid=:mid AND aid=:aid AND iid=:iid')
+                ->setParameter('mid', $this->getMetaModel()->get('id'))
+                ->setParameter('aid', $this->get('id'))
+                ->setParameter('iid', $intItemId);
         }
 
-        $this
-            ->getMetaModel()
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare($strSQL)
-            ->set($arrSet)
-            ->execute(
-                $this->getMetaModel()->get('id'),
-                $this->get('id'),
-                $intItemId
-            );
+        $queryBuilder->execute();
 
         if ($blnLock) {
-            Session::getInstance()->set($this->getLockId($intItemId), true);
+            $this->getSessionBag()->set($this->getLockId($intItemId), true);
         }
     }
 
@@ -349,26 +426,30 @@ class Rating extends BaseComplex
 
         $strEmpty = $this->ensureImage(
             $this->get('rating_emtpy'),
-            'system/modules/metamodelsattribute_rating/html/star-empty.png'
+            'bundles/metamodelsattributerating/star-empty.png'
         );
         $strFull  = $this->ensureImage(
             $this->get('rating_full'),
-            'system/modules/metamodelsattribute_rating/html/star-full.png'
+            'bundles/metamodelsattributerating/star-full.png'
         );
         $strHover = $this->ensureImage(
             $this->get('rating_hover'),
-            'system/modules/metamodelsattribute_rating/html/star-hover.png'
+            'bundles/metamodelsattributerating/star-hover.png'
         );
 
-        $size                    = \getimagesize(TL_ROOT.'/'.$strEmpty);
+        if (\file_exists(TL_ROOT . '/' . $strEmpty)) {
+            $size = \getimagesize(TL_ROOT . '/' . $strEmpty);
+        } else {
+            $size = \getimagesize(TL_ROOT . '/web/' . $strEmpty);
+        }
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
         $objTemplate->name       = 'rating_attribute_'.$this->get('id').'_'.$arrRowData['id'];
 
         $objTemplate->ratingDisabled = (
-            (TL_MODE == 'BE')
+            $this->scopeDeterminator->currentScopeIsBackend()
             || $objSettings->get('rating_disabled')
-            || Session::getInstance()->get($this->getLockId($arrRowData['id']))
+            || $this->getSessionBag()->get($this->getLockId($arrRowData['id']))
         );
 
         $value  = ($this->get('rating_max') * (float) $arrRowData[$this->getColName()]['meanvalue']);
@@ -380,11 +461,7 @@ class Rating extends BaseComplex
             '[VALUE]',
             $this->get('rating_max')
         );
-        $objTemplate->ajaxUrl      = \sprintf(
-            '%s?metamodelsattribute_rating=%s',
-            $this->getContainer()['simpleajax.entrypoint-frontend'],
-            $this->get('id')
-        );
+        $objTemplate->ajaxUrl      = $this->router->generate('metamodels.attribute_rating.rate');
         $objTemplate->ajaxData     = \json_encode(
             [
                 'id'   => $this->get('id'),
@@ -417,43 +494,21 @@ class Rating extends BaseComplex
      */
     public function sortIds($idList, $strDirection)
     {
-        $objData = $this
-            ->getMetaModel()
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare(sprintf(
-                'SELECT iid FROM tl_metamodel_rating WHERE (mid=?) AND (aid=?) AND (iid IN (%s)) ORDER BY meanvalue '
-                .$strDirection,
-                \implode(', ', \array_fill(0, \count($idList), '?'))
-            ))
-            ->execute(
-                \array_merge(
-                    [
-                        $this->getMetaModel()->get('id'),
-                        $this->get('id'),
-                    ],
-                    $idList
-                )
-            );
+        $statement = $this->connection->createQueryBuilder()
+            ->select('iid')
+            ->from('tl_metamodel_rating')
+            ->andWhere('mid=:mid AND aid=:aid AND iid IN (:iids)')
+            ->setParameter('mid', $this->getMetaModel()->get('id'))
+            ->setParameter('aid', $this->get('id'))
+            ->setParameter('iids', $idList, Connection::PARAM_STR_ARRAY)
+            ->orderBy('meanvalue', $strDirection)
+            ->execute();
 
-        $arrSorted = $objData->fetchEach('iid');
+        $arrSorted = $statement->fetchAll(\PDO::FETCH_COLUMN, 'iid');
 
         return ($strDirection == 'DESC')
             ? \array_merge($arrSorted, \array_diff($idList, $arrSorted))
             : \array_merge(\array_diff($idList, $arrSorted), $arrSorted);
-    }
-
-    /**
-     * Returns the dependency injection container (replacement for super globals access).
-     *
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function getContainer()
-    {
-        return $GLOBALS['container'];
     }
 
     /**
@@ -467,5 +522,23 @@ class Rating extends BaseComplex
     protected function getActiveLanguageArray()
     {
         return $GLOBALS['TL_LANG'];
+    }
+
+    /**
+     * Get the session bag depending on current scope.
+     *
+     * @return AttributeBagInterface|SessionBagInterface
+     */
+    protected function getSessionBag()
+    {
+        if ($this->scopeDeterminator->currentScopeIsBackend()) {
+            return $this->session->getBag('contao_backend');
+        }
+
+        if ($this->scopeDeterminator->currentScopeIsFrontend()) {
+            return $this->session->getBag('contao_frontend');
+        }
+
+        return $this->session->getBag('attributes');
     }
 }
