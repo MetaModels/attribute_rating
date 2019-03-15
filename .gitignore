@@ -19,3 +19,4 @@ build/
 
 # concrete configs not to be added
 phpunit.xml
+composer.lock
