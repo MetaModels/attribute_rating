@@ -11,5 +11,6 @@ services:
 
     metamodels.controller.rating:
         class: MetaModels\AttributeRatingBundle\Controller\RateAjaxController
+        public: true
         arguments:
             - '@metamodels.factory'
