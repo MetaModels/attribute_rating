@@ -8,4 +8,5 @@
 -->
 <project name="metamodels/attribute_rating" default="build">
     <import file="vendor/phpcq/phpcq/phpcq.main.xml" />
+    <target name="phpspec" />
 </project>
