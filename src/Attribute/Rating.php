@@ -355,9 +355,9 @@ class Rating extends BaseComplex
         $value = (1 / $hundred * ($grandTotal + $fltValue));
 
         $arrSet = [
-            'mid' => $this->getMetaModel()->get('id'),
-            'aid' => $this->get('id'),
-            'iid' => $intItemId,
+            'mid'       => $this->getMetaModel()->get('id'),
+            'aid'       => $this->get('id'),
+            'iid'       => $intItemId,
             'votecount' => $voteCount,
             'meanvalue' => $value,
         ];
@@ -365,9 +365,14 @@ class Rating extends BaseComplex
         $queryBuilder = $this->connection->createQueryBuilder();
 
         if (!$arrData || !$arrData[$intItemId]['votecount']) {
+            foreach ($arrSet as $key => $value) {
+                $queryBuilder
+                    ->setValue('tl_metamodel_rating.' . $key, ':' . $key)
+                    ->setParameter($key, $value);
+            }
+
             $queryBuilder
-                ->insert('tl_metamodel_rating', 't')
-                ->values(\array_flip(\array_map(function($v){return 't.' . $v;},\array_flip($arrSet))));
+                ->insert('tl_metamodel_rating');
         } else {
             foreach ($arrSet as $key => $value) {
                 $queryBuilder
@@ -444,7 +449,7 @@ class Rating extends BaseComplex
         }
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
-        $objTemplate->name       = 'rating_attribute_'.$this->get('id').'_'.$arrRowData['id'];
+        $objTemplate->name       = 'rating_attribute_' . $this->get('id') . '_' . $arrRowData['id'];
 
         $objTemplate->ratingDisabled = (
             $this->scopeDeterminator->currentScopeIsBackend()
@@ -475,13 +480,13 @@ class Rating extends BaseComplex
 
         while ($intValue <= $this->get('rating_max')) {
             $arrOptions[] = $intValue;
-            $intValue    += $intInc;
+            $intValue     += $intInc;
         }
         $objTemplate->options = $arrOptions;
 
-        $objTemplate->imageEmpty = $base.$strEmpty;
-        $objTemplate->imageFull  = $base.$strFull;
-        $objTemplate->imageHover = $base.$strHover;
+        $objTemplate->imageEmpty = $base . $strEmpty;
+        $objTemplate->imageFull  = $base . $strFull;
+        $objTemplate->imageHover = $base . $strHover;
     }
 
     /**
