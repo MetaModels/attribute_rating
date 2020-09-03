@@ -507,6 +507,7 @@ class Rating extends BaseComplex
             ->setParameter('aid', $this->get('id'))
             ->setParameter('iids', $idList, Connection::PARAM_STR_ARRAY)
             ->orderBy('t.meanvalue', $strDirection)
+            ->addOrderBy('t.votecount', $strDirection)
             ->execute();
 
         $arrSorted = $statement->fetchAll(\PDO::FETCH_COLUMN, 'iid');
