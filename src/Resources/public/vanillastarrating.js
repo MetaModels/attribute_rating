@@ -357,6 +357,8 @@
     };
 
     VanillaStarRating.prototype.sendAjaxRequest = function(value) {
+        var _radios = this.radios, _stars = this.stars, _currentIndex = this.currentIndex, _me = this;
+
         var data   = JSON.parse(this.options.ajaxData);
         var params = 'rating=' + value + '&data[id]=' + data.id + '&data[pid]=' + data.pid + '&data[item]=' + data.item
                      + '&REQUEST_TOKEN=' + this.options.requestToken;
@@ -364,19 +366,59 @@
         var xhr = new XMLHttpRequest();
         xhr.open('POST', this.options.ajaxUrl);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        //xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(params);
         xhr.onload = function() {
             if (xhr.status === 200) {
                 //success
+                makeDisableRadios(_radios, _stars, _currentIndex, _me);
             } else {
                 if (xhr.status !== 200) {
-                    //console.log(xhr.status);
+                    if (this.options.tip && this.options.tipTarget) {
+                        if (this.options.tipTargetType == 'text') {
+                            this.options.tipTarget.innerText = 'Error! ' + xhr.status;
+                        } else {
+                            this.options.tipTarget.innerHTML = 'Error! ' + xhr.status;
+                        }
+                    }
                 }
             }
         };
-        xhr.send(params);
+        xhr.onerror = function() {
+            if (this.options.tip && this.options.tipTarget) {
+                if (this.options.tipTargetType == 'text') {
+                    this.options.tipTarget.innerText = 'Error!';
+                } else {
+                    this.options.tipTarget.innerHTML = 'Error!';
+                }
+            }
+        }
     };
+
+    var makeDisableRadios = function(_radios, _stars, _curr_index, _me) {
+        var disable = false;
+
+        if (_radios == undefined || _radios == null) {
+            return;
+        }
+
+        for (var i = 0; i < _radios.length; i++) {
+            if (i == _curr_index) {
+                _radios[i].setAttribute('checked', 'true');
+                disable = true;
+                break;
+            }
+        }
+
+        if (disable) {
+            for (var i = 0; i < _radios.length; i++) {
+                _radios[i].setAttribute('disabled', 'true');
+                _stars[i].style.cursor = 'default';
+            }
+        }
+
+        _me.options.disabled = true;
+    }
 
     // export to global namespace
     window.VanillaStarRating = function() {
