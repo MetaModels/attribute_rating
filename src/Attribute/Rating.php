@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -298,8 +298,10 @@ class Rating extends BaseComplex
     public function unsetDataFor($arrIds)
     {
         $this->connection->createQueryBuilder()
-            ->delete('tl_metamodel_rating', 't')
-            ->andWhere('t.mid=:mid AND t.aid=:aid AND t.iid IN (:iids)')
+            ->delete('tl_metamodel_rating')
+            ->andWhere('tl_metamodel_rating.mid=:mid')
+            ->andWhere('tl_metamodel_rating.aid=:aid')
+            ->andWhere('tl_metamodel_rating.iid IN (:iids)')
             ->setParameter('mid', $this->getMetaModel()->get('id'))
             ->setParameter('aid', $this->get('id'))
             ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
