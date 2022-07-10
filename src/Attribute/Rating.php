@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -257,10 +257,10 @@ class Rating extends BaseComplex
             ->execute();
 
         $arrResult = [];
-        while ($objData = $statement->fetch(\PDO::FETCH_OBJ)) {
-            $arrResult[$objData->iid] = [
-                'votecount' => (int) $objData->votecount,
-                'meanvalue' => (float) $objData->meanvalue,
+        while ($objData = $statement->fetchAssociative()) {
+            $arrResult[$objData['iid']] = [
+                'votecount' => (int) $objData['votecount'],
+                'meanvalue' => (float) $objData['meanvalue'],
             ];
         }
         foreach (\array_diff($arrIds, \array_keys($arrResult)) as $intId) {
@@ -512,7 +512,7 @@ class Rating extends BaseComplex
             ->addOrderBy('t.votecount', $strDirection)
             ->execute();
 
-        $arrSorted = $statement->fetchAll(\PDO::FETCH_COLUMN, 'iid');
+        $arrSorted = $statement->fetchFirstColumn();
 
         return ($strDirection == 'DESC')
             ? \array_merge($arrSorted, \array_diff($idList, $arrSorted))
