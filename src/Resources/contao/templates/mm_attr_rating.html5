@@ -1,31 +1,34 @@
-<?php $GLOBALS['TL_BODY']['metamodelsattribute_rating'] =
-    '<script src="bundles/metamodelsattributerating/vanillastarrating.min.js"></script>'; ?>
+<?php
+$GLOBALS['TL_BODY']['metamodelsattribute_rating'] =
+    sprintf('<script src="bundles/metamodelsattributerating/vanillastarrating%s.js"></script>',
+            System::getContainer()->get('kernel')->isDebug() ? '' : '.min');
+?>
 <script type="text/javascript">
-window.addEventListener('DOMContentLoaded', function(e) {
-    var vanillaStarRating = VanillaStarRating().initialize({
-       <?php if ($this->ratingDisabled): ?>disabled: true,<?php endif; ?>
-       form          : '<?php echo $this->name; ?>',
-       radios        : '<?php echo $this->name; ?>_rating',
-       half          : <?php echo $this->rateHalf; ?>,
-       imageEmpty    : '<?php echo $this->imageEmpty; ?>',
-       imageFull     : '<?php echo $this->imageFull; ?>',
-       imageHover    : '<?php echo $this->imageHover; ?>',
-       width         : <?php echo $this->imageWidth; ?>,
-       tip           : '<?php echo $this->tipText; ?></i>',
-       tipTarget     : document.getElementById('<?php echo $this->name; ?>_tip'),
-       tipTargetType : 'html',
-       ajaxUrl       : '<?php echo $this->ajaxUrl; ?>',
-       requestToken  : '<?php echo REQUEST_TOKEN; ?>',
-       ajaxData      : '<?php echo $this->ajaxData; ?>',
+    window.addEventListener('DOMContentLoaded', function(e) {
+        let vanillaStarRating = VanillaStarRating().initialize({
+           <?php if ($this->ratingDisabled): ?>disabled: true,<?php endif; ?>
+           form          : '<?= $this->name ?>',
+           radios        : '<?= $this->name ?>_rating',
+           half          : <?= $this->rateHalf ?>,
+           imageEmpty    : '<?= $this->imageEmpty ?>',
+           imageFull     : '<?= $this->imageFull ?>',
+           imageHover    : '<?= $this->imageHover ?>',
+           width         : <?= $this->imageWidth ?>,
+           tip           : '<?= $this->tipText ?></i>',
+           tipTarget     : document.getElementById('<?= $this->name ?>_tip'),
+           tipTargetType : 'html',
+           ajaxUrl       : '<?= $this->ajaxUrl ?>',
+           requestToken  : '<?= REQUEST_TOKEN ?>',
+           ajaxData      : '<?= $this->ajaxData ?>',
+       });
     });
-});
 </script>
 
-<form name="<?php echo $this->name; ?>" class="<?php echo $this->additional_class; ?>">
+<form name="<?= $this->name ?>" class="<?= $this->additional_class ?>">
     <?php foreach ($this->options as $value): ?>
-        <input type="radio" name="<?php echo $this->name; ?>_rating"<?php if ($this->currentValue
-                                                                              == $value): ?> checked="checked" <?php endif; ?>
-               value="<?php echo $value ?>">
+        <input type="radio" name="<?= $this->name ?>_rating"<?php if ($this->currentValue
+                                                                      == $value): ?> checked="checked" <?php endif; ?>
+               value="<?= $value ?>">
     <?php endforeach; ?>
-    <span id="<?php echo $this->name; ?>_tip" class="ajax_rating_tip"></span>
+    <span id="<?= $this->name ?>_tip" class="ajax_rating_tip"></span>
 </form>

@@ -1,7 +1,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,20 +12,20 @@
  *
  * @package    MetaModels/attribute_rating
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 (function() {
-    var local = {};
-    var Storage = {};
+    let local = {};
+    let Storage = {};
 
-    var createUUID = function() {
+    let createUUID = function() {
         // http://www.ietf.org/rfc/rfc4122.txt
-        var s = [];
-        var hexDigits = '0123456789abcdef';
-        for (var i = 0; i < 36; i++) {
+        let s = [];
+        let hexDigits = '0123456789abcdef';
+        for (let i = 0; i < 36; i++) {
             s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
         }
         s[14] = '4';  // bits 12-15 of the time_hi_and_version field to 0010
@@ -39,39 +39,38 @@
         return node.uniqueNumber || (node.uniqueNumber = createUUID());
     };
 
-    var Slick = local.Slick = (this.Slick || {});
+    let Slick = local.Slick = (this.Slick || {});
 
     Slick.uidOf = function(node) {
         return local.getUIDHTML(node);
     };
 
-    var get = function(uid) {
+    let get = function(uid) {
         return (storage[uid] || (storage[uid] = {}));
     };
 
-    Element.implement('_store', function(key, value) {
-        var uid = Slick.uidOf(this), s = Storage[uid] || (Storage[uid] = {});
-
+    Element.prototype._store = function(key, value) {
+        let uid = Slick.uidOf(this), s = Storage[uid] || (Storage[uid] = {});
         return (s[key] = value), this;
-    });
+    };
 
-    Element.implement('_retrieve', function(key, initial) {
-        var uid = Slick.uidOf(this), s = Storage[uid] || (Storage[uid] = {}), undef = 'undefined';
+    Element.prototype._retrieve = function(key, initial) {
+        let uid = Slick.uidOf(this), s = Storage[uid] || (Storage[uid] = {}), undef = 'undefined';
         typeof initial !== undef && typeof s[key] === undef && (s[key] = initial);
 
         return s[key];
-    });
+    };
 }());
 
 (function() {
-    var VanillaStarRatingImages = {
+    let VanillaStarRatingImages = {
         defaultImageFolder: '',
         defaultImageEmpty : 'star_empty.png',
         defaultImageFull  : 'star_full.png',
         defaultImageHover : null,
     };
 
-    var VanillaStarRating = function() {
+    let VanillaStarRating = function() {
         this.options = {
             form         : null,
             radios       : 'rating',
@@ -115,35 +114,35 @@
         }
 
         // Build radio selector
-        var formQuery = this.options.form;
+        let formQuery = this.options.form;
         this.options.form = document.getElementById(formQuery);
         if (!this.options.form) {
             this.options.form = document.querySelectorAll('form[name=' + formQuery + ']')[0];
         }
 
-        var UID = Date.now();
+        let UID = Date.now();
 
         if (this.options.form) {
-            var uniqueId = 'star_' + (UID++).toString(36);
+            let uniqueId = 'star_' + (UID++).toString(36);
             this.options.form.classList.add(uniqueId);
             this.options.selector += 'form.' + uniqueId + ' ';
         }
         this.options.selector += 'input[type=radio][name=' + this.options.radios + ']';
 
         // Loop elements
-        var i = 0;
-        var me = this;
-        var lastElement = null;
-        var count = document.querySelectorAll(this.options.selector).length;
-        var width = parseInt(this.options.width);
-        var widthOdd = width;
-        var height = parseInt(this.options.height);
+        let i = 0;
+        let me = this;
+        let lastElement = null;
+        let count = document.querySelectorAll(this.options.selector).length;
+        let width = parseInt(this.options.width);
+        let widthOdd = width;
+        let height = parseInt(this.options.height);
         if (this.options.half) {
             width = parseInt(width / 2);
             widthOdd = widthOdd - width;
         }
 
-        var _c_items = document.querySelectorAll(this.options.selector);
+        let _c_items = document.querySelectorAll(this.options.selector);
 
         for (; i < _c_items.length;) {
             //Add item to radio list
@@ -159,7 +158,7 @@
 
             // Hide and replace
             _c_items[i].style.display = 'none';
-            var _aElm = document.createElement('a');
+            let _aElm = document.createElement('a');
             //_aElm.setAttribute('title', _c_items[i].getAttribute('title'));
             _aElm.classList.add(this.options.linksClass);
             this.stars[i] = _aElm;
@@ -186,7 +185,7 @@
 
             // Tip
             if (this.options.tip) {
-                var title = this.options.tip;
+                let title = this.options.tip;
                 title = title.replace('[VALUE]', _c_items[i].value);
                 title = title.replace('[COUNT]', count);
                 if (this.options.tipTarget) {
@@ -210,9 +209,9 @@
 
         }// end for loop
 
-        var _cstars = this.stars;
+        let _cstars = this.stars;
 
-        for (var i = 0; i < _cstars.length; i++) {
+        for (let i = 0; i < _cstars.length; i++) {
             lastElement.after(_cstars[i]);
             lastElement = _cstars[i];
         }
@@ -231,7 +230,7 @@
     };
 
     VanillaStarRating.prototype.setValue = function(value) {
-        for (var i = 0; i < this.radios.length; i++) {
+        for (let i = 0; i < this.radios.length; i++) {
             if (this.radios[i].value == value) {
                 this.currentIndex = i;
             }
@@ -260,7 +259,7 @@
 
     VanillaStarRating.prototype.enable = function() {
         this.options.disabled = false;
-        for (var i = 0; i < this.stars.length; i++) {
+        for (let i = 0; i < this.stars.length; i++) {
             this.stars[i].style.cursor = 'pointer';
         }
         this.refreshRadios();
@@ -270,7 +269,7 @@
 
     VanillaStarRating.prototype.disable = function() {
         this.options.disabled = true;
-        for (var i = 0; i < this.stars.length; i++) {
+        for (let i = 0; i < this.stars.length; i++) {
             this.stars[i].style.cursor = 'default';
         }
         this.refreshRadios();
@@ -286,8 +285,8 @@
     };
 
     VanillaStarRating.prototype.fillStars = function(hoverIndex) {
-        for (var i = 0; i < this.stars.length; i++) {
-            var image = this.options.imageEmpty;
+        for (let i = 0; i < this.stars.length; i++) {
+            let image = this.options.imageEmpty;
             if (hoverIndex == null) {
                 if (i <= this.currentIndex) {
                     image = this.options.imageFull;
@@ -348,7 +347,7 @@
     };
 
     VanillaStarRating.prototype.refreshRadios = function() {
-        for (var i = 0; i < this.radios.length; i++) {
+        for (let i = 0; i < this.radios.length; i++) {
             this.radios[i].setAttribute('disabled', this.options.disabled);
             this.radios[i].setAttribute('checked', i == this.currentIndex);
         }
@@ -357,13 +356,13 @@
     };
 
     VanillaStarRating.prototype.sendAjaxRequest = function(value) {
-        var _radios = this.radios, _stars = this.stars, _currentIndex = this.currentIndex, _me = this;
+        let _radios = this.radios, _stars = this.stars, _currentIndex = this.currentIndex, _me = this;
 
-        var data   = JSON.parse(this.options.ajaxData);
-        var params = 'rating=' + value + '&data[id]=' + data.id + '&data[pid]=' + data.pid + '&data[item]=' + data.item
+        let data   = JSON.parse(this.options.ajaxData);
+        let params = 'rating=' + value + '&data[id]=' + data.id + '&data[pid]=' + data.pid + '&data[item]=' + data.item
                      + '&REQUEST_TOKEN=' + this.options.requestToken;
 
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open('POST', this.options.ajaxUrl);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -395,14 +394,14 @@
         }
     };
 
-    var makeDisableRadios = function(_radios, _stars, _curr_index, _me) {
-        var disable = false;
+    let makeDisableRadios = function(_radios, _stars, _curr_index, _me) {
+        let disable = false;
 
         if (_radios == undefined || _radios == null) {
             return;
         }
 
-        for (var i = 0; i < _radios.length; i++) {
+        for (let i = 0; i < _radios.length; i++) {
             if (i == _curr_index) {
                 _radios[i].setAttribute('checked', 'true');
                 disable = true;
@@ -411,7 +410,7 @@
         }
 
         if (disable) {
-            for (var i = 0; i < _radios.length; i++) {
+            for (let i = 0; i < _radios.length; i++) {
                 _radios[i].setAttribute('disabled', 'true');
                 _stars[i].style.cursor = 'default';
             }
