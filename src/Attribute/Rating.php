@@ -161,7 +161,7 @@ class Rating extends BaseComplex
      */
     public function valueToWidget($varValue)
     {
-        return $varValue['meanvalue'];
+        return $varValue['meanvalue'] ?? 0.0;
     }
 
     /**
