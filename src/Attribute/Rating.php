@@ -482,7 +482,7 @@ class Rating extends BaseComplex
 
         while ($intValue <= $this->get('rating_max')) {
             $arrOptions[] = $intValue;
-            $intValue     += $intInc;
+            $intValue    += $intInc;
         }
 
         $objTemplate->options    = $arrOptions;
