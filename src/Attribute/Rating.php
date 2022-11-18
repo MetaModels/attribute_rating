@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -249,8 +249,8 @@ class Rating extends BaseComplex
     {
         $statement = $this->connection->createQueryBuilder()
             ->select('*')
-            ->from('tl_metamodel_rating')
-            ->andWhere('mid=:mid AND aid=:aid AND iid IN (:iids)')
+            ->from('tl_metamodel_rating', 't')
+            ->andWhere('t.mid=:mid AND t.aid=:aid AND t.iid IN (:iids)')
             ->setParameter('mid', $this->getMetaModel()->get('id'))
             ->setParameter('aid', $this->get('id'))
             ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
@@ -299,7 +299,9 @@ class Rating extends BaseComplex
     {
         $this->connection->createQueryBuilder()
             ->delete('tl_metamodel_rating')
-            ->andWhere('mid=:mid AND aid=:aid AND iid IN (:iids)')
+            ->andWhere('tl_metamodel_rating.mid=:mid')
+            ->andWhere('tl_metamodel_rating.aid=:aid')
+            ->andWhere('tl_metamodel_rating.iid IN (:iids)')
             ->setParameter('mid', $this->getMetaModel()->get('id'))
             ->setParameter('aid', $this->get('id'))
             ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
@@ -355,9 +357,9 @@ class Rating extends BaseComplex
         $value = (1 / $hundred * ($grandTotal + $fltValue));
 
         $arrSet = [
-            'mid' => $this->getMetaModel()->get('id'),
-            'aid' => $this->get('id'),
-            'iid' => $intItemId,
+            'mid'       => $this->getMetaModel()->get('id'),
+            'aid'       => $this->get('id'),
+            'iid'       => $intItemId,
             'votecount' => $voteCount,
             'meanvalue' => $value,
         ];
@@ -365,19 +367,26 @@ class Rating extends BaseComplex
         $queryBuilder = $this->connection->createQueryBuilder();
 
         if (!$arrData || !$arrData[$intItemId]['votecount']) {
+            foreach ($arrSet as $key => $value) {
+                $queryBuilder
+                    ->setValue($this->connection->quoteIdentifier($key), ':' . $key)
+                    ->setParameter($key, $value);
+            }
+
             $queryBuilder
-                ->insert('tl_metamodel_rating')
-                ->values($arrSet);
+                ->insert('tl_metamodel_rating');
         } else {
             foreach ($arrSet as $key => $value) {
                 $queryBuilder
-                    ->set($key, ':' . $key)
+                    ->set($this->connection->quoteIdentifier($key), ':' . $key)
                     ->setParameter($key, $value);
             }
 
             $queryBuilder
                 ->update('tl_metamodel_rating')
-                ->andWhere('mid=:mid AND aid=:aid AND iid=:iid')
+                ->andWhere($queryBuilder->expr()->eq($this->connection->quoteIdentifier('mid'), ':mid'))
+                ->andWhere($queryBuilder->expr()->eq($this->connection->quoteIdentifier('aid'), ':aid'))
+                ->andWhere($queryBuilder->expr()->eq($this->connection->quoteIdentifier('iid'), ':iid'))
                 ->setParameter('mid', $this->getMetaModel()->get('id'))
                 ->setParameter('aid', $this->get('id'))
                 ->setParameter('iid', $intItemId);
@@ -444,7 +453,7 @@ class Rating extends BaseComplex
         }
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
-        $objTemplate->name       = 'rating_attribute_'.$this->get('id').'_'.$arrRowData['id'];
+        $objTemplate->name       = 'rating_attribute_' . $this->get('id') . '_' . $arrRowData['id'];
 
         $objTemplate->ratingDisabled = (
             $this->scopeDeterminator->currentScopeIsBackend()
@@ -477,11 +486,11 @@ class Rating extends BaseComplex
             $arrOptions[] = $intValue;
             $intValue    += $intInc;
         }
-        $objTemplate->options = $arrOptions;
 
-        $objTemplate->imageEmpty = $base.$strEmpty;
-        $objTemplate->imageFull  = $base.$strFull;
-        $objTemplate->imageHover = $base.$strHover;
+        $objTemplate->options    = $arrOptions;
+        $objTemplate->imageEmpty = $base . $strEmpty;
+        $objTemplate->imageFull  = $base . $strFull;
+        $objTemplate->imageHover = $base . $strHover;
     }
 
     /**
@@ -495,13 +504,14 @@ class Rating extends BaseComplex
     public function sortIds($idList, $strDirection)
     {
         $statement = $this->connection->createQueryBuilder()
-            ->select('iid')
-            ->from('tl_metamodel_rating')
-            ->andWhere('mid=:mid AND aid=:aid AND iid IN (:iids)')
+            ->select('t.iid')
+            ->from('tl_metamodel_rating', 't')
+            ->andWhere('t.mid=:mid AND t.aid=:aid AND t.iid IN (:iids)')
             ->setParameter('mid', $this->getMetaModel()->get('id'))
             ->setParameter('aid', $this->get('id'))
             ->setParameter('iids', $idList, Connection::PARAM_STR_ARRAY)
-            ->orderBy('meanvalue', $strDirection)
+            ->orderBy('t.meanvalue', $strDirection)
+            ->addOrderBy('t.votecount', $strDirection)
             ->execute();
 
         $arrSorted = $statement->fetchAll(\PDO::FETCH_COLUMN, 'iid');

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,13 +16,15 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\AttributeRatingBundle\Test;
 
+use Contao\CoreBundle\Framework\Adapter;
+use Contao\TemplateLoader;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
 use MetaModels\AttributeRatingBundle\Attribute\Rating;
@@ -35,6 +37,8 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Test the rating attribute.
+ *
+ * @covers \MetaModels\AttributeRatingBundle\AttributeRating
  */
 class AttributeRatingTest extends TestCase
 {
@@ -53,7 +57,7 @@ class AttributeRatingTest extends TestCase
      */
     private $sessionBag;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         \Contao\Environment::set('base', 'https://example.com/');
@@ -64,7 +68,7 @@ class AttributeRatingTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $config = new \Doctrine\DBAL\Configuration();
         $this->connection = \Doctrine\DBAL\DriverManager::getConnection(['url' => 'sqlite:///:memory:'], $config);
@@ -91,8 +95,6 @@ class AttributeRatingTest extends TestCase
         $this->session
             ->method('getBag')
             ->willReturn($this->sessionBag = $this->getMockForAbstractClass(AttributeBagInterface::class));
-
-        return true;
     }
 
     /**
@@ -100,7 +102,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testFetchVote()
+    public function testFetchVote(): void
     {
         $this->connection->insert('tl_metamodel_rating', [
             'id'        => 1,
@@ -132,7 +134,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testFetchVoteUnknown()
+    public function testFetchVoteUnknown(): void
     {
         $this->connection->insert('tl_metamodel_rating', [
             'id'        => 1,
@@ -169,7 +171,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testCastVoteMax()
+    public function testCastVoteMax(): void
     {
         $this->connection->insert('tl_metamodel_rating', [
             'id'        => 1,
@@ -203,7 +205,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testCastVoteHalf()
+    public function testCastVoteHalf(): void
     {
         $this->connection->insert('tl_metamodel_rating', [
             'id'        => 1,
@@ -237,7 +239,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testUnsetDataFor()
+    public function testUnsetDataFor(): void
     {
         $this->connection->insert('tl_metamodel_rating', [
             'id'        => 1,
@@ -271,7 +273,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testTryCastVoteForLockedItem()
+    public function testTryCastVoteForLockedItem(): void
     {
         $this->connection->insert('tl_metamodel_rating', [
             'id'        => 1,
@@ -307,7 +309,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testTryCastVoteAndLockItem()
+    public function testTryCastVoteAndLockItem(): void
     {
         $this->connection->insert('tl_metamodel_rating', [
             'id'        => 1,
@@ -344,7 +346,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testCastVoteForNewItem()
+    public function testCastVoteForNewItem(): void
     {
         $metamodel = $this->mockMetaModel();
 
@@ -369,7 +371,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testSortVotes()
+    public function testSortVotes(): void
     {
         $metamodel = $this->mockMetaModel();
 
@@ -402,9 +404,13 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testPrepareTemplate()
+    public function testPrepareTemplate(): void
     {
         $metamodel = $this->mockMetaModel();
+
+        $scopeDeterminator = $this->getMockBuilder(RequestScopeDeterminator::class)
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
 
         /** @var Rating $rating */
         $rating   = $metamodel->getAttribute('rating');
@@ -415,7 +421,7 @@ class AttributeRatingTest extends TestCase
                 'meanvalue' => 1.0,
             ]
         ];
-        $template = new Template();
+        $template = new Template('', new Adapter(TemplateLoader::class), $scopeDeterminator);
         $settings = $rating->getDefaultRenderSettings();
 
         $rating->method('ensureImage')->willReturn('star-empty.png');
@@ -441,9 +447,13 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testPrepareTemplate2()
+    public function testPrepareTemplate2(): void
     {
         $metamodel = $this->mockMetaModel();
+
+        $scopeDeterminator = $this->getMockBuilder(RequestScopeDeterminator::class)
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
 
         /** @var Rating $rating */
         $rating   = $metamodel->getAttribute('rating2');
@@ -454,7 +464,7 @@ class AttributeRatingTest extends TestCase
                 'meanvalue' => 0.65333268,
             ]
         ];
-        $template = new Template();
+        $template = new Template('', new Adapter(TemplateLoader::class), $scopeDeterminator);
         $settings = $rating->getDefaultRenderSettings();
 
         $rating->method('ensureImage')->willReturn('star-empty.png');
@@ -476,7 +486,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testGetfilterOptions()
+    public function testGetfilterOptions(): void
     {
         $this->markTestIncomplete();
 
@@ -512,7 +522,7 @@ class AttributeRatingTest extends TestCase
      *
      * @return void
      */
-    public function testDestroyAUX()
+    public function testDestroyAUX(): void
     {
         $this->connection->insert('tl_metamodel_rating', [
             'id'        => 1,
@@ -551,12 +561,12 @@ class AttributeRatingTest extends TestCase
         $this->assertEquals(
             array(
                 array(
-                'id'        => 2,
-                'mid'       => 1,
-                'aid'       => 2,
-                'iid'       => 1,
-                'votecount' => 1,
-                'meanvalue' => 1.0,
+                    'id'        => 2,
+                    'mid'       => 1,
+                    'aid'       => 2,
+                    'iid'       => 1,
+                    'votecount' => 1,
+                    'meanvalue' => 1.0,
                 ),
             ),
             $query2->fetchAll()
@@ -575,15 +585,15 @@ class AttributeRatingTest extends TestCase
         $metaModel
             ->method('get')
             ->will($this->returnValueMap([
-                ['id',         1],
-                ['sorting',    256,],
-                ['tstamp',     1367274071,],
-                ['name',       'Movies',],
-                ['tableName',  'mm_movies',],
-                ['translated', '1',],
-                ['languages',  'a:2:{s:2:"en";a:1:{s:10:"isfallback";s:1:"1";}s:2:"de";a:1:{s:10:"isfallback";s:0:"";}}',],
-                ['varsupport', ''],
-            ]));
+                                             ['id',         1],
+                                             ['sorting',    256,],
+                                             ['tstamp',     1367274071,],
+                                             ['name',       'Movies',],
+                                             ['tableName',  'mm_movies',],
+                                             ['translated', '1',],
+                                             ['languages',  'a:2:{s:2:"en";a:1:{s:10:"isfallback";s:1:"1";}s:2:"de";a:1:{s:10:"isfallback";s:0:"";}}',],
+                                             ['varsupport', ''],
+                                         ]));
 
         $metaModel
             ->expects($this->any())
@@ -643,9 +653,9 @@ class AttributeRatingTest extends TestCase
         );
 
         $metaModel->method('getAttribute')->will($this->returnValueMap([
-            ['rating', $rating],
-            ['rating2', $rating2],
-        ]));
+                                                                           ['rating', $rating],
+                                                                           ['rating2', $rating2],
+                                                                       ]));
 
         return $metaModel;
     }
@@ -655,13 +665,13 @@ class AttributeRatingTest extends TestCase
         $attribute = $this
             ->getMockBuilder(Rating::class)
             ->setConstructorArgs([
-                $metaModel,
-                $data,
-                $this->connection,
-                $this->getMockForAbstractClass(RouterInterface::class),
-                $this->session,
-                $this->getMockBuilder(RequestScopeDeterminator::class)->disableOriginalConstructor()->getMock()
-            ])
+                                     $metaModel,
+                                     $data,
+                                     $this->connection,
+                                     $this->getMockForAbstractClass(RouterInterface::class),
+                                     $this->session,
+                                     $this->getMockBuilder(RequestScopeDeterminator::class)->disableOriginalConstructor()->getMock()
+                                 ])
             ->setMethods(['ensureImage'])
             ->getMock();
 
