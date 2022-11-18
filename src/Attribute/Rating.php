@@ -369,7 +369,7 @@ class Rating extends BaseComplex
         if (!$arrData || !$arrData[$intItemId]['votecount']) {
             foreach ($arrSet as $key => $value) {
                 $queryBuilder
-                    ->setValue('tl_metamodel_rating.' . $key, ':' . $key)
+                    ->setValue($this->connection->quoteIdentifier($key), ':' . $key)
                     ->setParameter($key, $value);
             }
 
@@ -378,13 +378,15 @@ class Rating extends BaseComplex
         } else {
             foreach ($arrSet as $key => $value) {
                 $queryBuilder
-                    ->set('t.' . $key, ':' . $key)
+                    ->set($this->connection->quoteIdentifier($key), ':' . $key)
                     ->setParameter($key, $value);
             }
 
             $queryBuilder
-                ->update('tl_metamodel_rating', 't')
-                ->andWhere('t.mid=:mid AND t.aid=:aid AND t.iid=:iid')
+                ->update('tl_metamodel_rating')
+                ->andWhere($queryBuilder->expr()->eq($this->connection->quoteIdentifier('mid'), ':mid'))
+                ->andWhere($queryBuilder->expr()->eq($this->connection->quoteIdentifier('aid'), ':aid'))
+                ->andWhere($queryBuilder->expr()->eq($this->connection->quoteIdentifier('iid'), ':iid'))
                 ->setParameter('mid', $this->getMetaModel()->get('id'))
                 ->setParameter('aid', $this->get('id'))
                 ->setParameter('iid', $intItemId);
@@ -482,10 +484,10 @@ class Rating extends BaseComplex
 
         while ($intValue <= $this->get('rating_max')) {
             $arrOptions[] = $intValue;
-            $intValue     += $intInc;
+            $intValue    += $intInc;
         }
-        $objTemplate->options = $arrOptions;
 
+        $objTemplate->options    = $arrOptions;
         $objTemplate->imageEmpty = $base . $strEmpty;
         $objTemplate->imageFull  = $base . $strFull;
         $objTemplate->imageHover = $base . $strHover;
