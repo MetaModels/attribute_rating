@@ -23,6 +23,8 @@
 
 namespace MetaModels\AttributeRatingBundle\Test;
 
+use Contao\CoreBundle\Framework\Adapter;
+use Contao\TemplateLoader;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
 use MetaModels\AttributeRatingBundle\Attribute\Rating;
@@ -406,6 +408,10 @@ class AttributeRatingTest extends TestCase
     {
         $metamodel = $this->mockMetaModel();
 
+        $scopeDeterminator = $this->getMockBuilder(RequestScopeDeterminator::class)
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
+
         /** @var Rating $rating */
         $rating   = $metamodel->getAttribute('rating');
         $itemData = [
@@ -415,7 +421,7 @@ class AttributeRatingTest extends TestCase
                 'meanvalue' => 1.0,
             ]
         ];
-        $template = new Template();
+        $template = new Template('', new Adapter(TemplateLoader::class), $scopeDeterminator);
         $settings = $rating->getDefaultRenderSettings();
 
         $rating->method('ensureImage')->willReturn('star-empty.png');
@@ -445,6 +451,10 @@ class AttributeRatingTest extends TestCase
     {
         $metamodel = $this->mockMetaModel();
 
+        $scopeDeterminator = $this->getMockBuilder(RequestScopeDeterminator::class)
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
+
         /** @var Rating $rating */
         $rating   = $metamodel->getAttribute('rating2');
         $itemData = [
@@ -454,7 +464,7 @@ class AttributeRatingTest extends TestCase
                 'meanvalue' => 0.65333268,
             ]
         ];
-        $template = new Template();
+        $template = new Template('', new Adapter(TemplateLoader::class), $scopeDeterminator);
         $settings = $rating->getDefaultRenderSettings();
 
         $rating->method('ensureImage')->willReturn('star-empty.png');
