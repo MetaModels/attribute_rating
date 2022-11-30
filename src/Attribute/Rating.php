@@ -73,6 +73,8 @@ class Rating extends BaseComplex
      */
     private $scopeDeterminator;
 
+    private string $appRoot;
+
     /**
      * Rating constructor.
      *
@@ -90,6 +92,7 @@ class Rating extends BaseComplex
         RouterInterface $router = null,
         SessionInterface $session = null,
         RequestScopeDeterminator $scopeDeterminator = null,
+        string $appRoot = null,
         RequestStack $requestStack = null
     ) {
         parent::__construct($objMetaModel, $arrData);
@@ -130,6 +133,14 @@ class Rating extends BaseComplex
             $scopeDeterminator = System::getContainer()->get('cca.dc-general.scope-matcher');
         }
 
+        if (null === $appRoot) {
+            @trigger_error(
+                'App root is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            $appRoot = TL_ROOT;
+        }
+
         if (null === $requestStack) {
             @trigger_error(
                 'Request stack is missing. It has to be passed in the constructor. Fallback will be dropped.',
@@ -144,6 +155,7 @@ class Rating extends BaseComplex
         $this->router            = $router;
         $this->session           = $session;
         $this->scopeDeterminator = $scopeDeterminator;
+        $this->appRoot           = $appRoot;
         $this->requestStack      = $requestStack;
     }
 
@@ -422,7 +434,7 @@ class Rating extends BaseComplex
     protected function ensureImage($uuidImage, $strDefault)
     {
         $imagePath = ToolboxFile::convertValueToPath($uuidImage);
-        if (\strlen($imagePath) && \file_exists(TL_ROOT . '/' . $imagePath)) {
+        if (\strlen($imagePath) && \file_exists($this->appRoot . '/' . $imagePath)) {
             return $imagePath;
         }
 
@@ -457,10 +469,10 @@ class Rating extends BaseComplex
             'bundles/metamodelsattributerating/star-hover.png'
         );
 
-        if (\file_exists(TL_ROOT . '/' . $strEmpty)) {
-            $size = \getimagesize(TL_ROOT . '/' . $strEmpty);
+        if (\file_exists($this->appRoot . '/' . $strEmpty)) {
+            $size = \getimagesize($this->appRoot . '/' . $strEmpty);
         } else {
-            $size = \getimagesize(TL_ROOT . '/web/' . $strEmpty);
+            $size = \getimagesize($this->appRoot . '/public/' . $strEmpty);
         }
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';

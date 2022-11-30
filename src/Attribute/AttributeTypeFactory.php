@@ -75,6 +75,7 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
         RouterInterface $router,
         SessionInterface $session,
         RequestScopeDeterminator $scopeDeterminator,
+        string $appRoot,
         RequestStack $requestStack
     ) {
         $this->typeName          = 'rating';
@@ -84,6 +85,7 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
         $this->router            = $router;
         $this->session           = $session;
         $this->scopeDeterminator = $scopeDeterminator;
+        $this->appRoot           = $appRoot;
         $this->requestStack      = $requestStack;
     }
 
@@ -99,6 +101,7 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
             $this->router,
             $this->session,
             $this->scopeDeterminator,
+            $this->appRoot,
             $this->requestStack
         );
     }
