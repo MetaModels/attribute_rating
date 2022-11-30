@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +25,7 @@ namespace MetaModels\AttributeRatingBundle\Attribute;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\AbstractAttributeTypeFactory;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -73,7 +74,9 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
         Connection $connection,
         RouterInterface $router,
         SessionInterface $session,
-        RequestScopeDeterminator $scopeDeterminator
+        RequestScopeDeterminator $scopeDeterminator,
+        string $appRoot,
+        RequestStack $requestStack
     ) {
         $this->typeName          = 'rating';
         $this->typeIcon          = 'bundles/metamodelsattributerating/star-full.png';
@@ -82,6 +85,8 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
         $this->router            = $router;
         $this->session           = $session;
         $this->scopeDeterminator = $scopeDeterminator;
+        $this->appRoot           = $appRoot;
+        $this->requestStack      = $requestStack;
     }
 
     /**
@@ -95,7 +100,9 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
             $this->connection,
             $this->router,
             $this->session,
-            $this->scopeDeterminator
+            $this->scopeDeterminator,
+            $this->appRoot,
+            $this->requestStack
         );
     }
 }

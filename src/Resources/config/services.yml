@@ -6,6 +6,8 @@ services:
             - '@router'
             - '@session'
             - '@cca.dc-general.scope-matcher'
+            - '%kernel.project_dir%'
+            - '@request_stack'
         tags:
           - { name: metamodels.attribute_factory }
 
