@@ -25,7 +25,6 @@
 
 namespace MetaModels\AttributeRatingBundle\Attribute;
 
-use Contao\Environment;
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
@@ -34,6 +33,8 @@ use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\ISimple;
 use MetaModels\Render\Template;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -88,7 +89,8 @@ class Rating extends BaseComplex
         Connection $connection = null,
         RouterInterface $router = null,
         SessionInterface $session = null,
-        RequestScopeDeterminator $scopeDeterminator = null
+        RequestScopeDeterminator $scopeDeterminator = null,
+        RequestStack $requestStack = null
     ) {
         parent::__construct($objMetaModel, $arrData);
 
@@ -127,12 +129,22 @@ class Rating extends BaseComplex
 
             $scopeDeterminator = System::getContainer()->get('cca.dc-general.scope-matcher');
         }
+
+        if (null === $requestStack) {
+            @trigger_error(
+                'Request stack is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+
+            $requestStack = System::getContainer()->get('request_stack');
+        }
         // @codingStandardsIgnoreEnd
 
         $this->connection        = $connection;
         $this->router            = $router;
         $this->session           = $session;
         $this->scopeDeterminator = $scopeDeterminator;
+        $this->requestStack      = $requestStack;
     }
 
     /**
@@ -430,7 +442,6 @@ class Rating extends BaseComplex
     {
         parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
-        $base = Environment::get('base');
         $lang = $this->getActiveLanguageArray();
 
         $strEmpty = $this->ensureImage(
@@ -487,10 +498,12 @@ class Rating extends BaseComplex
             $intValue    += $intInc;
         }
 
+        $request = $this->requestStack->getCurrentRequest();
+        assert($request instanceof Request);
         $objTemplate->options    = $arrOptions;
-        $objTemplate->imageEmpty = $base . $strEmpty;
-        $objTemplate->imageFull  = $base . $strFull;
-        $objTemplate->imageHover = $base . $strHover;
+        $objTemplate->imageEmpty = $request->getUriForPath('/' . $strEmpty);
+        $objTemplate->imageFull  = $request->getUriForPath('/' . $strFull);
+        $objTemplate->imageHover = $request->getUriForPath('/' . $strHover);
     }
 
     /**
