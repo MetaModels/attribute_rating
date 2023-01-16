@@ -85,6 +85,9 @@ class Rating extends BaseComplex
      * @param RouterInterface|null          $router            The router.
      * @param SessionInterface|null         $session           Session.
      * @param RequestScopeDeterminator|null $scopeDeterminator Request scope determinator.
+     * @param string                        $appRoot           The application path.
+     * @param string                        $webDir            The public web folder.
+     * @param RequestStack                  $requestStack      The Request stack.
      */
     public function __construct(
         IMetaModel $objMetaModel,
