@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -74,6 +74,7 @@ class Rating extends BaseComplex
     private $scopeDeterminator;
 
     private string $appRoot;
+    private string $webDir;
 
     /**
      * Rating constructor.
@@ -93,6 +94,7 @@ class Rating extends BaseComplex
         SessionInterface $session = null,
         RequestScopeDeterminator $scopeDeterminator = null,
         string $appRoot = null,
+        string $webDir = null,
         RequestStack $requestStack = null
     ) {
         parent::__construct($objMetaModel, $arrData);
@@ -141,6 +143,14 @@ class Rating extends BaseComplex
             $appRoot = TL_ROOT;
         }
 
+        if (null === $webDir) {
+            @trigger_error(
+                'Web dir is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            $webDir = '';
+        }
+
         if (null === $requestStack) {
             @trigger_error(
                 'Request stack is missing. It has to be passed in the constructor. Fallback will be dropped.',
@@ -156,6 +166,7 @@ class Rating extends BaseComplex
         $this->session           = $session;
         $this->scopeDeterminator = $scopeDeterminator;
         $this->appRoot           = $appRoot;
+        $this->webDir            = $webDir;
         $this->requestStack      = $requestStack;
     }
 
@@ -471,9 +482,12 @@ class Rating extends BaseComplex
 
         if (\file_exists($this->appRoot . '/' . $strEmpty)) {
             $size = \getimagesize($this->appRoot . '/' . $strEmpty);
+        } elseif (\file_exists($this->appRoot . '/' . $this->webDir . '/' . $strEmpty)) {
+            $size = \getimagesize($this->appRoot . '/' . $this->webDir . '/' . $strEmpty);
         } else {
-            $size = \getimagesize($this->appRoot . '/public/' . $strEmpty);
+            $size = [0, 0];
         }
+
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
         $objTemplate->name       = 'rating_attribute_' . $this->get('id') . '_' . $arrRowData['id'];
