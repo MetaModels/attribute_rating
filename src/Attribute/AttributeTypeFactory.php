@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -76,6 +76,7 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
         SessionInterface $session,
         RequestScopeDeterminator $scopeDeterminator,
         string $appRoot,
+        string $webDir,
         RequestStack $requestStack
     ) {
         $this->typeName          = 'rating';
@@ -86,6 +87,7 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
         $this->session           = $session;
         $this->scopeDeterminator = $scopeDeterminator;
         $this->appRoot           = $appRoot;
+        $this->webDir            = $webDir;
         $this->requestStack      = $requestStack;
     }
 
@@ -102,6 +104,7 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
             $this->session,
             $this->scopeDeterminator,
             $this->appRoot,
+            $this->webDir,
             $this->requestStack
         );
     }
