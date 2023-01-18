@@ -501,7 +501,7 @@ class Rating extends BaseComplex
             || $this->getSessionBag()->get($this->getLockId($arrRowData['id']))
         );
 
-        $value  = ($this->get('rating_max') * (float) $arrRowData[$this->getColName()]['meanvalue']);
+        $value  = ($this->get('rating_max') * (float) ($arrRowData[$this->getColName()]['meanvalue'] ?? 0));
         $intInc = \strlen($this->get('rating_half')) ? .5 : 1;
 
         $objTemplate->currentValue = (\round(($value / $intInc), 0) * $intInc);
