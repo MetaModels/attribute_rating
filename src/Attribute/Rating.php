@@ -41,7 +41,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * This is the MetaModelAttribute class for handling numeric fields.
+ * This is the MetaModelAttribute class for handling rating fields.
  */
 class Rating extends BaseComplex
 {
@@ -292,7 +292,7 @@ class Rating extends BaseComplex
             ->setParameter('mid', $this->getMetaModel()->get('id'))
             ->setParameter('aid', $this->get('id'))
             ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
-            ->execute();
+            ->executeQuery();
 
         $arrResult = [];
         while ($objData = $statement->fetchAssociative()) {
@@ -343,7 +343,7 @@ class Rating extends BaseComplex
             ->setParameter('mid', $this->getMetaModel()->get('id'))
             ->setParameter('aid', $this->get('id'))
             ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
-            ->execute();
+            ->executeQuery();
     }
 
     /**
@@ -430,7 +430,7 @@ class Rating extends BaseComplex
                 ->setParameter('iid', $intItemId);
         }
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         if ($blnLock) {
             $this->getSessionBag()->set($this->getLockId($intItemId), true);
@@ -485,8 +485,8 @@ class Rating extends BaseComplex
 
         if (\file_exists($this->appRoot . '/' . $strEmpty)) {
             $size = \getimagesize($this->appRoot . '/' . $strEmpty);
-        } elseif (\file_exists($this->appRoot . '/' . $this->webDir . '/' . $strEmpty)) {
-            $size = \getimagesize($this->appRoot . '/' . $this->webDir . '/' . $strEmpty);
+        } elseif (\file_exists($this->webDir . '/' . $strEmpty)) {
+            $size = \getimagesize($this->webDir . '/' . $strEmpty);
         } else {
             $size = [0, 0];
         }
