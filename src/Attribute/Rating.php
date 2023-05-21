@@ -28,6 +28,7 @@ namespace MetaModels\AttributeRatingBundle\Attribute;
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\Attribute\BaseComplex;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
@@ -493,7 +494,7 @@ class Rating extends BaseComplex
 
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
-        $objTemplate->name       = 'rating_attribute_' . $this->get('id') . '_' . $arrRowData['id'];
+        $objTemplate->name       = 'rating_attribute_' . ($this->get('id') ?? 0) . '_' . $arrRowData['id'];
 
         $objTemplate->ratingDisabled = (
             $this->scopeDeterminator->currentScopeIsBackend()
@@ -513,7 +514,7 @@ class Rating extends BaseComplex
         $objTemplate->ajaxUrl      = $this->router->generate('metamodels.attribute_rating.rate');
         $objTemplate->ajaxData     = \json_encode(
             [
-                'id'   => $this->get('id'),
+                'id'   => ($this->get('id') ?? 0),
                 'pid'  => $this->get('pid'),
                 'item' => $arrRowData['id'],
             ]
@@ -538,10 +539,12 @@ class Rating extends BaseComplex
     /**
      * Sorts the given array list by field value in the given direction.
      *
-     * @param int[]  $idList       A list of Ids from the MetaModel table.
+     * @param int[] $idList A list of Ids from the MetaModel table.
      * @param string $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
      *
      * @return int[] The sorted integer array.
+     *
+     * @throws Exception
      */
     public function sortIds($idList, $strDirection)
     {
@@ -554,7 +557,7 @@ class Rating extends BaseComplex
             ->setParameter('iids', $idList, Connection::PARAM_STR_ARRAY)
             ->orderBy('t.meanvalue', $strDirection)
             ->addOrderBy('t.votecount', $strDirection)
-            ->execute();
+            ->executeQuery();
 
         $arrSorted = $statement->fetchFirstColumn();
 
