@@ -494,12 +494,12 @@ class Rating extends BaseComplex
 
         $objTemplate->imageWidth = $size[0];
         $objTemplate->rateHalf   = $this->get('rating_half') ? 'true' : 'false';
-        $objTemplate->name       = 'rating_attribute_' . ($this->get('id') ?? 0) . '_' . $arrRowData['id'];
+        $objTemplate->name       = 'rating_attribute_' . $this->get('id') . '_' . ($arrRowData['id'] ?? 0);
 
         $objTemplate->ratingDisabled = (
             $this->scopeDeterminator->currentScopeIsBackend()
             || $objSettings->get('rating_disabled')
-            || $this->getSessionBag()->get($this->getLockId($arrRowData['id']))
+            || $this->getSessionBag()->get($this->getLockId($arrRowData['id'] ?? 0))
         );
 
         $value  = ($this->get('rating_max') * (float) ($arrRowData[$this->getColName()]['meanvalue'] ?? 0));
@@ -516,7 +516,7 @@ class Rating extends BaseComplex
             [
                 'id'   => ($this->get('id') ?? 0),
                 'pid'  => $this->get('pid'),
-                'item' => $arrRowData['id'],
+                'item' => ($arrRowData['id'] ?? 0),
             ]
         );
 
