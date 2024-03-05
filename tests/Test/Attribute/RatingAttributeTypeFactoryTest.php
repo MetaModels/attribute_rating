@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,6 +28,7 @@ use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\AttributeRatingBundle\Attribute\AttributeTypeFactory;
 use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use MetaModels\AttributeRatingBundle\Attribute\Rating;
@@ -120,8 +121,20 @@ class RatingAttributeTypeFactoryTest extends TestCase
         $router       = $this->getMockBuilder(RouterInterface::class)->getMock();
         $session      = $this->getMockBuilder(SessionInterface::class)->getMock();
         $scopeMatcher = $this->mockScopeMatcher();
+        $appRoot      = '';
+        $webDir       = '';
+        $requestStack = $this->getMockBuilder(RequestStack::class)->getMock();
 
-        $factory   = new AttributeTypeFactory($connection, $router, $session, $scopeMatcher);
+
+        $factory   = new AttributeTypeFactory(
+            $connection,
+            $router,
+            $session,
+            $scopeMatcher,
+            $appRoot,
+            $webDir,
+            $requestStack
+        );
         $values    = [
             'rating_max'   => 10,
             'rating_half'  => 1,

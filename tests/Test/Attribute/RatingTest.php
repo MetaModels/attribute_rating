@@ -27,6 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
 use MetaModels\AttributeRatingBundle\Attribute\Rating;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use MetaModels\IMetaModel;
@@ -104,8 +105,21 @@ class RatingTest extends TestCase
         $router       = $this->getMockBuilder(RouterInterface::class)->getMock();
         $session      = $this->getMockBuilder(SessionInterface::class)->getMock();
         $scopeMatcher = $this->mockScopeMatcher();
+        $appRoot      = '';
+        $webDir       = '';
+        $requestStack = $this->getMockBuilder(RequestStack::class)->getMock();
 
-        $text = new Rating($this->mockMetaModel('en', 'en'), [], $connection, $router, $session, $scopeMatcher);
+        $text = new Rating(
+            $this->mockMetaModel('en', 'en'),
+            [],
+            $connection,
+            $router,
+            $session,
+            $scopeMatcher,
+            $appRoot,
+            $webDir,
+            $requestStack
+        );
         $this->assertInstanceOf(Rating::class, $text);
     }
 }

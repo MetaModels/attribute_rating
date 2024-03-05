@@ -214,8 +214,8 @@ class Rating extends BaseComplex
     /**
      * Returns all valid settings for the attribute type.
      *
-     * @return array All valid setting names, this reensembles the columns in tl_metamodel_attribute
-     *               this attribute class understands.
+     * @return list<string> All valid setting names, this reensembles the columns in tl_metamodel_attribute
+     *                      this attribute class understands.
      */
     public function getAttributeSettingNames()
     {
@@ -284,9 +284,9 @@ class Rating extends BaseComplex
      * This is only relevant, when using "null" as id list for attributes that have preconfigured
      * values like select lists and tags i.e.
      *
-     * @param array $idList   The ids of items that the values shall be fetched from.
-     * @param bool  $usedOnly Determines if only "used" values shall be returned.
-     * @param bool  $arrCount Array for the counted values.
+     * @param list<string>|null $idList   The ids of items that the values shall be fetched from.
+     * @param bool              $usedOnly Determines if only "used" values shall be returned.
+     * @param array|null        $arrCount Array for the counted values.
      *
      * @return array All options matching the given conditions as name => value.
      *
@@ -316,10 +316,10 @@ class Rating extends BaseComplex
     /**
      * This method is called to retrieve the data for certain items from the database.
      *
-     * @param int[] $arrIds The ids of the items to retrieve.
+     * @param list<string> $arrIds The ids of the items to retrieve.
      *
-     * @return mixed[] The nature of the resulting array is a mapping from id => "native data" where
-     *                 the definition of "native data" is only of relevance to the given item.
+     * @return array<string, mixed> The nature of the resulting array is a mapping from id => "native data" where
+     *                              the definition of "native data" is only of relevance to the given item.
      */
     public function getDataFor($arrIds)
     {
@@ -352,7 +352,7 @@ class Rating extends BaseComplex
     /**
      * This method is a no-op in this class.
      *
-     * @param mixed[int] $arrValues Unused.
+     * @param array<string, mixed> $arrValues Unused.
      *
      * @return void
      *
@@ -367,7 +367,7 @@ class Rating extends BaseComplex
     /**
      * Delete all votes for the given items.
      *
-     * @param int[] $arrIds The ids of the items to remove votes for.
+     * @param list<string> $arrIds The ids of the items to remove votes for.
      *
      * @return void
      */
@@ -380,7 +380,7 @@ class Rating extends BaseComplex
             ->andWhere('tl_metamodel_rating.iid IN (:iids)')
             ->setParameter('mid', $this->getMetaModel()->get('id'))
             ->setParameter('aid', $this->get('id'))
-            ->setParameter('iids', $arrIds,  ArrayParameterType::STRING)
+            ->setParameter('iids', $arrIds, ArrayParameterType::STRING)
             ->executeQuery();
     }
 
@@ -576,10 +576,10 @@ class Rating extends BaseComplex
     /**
      * Sorts the given array list by field value in the given direction.
      *
-     * @param int[] $idList A list of Ids from the MetaModel table.
-     * @param string $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
+     * @param list<string> $idList A list of Ids from the MetaModel table.
+     * @param string       $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
      *
-     * @return int[] The sorted integer array.
+     * @return list<string> The sorted integer array.
      *
      * @throws Exception
      */
