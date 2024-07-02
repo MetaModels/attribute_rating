@@ -44,12 +44,6 @@
     "menatwork/contao-multicolumnwizard-bundle": "^3.4",
     "phpcq/runner-bootstrap": "^1.0@dev"
   },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://packages.cyberspectrum.de/r"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "MetaModels\\AttributeRatingBundle\\": "src/"
@@ -73,8 +67,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-feature/2.3.0": "2.3.x-dev",
-      "dev-hotfix/phpcq-2": "2.3.x-dev"
+      "dev-feature/2.3.0": "2.3.x-dev"
     },
     "contao-manager-plugin": "MetaModels\\AttributeRatingBundle\\ContaoManager\\Plugin"
   }
