@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,6 +27,7 @@ namespace MetaModels\AttributeRatingBundle\Attribute;
 
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use MetaModels\Attribute\BaseComplex;
@@ -37,12 +38,15 @@ use MetaModels\Render\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
  * This is the MetaModelAttribute class for handling rating fields.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rating extends BaseComplex
 {
@@ -51,31 +55,49 @@ class Rating extends BaseComplex
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Router.
      *
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
 
     /**
      * Web session.
      *
-     * @var null|SessionInterface
+     * @var SessionInterface
      */
-    private $session;
+    private SessionInterface $session;
 
     /**
      * Request scope determinator.
      *
-     * @var RequestScopeDeterminator|null
+     * @var RequestScopeDeterminator
      */
-    private $scopeDeterminator;
+    private RequestScopeDeterminator $scopeDeterminator;
 
+    /**
+     * The application path.
+     *
+     * @var string
+     */
     private string $appRoot;
+
+    /**
+     * The public web folder.
+     *
+     * @var string
+     */
     private string $webDir;
+
+    /**
+     * The Request stack.
+     *
+     * @var RequestStack
+     */
+    private RequestStack $requestStack;
 
     /**
      * Rating constructor.
@@ -86,9 +108,9 @@ class Rating extends BaseComplex
      * @param RouterInterface|null          $router            The router.
      * @param SessionInterface|null         $session           Session.
      * @param RequestScopeDeterminator|null $scopeDeterminator Request scope determinator.
-     * @param string                        $appRoot           The application path.
-     * @param string                        $webDir            The public web folder.
-     * @param RequestStack                  $requestStack      The Request stack.
+     * @param string|null                   $appRoot           The application path.
+     * @param string|null                   $webDir            The public web folder.
+     * @param RequestStack|null             $requestStack      The Request stack.
      */
     public function __construct(
         IMetaModel $objMetaModel,
@@ -103,82 +125,97 @@ class Rating extends BaseComplex
     ) {
         parent::__construct($objMetaModel, $arrData);
 
-        // @codingStandardsIgnoreStart Silencing errors is discouraged
         if (null === $connection) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
+            assert($connection instanceof Connection);
         }
+        $this->connection = $connection;
 
         if (null === $router) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Router is missing. It has to be passed in the constructor. Fallback will be dropped.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
 
             $router = System::getContainer()->get('router');
+            assert($router instanceof RouterInterface);
         }
+        $this->router = $router;
 
         if (null === $session) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
-                'Router is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                'Not passing an "Session" is deprecated.',
                 E_USER_DEPRECATED
             );
-
+            // @codingStandardsIgnoreEnd
             $session = System::getContainer()->get('session');
+            assert($session instanceof SessionInterface);
         }
+        $this->session = $session;
 
         if (null === $scopeDeterminator) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Scope determinator is missing. It has to be passed in the constructor. Fallback will be dropped.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
 
             $scopeDeterminator = System::getContainer()->get('cca.dc-general.scope-matcher');
+            assert($scopeDeterminator instanceof RequestScopeDeterminator);
         }
+        $this->scopeDeterminator = $scopeDeterminator;
 
         if (null === $appRoot) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'App root is missing. It has to be passed in the constructor. Fallback will be dropped.',
                 E_USER_DEPRECATED
             );
-            $appRoot = TL_ROOT;
+            // @codingStandardsIgnoreEnd
+            $appRoot = System::getContainer()->getParameter('kernel.project_dir');
+            assert(\is_string($appRoot));
         }
+        $this->appRoot = $appRoot;
 
         if (null === $webDir) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Web dir is missing. It has to be passed in the constructor. Fallback will be dropped.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
             $webDir = '';
         }
+        $this->webDir = $webDir;
 
         if (null === $requestStack) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Request stack is missing. It has to be passed in the constructor. Fallback will be dropped.',
                 E_USER_DEPRECATED
             );
-
+            // @codingStandardsIgnoreEnd
             $requestStack = System::getContainer()->get('request_stack');
+            assert($requestStack instanceof RequestStack);
         }
-        // @codingStandardsIgnoreEnd
-
-        $this->connection        = $connection;
-        $this->router            = $router;
-        $this->session           = $session;
-        $this->scopeDeterminator = $scopeDeterminator;
-        $this->appRoot           = $appRoot;
-        $this->webDir            = $webDir;
-        $this->requestStack      = $requestStack;
+        $this->requestStack = $requestStack;
     }
 
     /**
      * Returns all valid settings for the attribute type.
      *
-     * @return array All valid setting names, this reensembles the columns in tl_metamodel_attribute
-     *               this attribute class understands.
+     * @return list<string> All valid setting names, this reensembles the columns in tl_metamodel_attribute
+     *                      this attribute class understands.
      */
     public function getAttributeSettingNames()
     {
@@ -247,9 +284,9 @@ class Rating extends BaseComplex
      * This is only relevant, when using "null" as id list for attributes that have preconfigured
      * values like select lists and tags i.e.
      *
-     * @param array $idList   The ids of items that the values shall be fetched from.
-     * @param bool  $usedOnly Determines if only "used" values shall be returned.
-     * @param bool  $arrCount Array for the counted values.
+     * @param list<string>|null $idList   The ids of items that the values shall be fetched from.
+     * @param bool              $usedOnly Determines if only "used" values shall be returned.
+     * @param array|null        $arrCount Array for the counted values.
      *
      * @return array All options matching the given conditions as name => value.
      *
@@ -279,10 +316,10 @@ class Rating extends BaseComplex
     /**
      * This method is called to retrieve the data for certain items from the database.
      *
-     * @param int[] $arrIds The ids of the items to retrieve.
+     * @param list<string> $arrIds The ids of the items to retrieve.
      *
-     * @return mixed[] The nature of the resulting array is a mapping from id => "native data" where
-     *                 the definition of "native data" is only of relevance to the given item.
+     * @return array<string, mixed> The nature of the resulting array is a mapping from id => "native data" where
+     *                              the definition of "native data" is only of relevance to the given item.
      */
     public function getDataFor($arrIds)
     {
@@ -292,7 +329,7 @@ class Rating extends BaseComplex
             ->andWhere('t.mid=:mid AND t.aid=:aid AND t.iid IN (:iids)')
             ->setParameter('mid', $this->getMetaModel()->get('id'))
             ->setParameter('aid', $this->get('id'))
-            ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->setParameter('iids', $arrIds, ArrayParameterType::STRING)
             ->executeQuery();
 
         $arrResult = [];
@@ -315,7 +352,7 @@ class Rating extends BaseComplex
     /**
      * This method is a no-op in this class.
      *
-     * @param mixed[int] $arrValues Unused.
+     * @param array<string, mixed> $arrValues Unused.
      *
      * @return void
      *
@@ -330,7 +367,7 @@ class Rating extends BaseComplex
     /**
      * Delete all votes for the given items.
      *
-     * @param int[] $arrIds The ids of the items to remove votes for.
+     * @param list<string> $arrIds The ids of the items to remove votes for.
      *
      * @return void
      */
@@ -343,14 +380,14 @@ class Rating extends BaseComplex
             ->andWhere('tl_metamodel_rating.iid IN (:iids)')
             ->setParameter('mid', $this->getMetaModel()->get('id'))
             ->setParameter('aid', $this->get('id'))
-            ->setParameter('iids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->setParameter('iids', $arrIds, ArrayParameterType::STRING)
             ->executeQuery();
     }
 
     /**
      * Calculate the lock id for a given item.
      *
-     * @param int $intItemId The id of the item.
+     * @param string $intItemId The id of the item.
      *
      * @return string
      */
@@ -367,9 +404,9 @@ class Rating extends BaseComplex
     /**
      * Add a vote to the database.
      *
-     * @param int   $intItemId The id of the item to be voted.
-     * @param float $fltValue  The value of the vote.
-     * @param bool  $blnLock   Flag if the user session shall be locked against voting for this item again.
+     * @param string $intItemId The id of the item to be voted.
+     * @param float  $fltValue  The value of the vote.
+     * @param bool   $blnLock   Flag if the user session shall be locked against voting for this item again.
      *
      * @return void
      */
@@ -498,8 +535,8 @@ class Rating extends BaseComplex
 
         $objTemplate->ratingDisabled = (
             $this->scopeDeterminator->currentScopeIsBackend()
-            || $objSettings->get('rating_disabled')
-            || $this->getSessionBag()->get($this->getLockId($arrRowData['id'] ?? 0))
+            || null !== $objSettings->get('rating_disabled')
+            || $this->getSessionBag()->get($this->getLockId($arrRowData['id'] ?? '0'))
         );
 
         $value  = ($this->get('rating_max') * (float) ($arrRowData[$this->getColName()]['meanvalue'] ?? 0));
@@ -539,10 +576,10 @@ class Rating extends BaseComplex
     /**
      * Sorts the given array list by field value in the given direction.
      *
-     * @param int[] $idList A list of Ids from the MetaModel table.
-     * @param string $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
+     * @param list<string> $idList A list of Ids from the MetaModel table.
+     * @param string       $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
      *
-     * @return int[] The sorted integer array.
+     * @return list<string> The sorted integer array.
      *
      * @throws Exception
      */
@@ -554,14 +591,14 @@ class Rating extends BaseComplex
             ->andWhere('t.mid=:mid AND t.aid=:aid AND t.iid IN (:iids)')
             ->setParameter('mid', $this->getMetaModel()->get('id'))
             ->setParameter('aid', $this->get('id'))
-            ->setParameter('iids', $idList, Connection::PARAM_STR_ARRAY)
+            ->setParameter('iids', $idList, ArrayParameterType::STRING)
             ->orderBy('t.meanvalue', $strDirection)
             ->addOrderBy('t.votecount', $strDirection)
             ->executeQuery();
 
         $arrSorted = $statement->fetchFirstColumn();
 
-        return ($strDirection == 'DESC')
+        return ($strDirection === 'DESC')
             ? \array_merge($arrSorted, \array_diff($idList, $arrSorted))
             : \array_merge(\array_diff($idList, $arrSorted), $arrSorted);
     }
@@ -582,18 +619,27 @@ class Rating extends BaseComplex
     /**
      * Get the session bag depending on current scope.
      *
-     * @return AttributeBagInterface|SessionBagInterface
+     * @return AttributeBagInterface
      */
     protected function getSessionBag()
     {
         if ($this->scopeDeterminator->currentScopeIsBackend()) {
-            return $this->session->getBag('contao_backend');
+            $sessionBag = $this->session->getBag('contao_backend');
+            assert($sessionBag instanceof AttributeBagInterface);
+
+            return $sessionBag;
         }
 
         if ($this->scopeDeterminator->currentScopeIsFrontend()) {
-            return $this->session->getBag('contao_frontend');
+            $sessionBag = $this->session->getBag('contao_frontend');
+            assert($sessionBag instanceof AttributeBagInterface);
+
+            return $sessionBag;
         }
 
-        return $this->session->getBag('attributes');
+        $sessionBag = $this->session->getBag('attributes');
+        assert($sessionBag instanceof AttributeBagInterface);
+
+        return $sessionBag;
     }
 }

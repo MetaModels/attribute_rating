@@ -27,6 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
 use MetaModels\AttributeRatingBundle\Attribute\Rating;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use MetaModels\IMetaModel;
@@ -51,19 +52,19 @@ class RatingTest extends TestCase
         $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getTableName')
-            ->will($this->returnValue('mm_unittest'));
+            ->willReturn('mm_unittest');
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getActiveLanguage')
-            ->will($this->returnValue($language));
+            ->willReturn($language);
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getFallbackLanguage')
-            ->will($this->returnValue($fallbackLanguage));
+            ->willReturn($fallbackLanguage);
 
         return $metaModel;
     }
@@ -104,8 +105,21 @@ class RatingTest extends TestCase
         $router       = $this->getMockBuilder(RouterInterface::class)->getMock();
         $session      = $this->getMockBuilder(SessionInterface::class)->getMock();
         $scopeMatcher = $this->mockScopeMatcher();
+        $appRoot      = '';
+        $webDir       = '';
+        $requestStack = $this->getMockBuilder(RequestStack::class)->getMock();
 
-        $text = new Rating($this->mockMetaModel('en', 'en'), [], $connection, $router, $session, $scopeMatcher);
+        $text = new Rating(
+            $this->mockMetaModel('en', 'en'),
+            [],
+            $connection,
+            $router,
+            $session,
+            $scopeMatcher,
+            $appRoot,
+            $webDir,
+            $requestStack
+        );
         $this->assertInstanceOf(Rating::class, $text);
     }
 }

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_rating.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_rating/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -39,28 +39,49 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Router.
      *
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
 
     /**
      * Session.
      *
      * @var SessionInterface
      */
-    private $session;
+    private SessionInterface $session;
 
     /**
      * Request scope determinator.
      *
      * @var RequestScopeDeterminator
      */
-    private $scopeDeterminator;
+    private RequestScopeDeterminator $scopeDeterminator;
+
+    /**
+     * The application path.
+     *
+     * @var string
+     */
+    private string $appRoot;
+
+    /**
+     * The public web folder.
+     *
+     * @var string
+     */
+    private string $webDir;
+
+    /**
+     * The Request stack.
+     *
+     * @var RequestStack
+     */
+    private RequestStack $requestStack;
 
     /**
      * Construct.
@@ -69,6 +90,9 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
      * @param RouterInterface          $router            Router.
      * @param SessionInterface         $session           Session
      * @param RequestScopeDeterminator $scopeDeterminator Scope determinator.
+     * @param string                   $appRoot           The application path.
+     * @param string                   $webDir            The public web folder.
+     * @param RequestStack             $requestStack      The Request stack.
      */
     public function __construct(
         Connection $connection,
