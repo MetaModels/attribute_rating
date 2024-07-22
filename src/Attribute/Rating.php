@@ -38,10 +38,9 @@ use MetaModels\Render\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This is the MetaModelAttribute class for handling rating fields.
@@ -542,14 +541,21 @@ class Rating extends BaseComplex
         $value  = ($this->get('rating_max') * (float) ($arrRowData[$this->getColName()]['meanvalue'] ?? 0));
         $intInc = \strlen($this->get('rating_half')) ? .5 : 1;
 
+        $translator = System::getContainer()->get('translator');
+        assert($translator instanceof TranslatorInterface);
+
         $objTemplate->currentValue = (\round(($value / $intInc), 0) * $intInc);
-        $objTemplate->tipText      = \sprintf(
-            $lang['metamodel_rating_label'],
-            '[VALUE]',
-            $this->get('rating_max')
+        $objTemplate->tipText      = $translator->trans(
+            'metamodel_rating_label',
+            [
+                '%value%' => '[VALUE]',
+                '%rmax%' => $this->get('rating_max')
+            ],
+            'tl_metamodel_rendersetting'
         );
-        $objTemplate->ajaxUrl      = $this->router->generate('metamodels.attribute_rating.rate');
-        $objTemplate->ajaxData     = \json_encode(
+
+        $objTemplate->ajaxUrl  = $this->router->generate('metamodels.attribute_rating.rate');
+        $objTemplate->ajaxData = \json_encode(
             [
                 'id'   => ($this->get('id') ?? 0),
                 'pid'  => $this->get('pid'),
