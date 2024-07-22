@@ -387,7 +387,7 @@ class Rating extends BaseComplex
     /**
      * Calculate the lock id for a given item.
      *
-     * @param int $intItemId The id of the item.
+     * @param string $intItemId The id of the item.
      *
      * @return string
      */
@@ -404,9 +404,9 @@ class Rating extends BaseComplex
     /**
      * Add a vote to the database.
      *
-     * @param int   $intItemId The id of the item to be voted.
-     * @param float $fltValue  The value of the vote.
-     * @param bool  $blnLock   Flag if the user session shall be locked against voting for this item again.
+     * @param string $intItemId The id of the item to be voted.
+     * @param float  $fltValue  The value of the vote.
+     * @param bool   $blnLock   Flag if the user session shall be locked against voting for this item again.
      *
      * @return void
      */
@@ -535,8 +535,8 @@ class Rating extends BaseComplex
 
         $objTemplate->ratingDisabled = (
             $this->scopeDeterminator->currentScopeIsBackend()
-            || $objSettings->get('rating_disabled')
-            || $this->getSessionBag()->get($this->getLockId($arrRowData['id'] ?? 0))
+            || null !== $objSettings->get('rating_disabled')
+            || $this->getSessionBag()->get($this->getLockId($arrRowData['id'] ?? '0'))
         );
 
         $value  = ($this->get('rating_max') * (float) ($arrRowData[$this->getColName()]['meanvalue'] ?? 0));
@@ -619,18 +619,27 @@ class Rating extends BaseComplex
     /**
      * Get the session bag depending on current scope.
      *
-     * @return AttributeBagInterface|SessionBagInterface
+     * @return AttributeBagInterface
      */
     protected function getSessionBag()
     {
         if ($this->scopeDeterminator->currentScopeIsBackend()) {
-            return $this->session->getBag('contao_backend');
+            $sessionBag = $this->session->getBag('contao_backend');
+            assert($sessionBag instanceof AttributeBagInterface);
+
+            return $sessionBag;
         }
 
         if ($this->scopeDeterminator->currentScopeIsFrontend()) {
-            return $this->session->getBag('contao_frontend');
+            $sessionBag = $this->session->getBag('contao_frontend');
+            assert($sessionBag instanceof AttributeBagInterface);
+
+            return $sessionBag;
         }
 
-        return $this->session->getBag('attributes');
+        $sessionBag = $this->session->getBag('attributes');
+        assert($sessionBag instanceof AttributeBagInterface);
+
+        return $sessionBag;
     }
 }

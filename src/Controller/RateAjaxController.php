@@ -57,7 +57,7 @@ class RateAjaxController
      *
      * @param string $message The error message.
      *
-     * @return void
+     * @return never
      *
      * @throws BadRequestHttpException With the given message.
      */
@@ -75,7 +75,7 @@ class RateAjaxController
      */
     public function ratingAction(Request $request)
     {
-        $arrData  = $request->request->get('data');
+        $arrData  = $request->request->all('data');
         $fltValue = $request->request->get('rating');
 
         if (!($arrData && $arrData['id'] && $arrData['pid'] && $arrData['item'])) {
@@ -87,10 +87,9 @@ class RateAjaxController
             $this->bail('No MetaModel.');
         }
 
-        /** @var Rating $objAttribute */
         $objAttribute = $objMetaModel->getAttributeById((int) $arrData['id']);
 
-        if (!$objAttribute) {
+        if (!$objAttribute instanceof Rating) {
             $this->bail('No Attribute.');
         }
 
