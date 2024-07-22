@@ -26,7 +26,7 @@ $GLOBALS['TL_BODY']['metamodelsattribute_rating'] =
 
 <form name="<?= $this->name ?>" class="rating<?= $this->additional_class ?>">
     <?php foreach ($this->options as $value): ?>
-        <input type="radio" name="<?= $this->name ?>_rating"<?php if ($this->currentValue == $value): ?> checked="checked" <?php endif; ?>value="<?= $value ?>">
+        <input type="radio" name="<?= $this->name ?>_rating"<?php if ($this->currentValue == $value): ?> checked="checked" <?php endif; ?> value="<?= $value ?>">
     <?php endforeach; ?>
     <span id="<?= $this->name ?>_tip" class="ajax_rating_tip"></span>
 </form>
