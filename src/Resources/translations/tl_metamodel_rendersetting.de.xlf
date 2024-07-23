@@ -1,0 +1,18 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_rendersetting.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="rating_disabled.label" resname="rating_disabled.label">
+        <source>Disable rating (implicit on in the backend)</source>
+        <target>Bewertungsmöglichkeit ausschalten.</target>
+      </trans-unit>
+      <trans-unit id="rating_disabled.description" resname="rating_disabled.description">
+        <source>If this is checked, the rating will be disabled and only the current rating value will get shown (this is hardcoded to &quot;on&quot; for the Backend).</source>
+        <target>Ist die Checkbox gesetzt, wird die Bewertung gesperrt und nur der aktuelle Wert der Bewertung wird angezeigt (das ist fest eingestellt als &quot;on&quot; für das Backend).</target>
+      </trans-unit>
+      <trans-unit id="metamodel_rating_label" resname="metamodel_rating_label">
+        <source>Rate as %value% / %rmax%</source>
+        <target>Bewerten als %value% / %rmax%</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
