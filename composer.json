@@ -40,7 +40,8 @@
     "symfony/dependency-injection": "^5.4",
     "symfony/http-foundation": "^5.4",
     "symfony/http-kernel": "^5.4",
-    "symfony/routing": "^5.4"
+    "symfony/routing": "^5.4",
+    "symfony/translation-contracts": "^2.5.2"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.1",

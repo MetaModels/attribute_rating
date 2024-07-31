@@ -24,6 +24,7 @@
 namespace MetaModels\AttributeRatingBundle\Test;
 
 use Contao\CoreBundle\Framework\Adapter;
+use Contao\System;
 use Contao\TemplateLoader;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Configuration;
@@ -34,11 +35,13 @@ use MetaModels\IMetaModel;
 use MetaModels\Render\Template;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Test the rating attribute.
@@ -424,6 +427,11 @@ class AttributeRatingTest extends TestCase
                                     ->disableOriginalConstructor()
                                     ->getMock();
 
+        $translator = $this->getMockForAbstractClass(TranslatorInterface::class);
+        $container  = $this->getMockForAbstractClass(ContainerInterface::class);
+        $container->method('get')->with('translator')->willReturn($translator);
+        System::setContainer($container);
+
         /** @var Rating $rating */
         $rating   = $metamodel->getAttribute('rating');
         $itemData = [
@@ -466,6 +474,11 @@ class AttributeRatingTest extends TestCase
         $scopeDeterminator = $this->getMockBuilder(RequestScopeDeterminator::class)
                                     ->disableOriginalConstructor()
                                     ->getMock();
+
+        $translator = $this->getMockForAbstractClass(TranslatorInterface::class);
+        $container  = $this->getMockForAbstractClass(ContainerInterface::class);
+        $container->method('get')->with('translator')->willReturn($translator);
+        System::setContainer($container);
 
         /** @var Rating $rating */
         $rating   = $metamodel->getAttribute('rating2');
