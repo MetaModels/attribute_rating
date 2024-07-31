@@ -505,8 +505,6 @@ class Rating extends BaseComplex
     {
         parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
-        $lang = $this->getActiveLanguageArray();
-
         $strEmpty = $this->ensureImage(
             $this->get('rating_emtpy'),
             'bundles/metamodelsattributerating/star-empty.png'
