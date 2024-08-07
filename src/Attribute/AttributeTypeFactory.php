@@ -49,13 +49,6 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
     private RouterInterface $router;
 
     /**
-     * Session.
-     *
-     * @var SessionInterface
-     */
-    private SessionInterface $session;
-
-    /**
      * Request scope determinator.
      *
      * @var RequestScopeDeterminator
@@ -88,7 +81,6 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
      *
      * @param Connection               $connection        Database connection.
      * @param RouterInterface          $router            Router.
-     * @param SessionInterface         $session           Session
      * @param RequestScopeDeterminator $scopeDeterminator Scope determinator.
      * @param string                   $appRoot           The application path.
      * @param string                   $webDir            The public web folder.
@@ -97,18 +89,17 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
     public function __construct(
         Connection $connection,
         RouterInterface $router,
-        SessionInterface $session,
         RequestScopeDeterminator $scopeDeterminator,
         string $appRoot,
         string $webDir,
         RequestStack $requestStack
     ) {
+        parent::__construct();
         $this->typeName          = 'rating';
         $this->typeIcon          = 'bundles/metamodelsattributerating/star-full.png';
         $this->typeClass         = Rating::class;
         $this->connection        = $connection;
         $this->router            = $router;
-        $this->session           = $session;
         $this->scopeDeterminator = $scopeDeterminator;
         $this->appRoot           = $appRoot;
         $this->webDir            = $webDir;
@@ -120,12 +111,12 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        return new $this->typeClass(
+        return new Rating(
             $metaModel,
             $information,
             $this->connection,
             $this->router,
-            $this->session,
+            null,
             $this->scopeDeterminator,
             $this->appRoot,
             $this->webDir,
