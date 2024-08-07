@@ -4,7 +4,6 @@ services:
         arguments:
             - '@database_connection'
             - '@router'
-            - '@session'
             - '@cca.dc-general.scope-matcher'
             - '%kernel.project_dir%'
             - '%contao.web_dir%'

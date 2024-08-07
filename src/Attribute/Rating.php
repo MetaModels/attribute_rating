@@ -37,6 +37,7 @@ use MetaModels\Render\Setting\ISimple;
 use MetaModels\Render\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -62,13 +63,6 @@ class Rating extends BaseComplex
      * @var RouterInterface
      */
     private RouterInterface $router;
-
-    /**
-     * Web session.
-     *
-     * @var SessionInterface
-     */
-    private SessionInterface $session;
 
     /**
      * Request scope determinator.
@@ -149,17 +143,14 @@ class Rating extends BaseComplex
         }
         $this->router = $router;
 
-        if (null === $session) {
+        if (null !== $session) {
             // @codingStandardsIgnoreStart
             @trigger_error(
-                'Not passing an "Session" is deprecated.',
+                'Passing an "Session" is deprecated - we obtain the session via the request stack.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $session = System::getContainer()->get('session');
-            assert($session instanceof SessionInterface);
         }
-        $this->session = $session;
 
         if (null === $scopeDeterminator) {
             // @codingStandardsIgnoreStart
@@ -621,27 +612,33 @@ class Rating extends BaseComplex
     }
 
     /**
-     * Get the session bag depending on current scope.
+     * Get the requestStack bag depending on current scope.
      *
      * @return AttributeBagInterface
      */
-    protected function getSessionBag()
+    protected function getSessionBag(): AttributeBagInterface
     {
+        try {
+            $session = $this->requestStack->getSession();
+        } catch (\Throwable $throwable) {
+            return new AttributeBag();
+        }
+
         if ($this->scopeDeterminator->currentScopeIsBackend()) {
-            $sessionBag = $this->session->getBag('contao_backend');
+            $sessionBag = $session->getBag('contao_backend');
             assert($sessionBag instanceof AttributeBagInterface);
 
             return $sessionBag;
         }
 
         if ($this->scopeDeterminator->currentScopeIsFrontend()) {
-            $sessionBag = $this->session->getBag('contao_frontend');
+            $sessionBag = $session->getBag('contao_frontend');
             assert($sessionBag instanceof AttributeBagInterface);
 
             return $sessionBag;
         }
 
-        $sessionBag = $this->session->getBag('attributes');
+        $sessionBag = $session->getBag('attributes');
         assert($sessionBag instanceof AttributeBagInterface);
 
         return $sessionBag;
