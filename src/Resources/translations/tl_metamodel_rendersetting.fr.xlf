@@ -1,0 +1,18 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_rendersetting.en.xlf" target-language="fr">
+    <body>
+      <trans-unit id="rating_disabled.label" resname="rating_disabled.label">
+        <source>Disable rating (implicit on in the backend)</source>
+        <target>Désactiver l'évaluation (implicite dans le backend)</target>
+      </trans-unit>
+      <trans-unit id="rating_disabled.description" resname="rating_disabled.description">
+        <source>If this is checked, the rating will be disabled and only the current rating value will get shown (this is hardcoded to &quot;on&quot; for the Backend).</source>
+        <target>Si cette case est cochée, l'évaluation sera désactivée et seule la valeur actuelle de l'évaluation sera affichée (cette case est codée en dur à &quot;on&quot; pour le backend).</target>
+      </trans-unit>
+      <trans-unit id="metamodel_rating_label" resname="metamodel_rating_label">
+        <source>Rate as %value% / %rmax%</source>
+        <target>Évaluer %value% / %rmax%</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

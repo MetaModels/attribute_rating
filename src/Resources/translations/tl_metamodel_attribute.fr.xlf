@@ -1,0 +1,50 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_attribute.en.xlf" target-language="fr">
+    <body>
+      <trans-unit id="typeOptions.rating" resname="typeOptions.rating">
+        <source>Rating</source>
+        <target>Évaluation</target>
+      </trans-unit>
+      <trans-unit id="rating_max.label" resname="rating_max.label">
+        <source>Maximum</source>
+        <target>Maximum</target>
+      </trans-unit>
+      <trans-unit id="rating_max.description" resname="rating_max.description">
+        <source>Please enter the maximum value for the rating.</source>
+        <target>Indiquez la valeur maximum pour l'évaluation.</target>
+      </trans-unit>
+      <trans-unit id="rating_half.label" resname="rating_half.label">
+        <source>Enable half steps</source>
+        <target>Activer les demi-pas</target>
+      </trans-unit>
+      <trans-unit id="rating_half.description" resname="rating_half.description">
+        <source>If this is checked, the rating will count in .5 steps instead of integer values.</source>
+        <target>Si coché, l'évaluation se fera par  pas de 0.5 au lieu de valeurs entières.</target>
+      </trans-unit>
+      <trans-unit id="rating_emtpy.label" resname="rating_emtpy.label">
+        <source>Image for &quot;empty star&quot;</source>
+        <target>Image d'étoile vide</target>
+      </trans-unit>
+      <trans-unit id="rating_emtpy.description" resname="rating_emtpy.description">
+        <source>Choose the image to use as empty star.</source>
+        <target>Sélectionnez l'image pour quand l'étoile est vide. </target>
+      </trans-unit>
+      <trans-unit id="rating_full.label" resname="rating_full.label">
+        <source>Image for &quot;full star&quot;</source>
+        <target>Image d'étoile pleine</target>
+      </trans-unit>
+      <trans-unit id="rating_full.description" resname="rating_full.description">
+        <source>Choose the image to use as full star.</source>
+        <target>Sélectionnez l'image pour quand l'étoile est pleine. </target>
+      </trans-unit>
+      <trans-unit id="rating_hover.label" resname="rating_hover.label">
+        <source>Image for &quot;hovered star&quot;</source>
+        <target>Image d'étoile survolée</target>
+      </trans-unit>
+      <trans-unit id="rating_hover.description" resname="rating_hover.description">
+        <source>Choose the image to use as hovered star.</source>
+        <target>Sélectionnez l'image pour quand l'étoile est survolée. </target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
