@@ -119,7 +119,6 @@ class RatingAttributeTypeFactoryTest extends TestCase
     {
         $connection   = $this->mockConnection();
         $router       = $this->getMockBuilder(RouterInterface::class)->getMock();
-        $session      = $this->getMockBuilder(SessionInterface::class)->getMock();
         $scopeMatcher = $this->mockScopeMatcher();
         $appRoot      = '';
         $webDir       = '';
@@ -129,7 +128,6 @@ class RatingAttributeTypeFactoryTest extends TestCase
         $factory   = new AttributeTypeFactory(
             $connection,
             $router,
-            $session,
             $scopeMatcher,
             $appRoot,
             $webDir,
