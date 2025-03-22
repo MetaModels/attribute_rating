@@ -35,7 +35,7 @@
     "contao-community-alliance/dc-general": "^2.3",
     "contao/core-bundle": "^4.13.0 <5.0",
     "doctrine/dbal": "^3.6.0",
-    "metamodels/core": "^2.3@dev",
+    "metamodels/core": "^2.3",
     "symfony/config": "^5.4",
     "symfony/dependency-injection": "^5.4",
     "symfony/http-foundation": "^5.4",
