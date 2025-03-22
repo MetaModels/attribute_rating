@@ -27,5 +27,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class MetaModelsAttributeRatingBundle extends Bundle
 {
-
 }
